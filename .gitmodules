@@ -1,0 +1,3 @@
+[submodule "libs/libuv"]
+	path = libs/libuv
+	url = git@github.com:Haicam/libuv.git

@@ -9,4 +9,8 @@ However, This project includes several third-party Open-Source libraries, which 
 
 ### libuv 
 License: libuv  
-https://github.com/libuv/libuv/blob/master/LICENSE
+https://github.com/libuv/libuv/blob/v1.44.1/LICENSE
+
+### Unity
+License: MIT 
+https://github.com/ThrowTheSwitch/Unity/blob/v2.5.2/LICENSE.txt
