@@ -1,6 +1,6 @@
 # License overview of included 3rd party libraries
 
-This project is licensed under the terms of Haicam Non-Commercial, Non-Competitive License (LICENSE.md).
+This project is licensed under the terms of Haicam Non-Commercial, Non-Competitive License [LICENSE.md](LICENSE.md).
 
 
 However, This project includes several third-party Open-Source libraries, which are licensed under their own respective Open-Source licenses.
