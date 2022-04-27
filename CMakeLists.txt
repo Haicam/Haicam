@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 3.4.1)
 
 project(haicam-core)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+if (HAICAM_PLATFORM MATCHES "gm8136")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -48,6 +52,36 @@ if (HAICAM_PLATFORM MATCHES "android")
         haicam-core_a
         uv_a.a
         unity.a
+    )
+
+elseif (HAICAM_PLATFORM MATCHES "windows")
+
+    target_link_libraries (haicam-core
+        uv_a.a
+        unity.a
+        wsock32.a ws2_32.a wldap32.a iphlpapi.a secur32.a userenv.a
+    )
+
+    target_link_libraries (haicam-app
+        haicam-core_a
+        uv_a.a
+        unity.a
+        wsock32.a ws2_32.a wldap32.a iphlpapi.a secur32.a userenv.a
+    )
+
+elseif (HAICAM_PLATFORM MATCHES "mac" OR HAICAM_PLATFORM MATCHES "ios")
+
+    target_link_libraries (haicam-core
+        uv_a.a
+        unity.a
+    )
+
+    target_link_libraries (haicam-app
+        haicam-core_a
+        uv_a.a
+        unity.a
+        pthread
+        dl
     )
 
 else()

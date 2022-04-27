@@ -34,3 +34,33 @@ cmake -DCMAKE_TOOLCHAIN_FILE=/home/haicam/toolchain/android-ndk-r24/build/cmake/
     -DCMAKE_INSTALL_INCLUDEDIR=/home/haicam/workspace/libs/unity/android/arm64-v8a ..
 make -j`nproc` && make install
 rm -rf *
+
+#windows x86_64
+cmake -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/win64.toolchain.cmake -DCMAKE_INSTALL_LIBDIR=/home/haicam/workspace/libs/unity/windows/x86_64 -DCMAKE_INSTALL_INCLUDEDIR=/home/haicam/workspace/libs/unity/windows/x86_64 ..
+make -j`nproc` && make install
+rm -rf *
+
+#windows i386
+cmake -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/win32.toolchain.cmake -DCMAKE_INSTALL_LIBDIR=/home/haicam/workspace/libs/unity/windows/i386 -DCMAKE_INSTALL_INCLUDEDIR=/home/haicam/workspace/libs/unity/windows/i386 ..
+make -j`nproc` && make install
+rm -rf *
+
+#mac x86_64
+cmake -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/mac-x86_64.toolchain.cmake -DCMAKE_INSTALL_LIBDIR=/home/haicam/workspace/libs/unity/mac/x86_64 -DCMAKE_INSTALL_INCLUDEDIR=/home/haicam/workspace/libs/unity/mac/x86_64 ..
+make -j`nproc` && make install
+rm -rf *
+
+#ios arm64
+cmake -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/ios-arm64.toolchain.cmake -DCMAKE_INSTALL_LIBDIR=/home/haicam/workspace/libs/unity/ios/arm64 -DCMAKE_INSTALL_INCLUDEDIR=/home/haicam/workspace/libs/unity/ios/arm64 ..
+make -j`nproc` && make install
+rm -rf *
+
+#gm8136 armv5
+cmake -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/arm-gm8136.toolchain.cmake -DCMAKE_INSTALL_LIBDIR=/home/haicam/workspace/libs/unity/gm8136/armv5 -DCMAKE_INSTALL_INCLUDEDIR=/home/haicam/workspace/libs/unity/gm8136/armv5 ..
+make -j`nproc` && make install
+rm -rf *
+
+#rpi armv7
+cmake -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/arm-rpi.toolchain.cmake -DCMAKE_INSTALL_LIBDIR=/home/haicam/workspace/libs/unity/rpi/armv7 -DCMAKE_INSTALL_INCLUDEDIR=/home/haicam/workspace/libs/unity/rpi/armv7 ..
+make -j`nproc` && make install
+rm -rf *
