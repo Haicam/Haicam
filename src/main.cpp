@@ -1,11 +1,14 @@
 #include <stdio.h>
-#include "HaicamContext.hpp"
+#include "haicam/Context.hpp"
+
+using namespace haicam;
+
 int main() {
 
-   printf("Hello, Haicam!\n");
+   printf("Hello,Haicam!\n");
 
-   HaicamContext* haicamContext = HaicamContext::getInstance();
-   haicamContext->run();
+   Context* context = Context::getInstance();
+   context->run();
 
    return 0;
 }
