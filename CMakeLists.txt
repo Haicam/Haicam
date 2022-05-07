@@ -26,7 +26,7 @@ file(GLOB HAICAM_CORE_SRCS
 )
 
 file(GLOB HAICAM_APP_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/example/main.cpp
 )
 
 file(GLOB HAICAM_TEST_SRCS

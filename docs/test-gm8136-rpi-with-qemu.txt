@@ -1,0 +1,27 @@
+1. install qemu-system-arm
+
+#you can skip step 2 to 6, and use my build from https://www.dropbox.com/s/qirgx86feykue1p/haicam-qemu-image.zip?dl=0
+
+2. git clone git@github.com:ezhomelabs/buildroot.git
+3. cd buildroot
+4. make qemu_arm_vexpress_defconfig
+5. cd output/images
+6. ./start-qemu.sh
+
+#unzip haicam-qemu-image.zip
+cd haicam-qemu-image
+
+7. ./start-qemu.sh
+
+# default username root and password empty
+
+8. Install tftp server in your local computer. please refer to  https://linuxhint.com/install_tftp_server_ubuntu/
+
+Test for RPI:
+=================
+In the qemu VM, use tftp command to download file from your local tftp server for test
+
+Test for gm8136:
+=================
+In the qemu VM
+run: /root/gm8136_chroot.sh, go to the gm8136 environment, then use tftp command to download file from your local tftp server for test

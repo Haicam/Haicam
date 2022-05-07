@@ -1,0 +1,60 @@
+File: CloudCameraHub/gm_graphv1/encode_with_h264_motion_detection.c
+
+start
+Line 939
+int startencodeh264Video(int width,int height,int frameRate,int bitRate,int iDetecteValue,void* pgmsystem,unsigned char uHaveRaw,unsigned char uPeople, bool vflip)
+
+H264 encode thread frame callback
+Line 733 - 742
+void pushVideoData(char* data,unsigned int size,int keyframe,int remote); // remove int remote
+
+YUV thread frame callback
+Line 822
+videoYUVData(YUV422_WIDTH,YUV422_HEIGHT, gray) 
+
+Without YUV data, decode from snapshot
+CloudCameraHub/gm_graphv2/encode_with_h264_motion_detection.c
+Line 668 
+snapshot_len = gm_request_snapshot(&snapshot, 1000); 
+Line 704
+videoYUVData(YUV422_WIDTH,YUV422_HEIGHT, gray)
+
+/*
+int videoYUVData(int width,int height,char* data)
+{
+    return AccountData::getInstance()->setScanData(width, height, data);
+}
+int AccountData::setScanData(int width,int height,char* pData)
+{
+//    log("setScanData:(%d,%d)",width,height);
+    m_QRCodeScannerLock.Lock();
+    if (m_pQRCodeScanner) {
+        m_pQRCodeScanner->imageFeed(width, height, pData);
+        m_QRCodeScannerLock.UnLock();
+        return 1;
+    }else {
+        m_QRCodeScannerLock.UnLock();
+        return -1;
+    }
+}
+*/
+QR code scan success
+File: CloudCameraHub/QRCodeScanner.cpp
+Line 103 & 109
+AccountData::getInstance()->scanSuccess(strwifiData.substr(0,lpos), strwifiData.substr(lpos+1));
+
+Jpeg image pull
+Line 555 
+void sample_get_snapshot()
+Or Line 575
+void getMotionSnapshot(int width,int height){
+
+Jpeg image pull callback
+Line 570
+pushSnapshotData(snapshot_buf, snapshot_len);
+Or Line 589
+pushMotionSnapshotData(snapshot_buf, snapshot_len);
+
+Motion event callback
+Line 481
+ if(total_mb > 5) 

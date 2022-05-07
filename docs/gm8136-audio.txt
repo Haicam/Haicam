@@ -1,0 +1,86 @@
+Audio output (record from mic):
+=======================
+File: CloudCameraHub/gm_graphv1/audio_record.c
+
+start
+line 107
+int startAudioRecord()
+
+Audio output format 
+Line 138
+audio_encode_attr.encode_type = GM_AAC;
+
+Audio frame callback
+Line 94
+pushAudioData(multi_bs[i].bs.bs_buf, multi_bs[i].bs.bs_len);
+
+
+AAC Audio input (play from speaker)
+==========================
+File: CloudCameraHub/gm_graphv1/audio_playback.c
+
+start
+line 88
+int startAudioPlay(int samplerate)
+
+AAC Audio data feed:
+Line 58
+getPlayAudioData(bitstream_data,&length,1);
+
+PCM Audio input (play from speaker)
+============================
+File: CloudCameraHub/gm_graphv1/audio_pcm_playback.c
+
+start
+line 96
+int startPCMAudioPlay(int samplerate)
+
+PCM Audio data feed:
+Line 69
+getPlayAudioData(bitstream_data,&length,0);
+
+
+Sound Wave detection 
+===================================
+File: CloudCameraHub/gm_graphv1/soundwaverecord.c
+
+
+Sound Wave receive PCM data
+Line 852
+dominant((short *)data, length/2);
+
+Line 784 & 811
+soundWaveSuccess(curDecData2+1,curDecData2[0]);
+/*
+void soundWaveSuccess(char* data,unsigned int size)
+*/
+
+Audio volume detection
+===============================
+1. decode AAC to PCM
+CloudCameraHub/AudioEncoder.cpp
+Line 240
+len = avcodec_decode_audio4(cContext, decoded_frame, &got_frame, &avpkt);
+Line 270
+CameraController::getInstance()->pushAudioVolume(volume);
+
+/*
+void CameraController::pushAudioVolume(int volume){
+    m_audioDetecter->detect(volume);
+}
+*/
+
+2. detection
+CloudCameraHub/AudioDetecter.cpp
+Line 37
+void AudioDetecter::detect(int value)
+
+Event detected
+Line 83
+EventManage::getInstance()->updateSoundStatus(false);
+
+
+
+
+
+
