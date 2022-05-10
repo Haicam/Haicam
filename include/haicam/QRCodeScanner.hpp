@@ -3,6 +3,8 @@
 
 #include "haicam/Context.hpp"
 #include "haicam/SafeQueue.hpp"
+#include "haicam/ByteBuffer.hpp"
+#include <functional>
 
 namespace haicam
 {
@@ -11,15 +13,25 @@ namespace haicam
     {
     private:
         Context *context;
+        int width;
+        int height;
+        SafeQueue<ByteBufferPtr> threadDataQ;
+        SafeQueue<std::string> callBackDataQ;
+        uv_async_t async;
+        uv_thread_t thread;
+
+        static void asyncCallback(uv_async_t *handle);
+        static void run(void *data);
 
     public:
-        QRCodeScanner(Context *context);
+        QRCodeScanner(Context *context, int width, int height);
         ~QRCodeScanner();
 
         void start();
-        static void run(void* arg);
         void stop();
-        void scanImage(void *data, int width, int height);
+        void scanImage(ByteBufferPtr data);
+
+        std::function<void(std::string)> onSuccessCallback;
     };
 
 }

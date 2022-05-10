@@ -57,6 +57,7 @@ namespace haicam
         void close()
         {
             std::unique_lock<std::mutex> lock(m);
+            q.swap(std::queue<T>());
             isClosed = true;
             c.notify_all();
         }

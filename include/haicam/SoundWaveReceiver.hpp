@@ -3,6 +3,7 @@
 
 #include "haicam/Context.hpp"
 #include "haicam/SafeQueue.hpp"
+#include "haicam/ByteBuffer.hpp"
 
 namespace haicam
 {
@@ -11,15 +12,17 @@ namespace haicam
     {
     private:
         Context *context;
+        SafeQueue<ByteBufferPtr> safeQueue;
+        uv_thread_t thread;
+        static void run(void* data);
 
     public:
         SoundWaveReceiver(Context *context);
         ~SoundWaveReceiver();
 
         void start();
-        static void run(void* arg);
         void stop();
-        void pcmDataFeed(void *data, int length);
+        void pcmDataFeed(ByteBufferPtr data);
     };
 
 }
