@@ -7,12 +7,12 @@ namespace haicam
 {
     namespace gm8136
     {
-        class Led: public haicam::Led
+        class Led : public haicam::Led
         {
         public:
-            Led(LedType type):haicam::Led(type) {
+            Led(LedType type) : haicam::Led(type){
 
-            };
+                                };
 
             void on();
             void off();
@@ -20,5 +20,5 @@ namespace haicam
             LedStatus getStatus();
         };
     }
-} 
+}
 #endif

@@ -1,8 +1,9 @@
 #ifndef __HAICAM_CONTEXT_HPP__
 #define __HAICAM_CONTEXT_HPP__
 
-extern "C" {
-     #include <uv.h>
+extern "C"
+{
+#include <uv.h>
 }
 
 namespace haicam
@@ -10,16 +11,17 @@ namespace haicam
     class Context
     {
     public:
-        static Context* getInstance();
+        static Context *getInstance();
         ~Context();
 
         int run();
         void stop();
 
         uv_loop_t *uv_loop;
+
     private:
         Context();
-        static Context* instance;
+        static Context *instance;
     };
 }
 

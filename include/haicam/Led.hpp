@@ -3,13 +3,15 @@
 
 namespace haicam
 {
-    enum LedType {
-        LED_POWER = 0, 
-        LED_WIFI, 
-        LED_ETHERNET 
+    enum LedType
+    {
+        LED_POWER = 0,
+        LED_WIFI,
+        LED_ETHERNET
     };
 
-    enum LedStatus {
+    enum LedStatus
+    {
         LED_OFF = 0,
         LED_ON,
         LED_SLOW_BLINK,
@@ -22,12 +24,13 @@ namespace haicam
     protected:
         LedType type;
         LedStatus status;
-        
+
     public:
-        Led(LedType type) {
+        Led(LedType type)
+        {
             this->type = type;
         };
-        ~Led() {};
+        ~Led(){};
 
         virtual void on() = 0;
         virtual void off() = 0;
