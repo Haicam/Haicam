@@ -1,28 +1,26 @@
 #ifndef __HAICAM_SOUNDWAVERECEIVER_HPP__
 #define __HAICAM_SOUNDWAVERECEIVER_HPP__
 
-#include "haicam/Context.hpp"
-#include "haicam/SafeQueue.hpp"
-#include "haicam/ByteBuffer.hpp"
+#include "haicam/Runnable.hpp"
 
 namespace haicam
 {
+    class SoundWaveReceiver;
+    typedef std::shared_ptr<SoundWaveReceiver> SoundWaveReceiverPtr;
 
-    class SoundWaveReceiver
+    class SoundWaveReceiver : public Runnable
     {
     private:
-        Context *context;
-        SafeQueue<ByteBufferPtr> safeQueue;
-        uv_thread_t thread;
-        static void run(void* data);
+        SoundWaveReceiver(Context *context);
+
+    protected:
+        void run();
 
     public:
-        SoundWaveReceiver(Context *context);
-        ~SoundWaveReceiver();
-
-        void start();
-        void stop();
-        void pcmDataFeed(ByteBufferPtr data);
+        static SoundWaveReceiverPtr create(Context *context)
+        {
+            return SoundWaveReceiverPtr(new SoundWaveReceiver(context));
+        }
     };
 
 }

@@ -41,6 +41,12 @@ namespace haicam
             return ByteBufferPtr(new ByteBuffer(data, length));
         }
 
+        static ByteBufferPtr create(std::string str)
+        {
+
+            return ByteBufferPtr(new ByteBuffer((void*)str.data(), str.size()));
+        }
+
         bool fillData(void *data, int length, int offset = 0)
         {
             if (offset + length > buffer.size())
@@ -54,6 +60,11 @@ namespace haicam
         unsigned char * getData()
         {
             return buffer.data();
+        }
+
+        std::string toString()
+        {
+            return std::string(buffer.begin(), buffer.end());
         }
 
         size_t getLength()
