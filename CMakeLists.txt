@@ -12,11 +12,15 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/googletest/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/libuv/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/zbar/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/quid/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
 )
 
 link_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/googletest/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/libuv/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/zbar/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/quid/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
 )
 
 file(GLOB HAICAM_CORE_SRCS
@@ -75,11 +79,17 @@ elseif (HAICAM_PLATFORM MATCHES "mac" OR HAICAM_PLATFORM MATCHES "ios")
 
     target_link_libraries (haicam-core
         uv_a.a
+        zbar.a
+        liquid.a
+        openlibm.a
     )
 
     target_link_libraries (haicam-app
         haicam-core_a
         uv_a.a
+        zbar.a
+        liquid.a
+        openlibm.a
         pthread
         dl
     )
@@ -88,6 +98,9 @@ else()
 
     target_link_libraries (haicam-app
         haicam-core_a
+        zbar.a
+        liquid.a
+        openlibm.a
         uv_a.a
         pthread
         dl
@@ -139,6 +152,9 @@ else()
 
     target_link_libraries (haicam-test
         haicam-core_a
+        zbar.a
+        liquid.a
+        openlibm.a
         uv_a.a
         gtest.a
         gtest_main.a

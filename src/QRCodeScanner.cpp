@@ -1,4 +1,5 @@
 #include "haicam/QRCodeScanner.hpp"
+#include "zbar.h"
 
 using namespace haicam;
 
@@ -48,6 +49,7 @@ void QRCodeScanner::stop()
 {
     threadDataQ.close();
     callBackDataQ.close();
+    uv_close((uv_handle_t*) &this->async, NULL);
     uv_thread_join(&this->thread);
 }
 
