@@ -10,6 +10,9 @@ QRCodeScanner::QRCodeScanner(Context *context, int width, int height)
 
 QRCodeScanner::~QRCodeScanner()
 {
+    uv_thread_join(&m_thread1);
+    free(pVideoData1);
+    free(pvideoData2);
 }
 
 void QRCodeScanner::start()
