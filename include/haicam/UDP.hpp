@@ -99,7 +99,7 @@ namespace haicam
 
         };
 
-        void sendTo(std::string ip, int port, ByteBufferPtr data)
+        void sendDataTo(ByteBufferPtr data, std::string ip, int port)
         {
             struct sockaddr_in toAddr;
             uv_ip4_addr(ip.c_str(), port, &toAddr);
