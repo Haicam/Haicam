@@ -22,6 +22,7 @@ namespace haicam
         UDP(Context *context, std::string bindIp, int bindPort)
             : context(context),
               socket(),
+              addr(),
               onSentErrorCallback(NULL),
               onSentCallback(NULL),
               onCloseCallback(NULL),
@@ -30,11 +31,7 @@ namespace haicam
             uv_udp_init(context->uv_loop, &socket);
             socket.data = static_cast<void *>(this);
 
-            struct sockaddr_in addr;
             uv_ip4_addr(bindIp.c_str(), bindPort, &addr);
-            uv_udp_bind(&socket, (const struct sockaddr *)&addr, 0);
-
-            uv_udp_recv_start(&socket, UDP::allocReceiveBuffer, UDP::onDataReceived);
         };
 
         static void allocReceiveBuffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf)
@@ -120,6 +117,12 @@ namespace haicam
             uv_udp_send(&req, &socket, &buf, 1, (const struct sockaddr *)&toAddr, UDP::sentCallback);
         }
 
+        void open()
+        {
+            uv_udp_bind(&socket, (const struct sockaddr *)&addr, 0);
+            uv_udp_recv_start(&socket, UDP::allocReceiveBuffer, UDP::onDataReceived);
+        }
+
         void close()
         {
             if (uv_is_active((uv_handle_t *)&socket))
@@ -136,6 +139,7 @@ namespace haicam
     private:
         Context *context;
         uv_udp_t socket;
+        struct sockaddr_in addr;
 
     public:
         std::function<void()> onSentErrorCallback;

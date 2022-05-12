@@ -13,4 +13,6 @@ TEST(haicam_UDPTest, udp_test) {
     Context *context = Context::getInstance();
     UdpPtr udp = UDP::create(context);
     udp->onDataCallback = std::bind(onUdpDataCallback, udp, _1, _2, _3);
+    udp->open();
+    udp->close();
 }
