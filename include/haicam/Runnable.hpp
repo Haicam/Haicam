@@ -12,12 +12,6 @@ namespace haicam
     class Runnable
     {
     private:
-        Context *context;
-        SafeQueue<ByteBufferPtr> output;
-        uv_async_t async;
-        uv_timer_t timer;
-        uv_thread_t thread;
-
         static void asyncCallback(uv_async_t *handle)
         {
             Runnable *thiz = static_cast<Runnable *>(handle->data);
@@ -34,7 +28,7 @@ namespace haicam
         static void timerCallback(uv_timer_t *handle)
         {
             uv_timer_stop(handle);
-            Runnable* thiz = static_cast<Runnable *>(handle->data);
+            Runnable *thiz = static_cast<Runnable *>(handle->data);
             thiz->stop();
             if (thiz->onTimeoutCallback != NULL)
             {
@@ -42,13 +36,13 @@ namespace haicam
             }
         }
 
-        static void process(void* arg) {
+        static void process(void *arg)
+        {
             Runnable *thiz = static_cast<Runnable *>(arg);
             thiz->run();
         }
 
     protected:
-        SafeQueue<ByteBufferPtr> input;
         virtual void run() = 0;
 
         void sendDataOut(ByteBufferPtr buf)
@@ -61,7 +55,7 @@ namespace haicam
 
     public:
         Runnable(Context *context)
-            : context(context), input(), output(){};
+            : context(context), input(), output(), onSuccessCallback(NULL), onTimeoutCallback(NULL), async(), timer(), thread(){};
         ~Runnable(){};
 
         void start(int timeoutMillisecs = 60000)
@@ -88,6 +82,17 @@ namespace haicam
             uv_thread_join(&this->thread);
         }
 
+    private:
+        Context *context;
+        SafeQueue<ByteBufferPtr> output;
+        uv_async_t async;
+        uv_timer_t timer;
+        uv_thread_t thread;
+
+    protected:
+        SafeQueue<ByteBufferPtr> input;
+
+    public:
         std::function<void(ByteBufferPtr)> onSuccessCallback;
         std::function<void()> onTimeoutCallback;
     };
