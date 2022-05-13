@@ -10,7 +10,6 @@ QRCodeScanner::QRCodeScanner(Context *context, int width, int height)
 
 void QRCodeScanner::run()
 {
-<<<<<<< HEAD
     uv_thread_join(&m_thread1);
     free(pVideoData1);
     free(pvideoData2);
@@ -40,8 +39,6 @@ void QRCodeScanner::run(void *data)
 {
     QRCodeScanner *thiz = static_cast<QRCodeScanner *>(data);
 
-=======
->>>>>>> e271c013898e3275fe24bdfc2ac1c0b5477d821c
     ByteBufferPtr frame;
     while (this->input.dequeueWait(frame))
     {
