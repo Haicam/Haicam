@@ -62,12 +62,12 @@ namespace haicam
             {
                 char senderIP[17] = {0};
                 uv_ip4_name((const struct sockaddr_in *)addr, senderIP, 16);
-                std::string fromIP = senderIP;
-                int fromPort = ntohs(((const struct sockaddr_in *)addr)->sin_port);
+                std::string remoteIP = senderIP;
+                int remotePort = ntohs(((const struct sockaddr_in *)addr)->sin_port);
 
                 UDP *thiz = static_cast<UDP *>(socket->data);
                 if (thiz->onDataCallback != NULL)
-                    thiz->onDataCallback(ByteBuffer::create(buf->base, buf->len), fromIP, fromPort);
+                    thiz->onDataCallback(ByteBuffer::create(buf->base, nread), remoteIP, remotePort);
             }
 
             free(buf->base);
