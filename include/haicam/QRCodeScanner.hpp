@@ -1,37 +1,29 @@
 #ifndef __HAICAM_QRCODESCANNER_HPP__
 #define __HAICAM_QRCODESCANNER_HPP__
 
-#include "haicam/Context.hpp"
-#include "haicam/SafeQueue.hpp"
-#include "haicam/ByteBuffer.hpp"
-#include <functional>
+#include "haicam/Runnable.hpp"
 
 namespace haicam
 {
 
-    class QRCodeScanner
+    class QRCodeScanner;
+    typedef std::shared_ptr<QRCodeScanner> QRCodeScannerPtr;
+
+    class QRCodeScanner : public Runnable
     {
     private:
-        Context *context;
         int width;
         int height;
-        SafeQueue<ByteBufferPtr> threadDataQ;
-        SafeQueue<std::string> callBackDataQ;
-        uv_async_t async;
-        uv_thread_t thread;
 
-        static void asyncCallback(uv_async_t *handle);
-        static void run(void *data);
+        QRCodeScanner(Context *context, int width, int height);
+
+    protected:
+        void run();
 
     public:
-        QRCodeScanner(Context *context, int width, int height);
-        ~QRCodeScanner();
-
-        void start();
-        void stop();
-        void scanImage(ByteBufferPtr data);
-
-        std::function<void(std::string)> onSuccessCallback;
+        static QRCodeScannerPtr create(Context *context, int width, int height) {
+            return QRCodeScannerPtr(new QRCodeScanner(context, width, height));
+        }
     };
 
 }

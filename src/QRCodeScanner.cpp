@@ -4,12 +4,13 @@
 using namespace haicam;
 
 QRCodeScanner::QRCodeScanner(Context *context, int width, int height)
-    : context(context), width(width), height(height), onSuccessCallback(NULL)
+    : Runnable(context), width(width), height(height)
 {
 }
 
-QRCodeScanner::~QRCodeScanner()
+void QRCodeScanner::run()
 {
+<<<<<<< HEAD
     uv_thread_join(&m_thread1);
     free(pVideoData1);
     free(pvideoData2);
@@ -39,24 +40,11 @@ void QRCodeScanner::run(void *data)
 {
     QRCodeScanner *thiz = static_cast<QRCodeScanner *>(data);
 
+=======
+>>>>>>> e271c013898e3275fe24bdfc2ac1c0b5477d821c
     ByteBufferPtr frame;
-    while (thiz->threadDataQ.dequeueWait(frame))
+    while (this->input.dequeueWait(frame))
     {
-        /* find one data */
-        uv_async_send(&thiz->async);
-        thiz->callBackDataQ.enqueue("wifi:password");
+        this->sendDataOut(ByteBuffer::create("wifi:password"));
     }
-}
-
-void QRCodeScanner::stop()
-{
-    threadDataQ.close();
-    callBackDataQ.close();
-    uv_close((uv_handle_t*) &this->async, NULL);
-    uv_thread_join(&this->thread);
-}
-
-void QRCodeScanner::scanImage(ByteBufferPtr data)
-{
-    threadDataQ.enqueue(data);
 }

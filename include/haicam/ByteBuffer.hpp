@@ -18,11 +18,11 @@ namespace haicam
 
         ByteBuffer(void *data, int length) : buffer(length)
         {
-            std::copy((unsigned char *)data, (unsigned char *)data + length, buffer.begin());
+            std::copy((char *)data, (char *)data + length, buffer.begin());
         }
 
     public:
-        std::vector<unsigned char> buffer;
+        std::vector<char> buffer;
 
         ByteBufferPtr getPtr()
         {
@@ -41,19 +41,30 @@ namespace haicam
             return ByteBufferPtr(new ByteBuffer(data, length));
         }
 
+        static ByteBufferPtr create(std::string str)
+        {
+
+            return ByteBufferPtr(new ByteBuffer((void*)str.data(), str.size()));
+        }
+
         bool fillData(void *data, int length, int offset = 0)
         {
             if (offset + length > buffer.size())
             {
                 return false;
             }
-            std::copy((unsigned char *)data, (unsigned char *)data + length, buffer.begin() + offset);
+            std::copy((char *)data, (char *)data + length, buffer.begin() + offset);
             return true;
         }
 
-        unsigned char * getData()
+        char * getData()
         {
             return buffer.data();
+        }
+
+        std::string toString()
+        {
+            return std::string(buffer.begin(), buffer.end());
         }
 
         size_t getLength()

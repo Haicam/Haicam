@@ -5,33 +5,25 @@
 using namespace haicam;
 using namespace std::placeholders;
 
-uv_timer_t timer;
-
-void onWifiFound(QRCodeScanner* scanner, std::string wifiConfig)
+void onWifiFound(QRCodeScannerPtr scanner, ByteBufferPtr wifiConfig)
 {
-    uv_timer_stop(&timer);
     scanner->stop();
-    printf("wifiConfig %s\n", wifiConfig.c_str());
+    printf("wifiConfig %s\n", wifiConfig->toString().c_str());
 }
 
-void timeoutFunc(uv_timer_t *handle)
+void timeoutFunc(QRCodeScannerPtr scanner)
 {
-    uv_timer_stop(handle);
-    QRCodeScanner* scanner = (QRCodeScanner*)handle->data;
-    scanner->stop();
+
 }
 
 TEST(haicam_QRCodeScannerTest, wifi_qrcode_test) {
     Context* context = Context::getInstance();
 
-    QRCodeScanner scanner(context, 640, 480);
-    scanner.onSuccessCallback = std::bind(onWifiFound, &scanner, _1);
+    QRCodeScannerPtr scanner = QRCodeScanner::create(context, 640, 480);
+    scanner->onSuccessCallback = std::bind(onWifiFound, scanner, _1);
+    scanner->onTimeoutCallback = std::bind(timeoutFunc, scanner);
 
-    uv_timer_init(context->uv_loop, &timer);
-    timer.data = (void*)&scanner;
-    uv_timer_start(&timer, timeoutFunc, 0, 30000);
-
-    scanner.start();
+    scanner->start(2 * 60 * 1000);
 
     for(int i = 0; i < 10; i ++)
     {
@@ -39,7 +31,7 @@ TEST(haicam_QRCodeScannerTest, wifi_qrcode_test) {
         void* img = (void *)malloc(len);;
         ByteBufferPtr data = ByteBuffer::create(img, len);
         free(img);
-        scanner.scanImage(data);
+        scanner->sendDataIn(data);
     }
     
     context->run();
