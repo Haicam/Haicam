@@ -7,7 +7,6 @@ int haicam_ContextTest_callback_times = 0
 
 void haicam_ContextTest_timeout(uv_timer_t *handle) {
     fprintf(stderr, "haicam_ContextTest_timeout\n");
-    ASSERT_EQ(true, 2 == 2);
     uv_close((uv_handle_t *)handle, NULL);
 
     haicam_ContextTest_callback_times ++;

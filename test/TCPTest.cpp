@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "haicam/TCPServer.hpp"
 #include "haicam/TCPClient.hpp"
+#include "haicam/TCPConnection.hpp"
 
 using namespace haicam;
 using namespace std::placeholders;
@@ -10,8 +11,6 @@ int haicam_TCPTest_callback_times = 0;
 void haicam_TCPTest_server_onSentCallback(TCPServer* server, TCPConnectionPtr conn)
 {
     haicam_TCPTest_callback_times ++;
-
-    server->shutdown();
 }
 
 void haicam_TCPTest_server_onNewConnection(TCPServer* server, TCPConnectionPtr conn)
@@ -43,7 +42,17 @@ void haicam_TCPTest_client_onDataCallback(TCPClient* client, TCPConnectionPtr co
     haicam_TCPTest_callback_times ++;
 
     client->close();
+}
 
+void haicam_TCPTest_timeout(uv_timer_t *handle) {
+    fprintf(stderr, "haicam_TCPTest_timeout\n");
+    uv_close((uv_handle_t *)handle, NULL);
+
+    TCPServer* server = (TCPServer*) handle->data;
+
+    server->shutdown();
+
+    haicam_TCPTest_callback_times ++;
 }
 
 TEST(haicam_TCPTest, tcp_test) {
@@ -60,8 +69,16 @@ TEST(haicam_TCPTest, tcp_test) {
     client->onDataCallback = std::bind(haicam_TCPTest_client_onDataCallback, client.get(), _1, _2);
     client->connect();
 
+    uv_timer_t timer;
+    
+    timer.data = (void*) server.get();
+
+    uv_timer_init(context->uv_loop, &timer);
+
+    uv_timer_start(&timer, haicam_TCPTest_timeout, 3000, 0);
+
     context->run();
     delete context;
 
-    ASSERT_EQ(haicam_TCPTest_callback_times, 5);
+    ASSERT_EQ(haicam_TCPTest_callback_times, 6);
 }

@@ -1,6 +1,5 @@
 #ifndef __HAICAM_UDP_HPP__
 #define __HAICAM_UDP_HPP__
-
 #include "haicam/Context.hpp"
 #include "haicam/ByteBuffer.hpp"
 #include <functional>
@@ -9,12 +8,6 @@ namespace haicam
 {
     class UDP;
     typedef std::shared_ptr<UDP> UDPPtr;
-
-    struct ReqObj
-    {
-        UDP *thiz;
-        ByteBufferPtr data;
-    };
 
     class UDP
     {
@@ -32,6 +25,12 @@ namespace haicam
             socket.data = static_cast<void *>(this);
 
             uv_ip4_addr(bindIp.c_str(), bindPort, &addr);
+        };
+
+        struct ReqObj
+        {
+            UDP *thiz;
+            ByteBufferPtr data;
         };
 
         static void allocReceiveBuffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf)
