@@ -45,7 +45,6 @@ void haicam_TCPTest_client_onDataCallback(TCPClient* client, TCPConnectionPtr co
 }
 
 void haicam_TCPTest_timeout(uv_timer_t *handle) {
-    fprintf(stderr, "haicam_TCPTest_timeout\n");
     uv_close((uv_handle_t *)handle, NULL);
 
     TCPServer* server = (TCPServer*) handle->data;

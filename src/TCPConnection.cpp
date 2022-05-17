@@ -33,7 +33,6 @@ void TCPConnection::allocReceiveBuffer(uv_handle_t *handle, size_t suggested_siz
 
 void TCPConnection::onSocketClose(uv_handle_t *handle)
 {
-    std::cout << "TCPConnection::onSocketClose\n";
     TCPConnection *thiz = static_cast<TCPConnection *>(handle->data);
 
     if (thiz->onCloseCallback != NULL)

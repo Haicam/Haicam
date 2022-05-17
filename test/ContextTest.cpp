@@ -3,7 +3,7 @@
 
 using namespace haicam;
 
-int haicam_ContextTest_callback_times = 0
+int haicam_ContextTest_callback_times = 0;
 
 void haicam_ContextTest_timeout(uv_timer_t *handle) {
     fprintf(stderr, "haicam_ContextTest_timeout\n");

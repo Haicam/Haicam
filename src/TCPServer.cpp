@@ -43,12 +43,12 @@ void TCPServer::onNewConnection(uv_stream_t *serverConn, int status)
 
         if (uv_accept(serverConn, (uv_stream_t *)newConn) == 0)
         {
-            struct sockaddr_storage addr;
-            int addrLen;
-            uv_tcp_getpeername(newConn, (sockaddr *)&addr, &addrLen);
+            struct sockaddr_storage saddr;
+            int addrLen = 0;
+            uv_tcp_getpeername(newConn, (sockaddr *)&saddr, &addrLen);
 
             char senderIP[17] = {0};
-            uv_ip4_name((const struct sockaddr_in *)&addr, senderIP, 16);
+            uv_ip4_name((const struct sockaddr_in *)&saddr, senderIP, 16);
 
             TCPConnectionPtr conntPtr = TCPConnection::create((uv_stream_t *)newConn);
             conntPtr->onSentErrorCallback = thiz->onSentErrorCallback;
@@ -57,7 +57,7 @@ void TCPServer::onNewConnection(uv_stream_t *serverConn, int status)
             conntPtr->onDataCallback = thiz->onDataCallback;
 
             conntPtr->remoteIP = senderIP;
-            conntPtr->remotePort = ntohs(((const struct sockaddr_in *)&addr)->sin_port);
+            conntPtr->remotePort = ntohs(((const struct sockaddr_in *)&saddr)->sin_port);
 
             conntPtr->server = thiz->getPtr();
 
@@ -124,7 +124,6 @@ void TCPServer::onConnectionClosed(TCPConnectionPtr conntPtr)
 
 void TCPServer::shutdown()
 {
-    std::cout << "TCPServer::shutdown \n";
     for (auto itr = connections.begin(); itr != connections.end();)
     {
         (*itr)->close();
