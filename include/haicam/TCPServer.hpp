@@ -10,7 +10,7 @@
 namespace haicam
 {
     class TCPServer;
-    typedef std::shared_ptr<TCPServer> TcpServerPtr;
+    typedef std::shared_ptr<TCPServer> TCPServerPtr;
 
     class TCPServer
     {
@@ -44,27 +44,32 @@ namespace haicam
             }
             else
             {
-                uv_tcp_t newConn;
-                uv_tcp_init(thiz->context->uv_loop, &newConn);
-                uv_tcp_nodelay(&newConn, 1);
+                uv_tcp_t* newConn = new uv_tcp_t();
+                uv_tcp_init(thiz->context->uv_loop, newConn);
+                uv_tcp_nodelay(newConn, 1);
 
-                if (uv_accept(serverConn, (uv_stream_t *)&newConn) == 0)
+                if (uv_accept(serverConn, (uv_stream_t *)newConn) == 0)
                 {
-                    /*struct sockaddr_storage addr;
+                    struct sockaddr_storage addr;
                     int addrLen;
-                    uv_tcp_getpeername(&newConn, (sockaddr*)&addr, &addrLen);
+                    uv_tcp_getpeername(newConn, (sockaddr*)&addr, &addrLen);
 
                     char senderIP[17] = {0};
                     uv_ip4_name((const struct sockaddr_in *)&addr, senderIP, 16);
-                    std::string remoteIP = senderIP;
-                    int remotePort = ntohs(((const struct sockaddr_in *)&addr)->sin_port);*/
 
-                    TcpConnectionPtr conntPtr = TCPConnection::create(*(uv_stream_t *)&newConn);
+                    TCPConnectionPtr conntPtr = TCPConnection::create((uv_stream_t *)newConn);
                     conntPtr->onSentErrorCallback = thiz->onSentErrorCallback;
                     conntPtr->onSentCallback = thiz->onSentCallback;
                     conntPtr->onCloseCallback = thiz->onCloseCallback;
                     conntPtr->onDataCallback = thiz->onDataCallback;
+
+                    conntPtr->remoteIP = senderIP;
+                    conntPtr->remotePort = ntohs(((const struct sockaddr_in *)&addr)->sin_port);
+
+                    conntPtr->createdByServer = true;
+
                     conntPtr->readStart();
+
                     thiz->connections.push_back(conntPtr);
 
                     if (thiz->onNewConnectionCallback != NULL)
@@ -74,15 +79,16 @@ namespace haicam
                 }
                 else
                 {
-                    uv_close((uv_handle_t *)&newConn, TCPServer::onSocketClose);
+                    uv_close((uv_handle_t *)newConn, TCPServer::onSocketClose);
+                    delete newConn;
                 }
             }
         }
 
     public:
-        static TcpServerPtr create(Context *context, std::string listenIp, int listenPort)
+        static TCPServerPtr create(Context *context, std::string listenIp, int listenPort)
         {
-            return TcpServerPtr(new TCPServer(context, listenIp, listenPort));
+            return TCPServerPtr(new TCPServer(context, listenIp, listenPort));
         };
         ~TCPServer(){
 
@@ -103,8 +109,18 @@ namespace haicam
             return true;
         }
 
-        void close()
+        void shutdown()
         {
+            if (uv_is_active((uv_handle_t *)&server))
+            {
+                uv_read_stop((uv_stream_t *)&server);
+            }
+
+            if (!uv_is_closing((uv_handle_t *)&server))
+            {
+                uv_close((uv_handle_t *)&server, TCPServer::onSocketClose);
+            }
+
             for (auto itr = connections.begin(); itr != connections.end();)
             {
                 (*itr)->close();
@@ -116,14 +132,14 @@ namespace haicam
         Context *context;
         uv_tcp_t server;
         struct sockaddr_in addr;
-        std::list<TcpConnectionPtr> connections;
+        std::list<TCPConnectionPtr> connections;
 
     public:
-        std::function<void(TcpConnectionPtr)> onNewConnectionCallback;
-        std::function<void(TcpConnectionPtr)> onSentErrorCallback;
-        std::function<void(TcpConnectionPtr)> onSentCallback;
-        std::function<void(TcpConnectionPtr)> onCloseCallback;
-        std::function<void(TcpConnectionPtr, ByteBufferPtr data)> onDataCallback;
+        std::function<void(TCPConnectionPtr)> onNewConnectionCallback;
+        std::function<void(TCPConnectionPtr)> onSentErrorCallback;
+        std::function<void(TCPConnectionPtr)> onSentCallback;
+        std::function<void(TCPConnectionPtr)> onCloseCallback;
+        std::function<void(TCPConnectionPtr, ByteBufferPtr data)> onDataCallback;
     };
 }
 #endif

@@ -54,6 +54,12 @@ namespace haicam
             return true;
         }
 
+        bool isOpen()
+        {
+            std::unique_lock<std::mutex> lock(m);
+            return !isClosed;
+        }
+
         void close()
         {
             std::unique_lock<std::mutex> lock(m);

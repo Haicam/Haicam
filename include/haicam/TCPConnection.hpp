@@ -8,7 +8,7 @@
 namespace haicam
 {
     class TCPConnection;
-    typedef std::shared_ptr<TCPConnection> TcpConnectionPtr;
+    typedef std::shared_ptr<TCPConnection> TCPConnectionPtr;
 
     struct WriteReq
     {
@@ -19,14 +19,17 @@ namespace haicam
     class TCPConnection : public std::enable_shared_from_this<TCPConnection>
     {
     private:
-        TCPConnection(uv_stream_t conn)
+        TCPConnection(uv_stream_t* conn)
             : conn(conn),
               onSentErrorCallback(NULL),
               onSentCallback(NULL),
               onCloseCallback(NULL),
-              onDataCallback(NULL)
+              onDataCallback(NULL),
+              remoteIP("0.0.0.0"),
+              remotePort(0),
+              createdByServer(false)
         {
-            conn.data = this;
+            conn->data = this;
         };
 
         static void allocReceiveBuffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf)
@@ -78,23 +81,27 @@ namespace haicam
                     thiz->onSentCallback(thiz->getPtr());
             }
             delete writeReq; // writeReq->data use_count - 1
+            delete req;
         };
 
     public:
-        static TcpConnectionPtr create(uv_stream_t conn)
+        static TCPConnectionPtr create(uv_stream_t* conn)
         {
-            return TcpConnectionPtr(new TCPConnection(conn));
+            return TCPConnectionPtr(new TCPConnection(conn));
         };
         ~TCPConnection(){
-
+            if(createdByServer) 
+            { 
+                delete conn;
+            }
         };
 
         void readStart() 
         {
-            uv_read_start(&conn, TCPConnection::allocReceiveBuffer, TCPConnection::onDataReceived);
+            uv_read_start(conn, TCPConnection::allocReceiveBuffer, TCPConnection::onDataReceived);
         }
 
-        TcpConnectionPtr getPtr()
+        TCPConnectionPtr getPtr()
         {
             return shared_from_this();
         };
@@ -108,33 +115,37 @@ namespace haicam
             writeReq->thiz = this;
             writeReq->data = data; // data use_count + 1
 
-            uv_write_t req;
-            req.data = static_cast<void*>(writeReq);
+            uv_write_t* req = new uv_write_t();
+            req->data = static_cast<void*>(writeReq);
 
-            uv_write(&req, &conn, &buf, 1, TCPConnection::sentCallback);
+            uv_write(req, conn, &buf, 1, TCPConnection::sentCallback);
         }
 
         void close()
         {
-            if (uv_is_active((uv_handle_t *)&conn))
+            if (uv_is_active((uv_handle_t *)conn))
             {
-                uv_read_stop(&conn);
+                uv_read_stop(conn);
             }
 
-            if (uv_is_closing((uv_handle_t *)&conn) == 0)
+            if (!uv_is_closing((uv_handle_t *)conn))
             {
-                uv_close((uv_handle_t *)&conn, TCPConnection::onSocketClose);
+                uv_close((uv_handle_t *)conn, TCPConnection::onSocketClose);
             }
         }
 
     private:
-        uv_stream_t conn;
+        uv_stream_t* conn;
 
     public:
-        std::function<void(TcpConnectionPtr)> onSentErrorCallback;
-        std::function<void(TcpConnectionPtr)> onSentCallback;
-        std::function<void(TcpConnectionPtr)> onCloseCallback;
-        std::function<void(TcpConnectionPtr, ByteBufferPtr)> onDataCallback;
+        std::function<void(TCPConnectionPtr)> onSentErrorCallback;
+        std::function<void(TCPConnectionPtr)> onSentCallback;
+        std::function<void(TCPConnectionPtr)> onCloseCallback;
+        std::function<void(TCPConnectionPtr, ByteBufferPtr)> onDataCallback;
+
+        std::string remoteIP;
+        int remotePort;
+        bool createdByServer;
     };
 }
 #endif

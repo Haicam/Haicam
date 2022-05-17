@@ -12,6 +12,11 @@ namespace haicam
     class Runnable
     {
     private:
+        static void asyncCloseCallback(uv_handle_t *handle)
+        {
+           
+        }
+
         static void asyncCallback(uv_async_t *handle)
         {
             Runnable *thiz = static_cast<Runnable *>(handle->data);
@@ -27,7 +32,6 @@ namespace haicam
 
         static void timerCallback(uv_timer_t *handle)
         {
-            uv_timer_stop(handle);
             Runnable *thiz = static_cast<Runnable *>(handle->data);
             thiz->stop();
             if (thiz->onTimeoutCallback != NULL)
@@ -45,27 +49,37 @@ namespace haicam
     protected:
         virtual void run() = 0;
 
+        bool isRunning()
+        {
+            return input.isOpen();
+        }
+
         void sendDataOut(ByteBufferPtr buf)
         {
             uv_timer_stop(&timer);
-
             uv_async_send(&this->async);
             this->output.enqueue(buf);
         }
 
     public:
         Runnable(Context *context)
-            : context(context), input(), output(), onSuccessCallback(NULL), onTimeoutCallback(NULL), async(), timer(), thread(){};
+            : context(context), input(), output(), onSuccessCallback(NULL), onTimeoutCallback(NULL), async(), timer(), thread(), isStopped(true){};
         ~Runnable(){};
 
-        void start(int timeoutMillisecs = 60000)
+        void start(int timeoutMillisecs)
         {
+            if (!isStopped) return;
+            isStopped = false;
+
+            H_ASSERT(context->uv_loop != NULL);
+            H_ASSERT(isRunning());
+
             uv_timer_init(context->uv_loop, &timer);
             timer.data = static_cast<void *>(this);
-            uv_timer_start(&timer, Runnable::timerCallback, 0, timeoutMillisecs);
+            uv_timer_start(&timer, Runnable::timerCallback, timeoutMillisecs, 0);
 
-            this->async.data = static_cast<void *>(this);
-            uv_async_init(context->uv_loop, &this->async, Runnable::asyncCallback);
+            uv_async_init(context->uv_loop, &async, Runnable::asyncCallback);
+            async.data = static_cast<void *>(this);
             uv_thread_create(&this->thread, Runnable::process, this);
         }
 
@@ -76,9 +90,16 @@ namespace haicam
 
         void stop()
         {
+            if (isStopped) return;
+            isStopped = true;
+
             input.close();
             output.close();
-            uv_close((uv_handle_t *)&this->async, NULL);
+
+            uv_timer_stop(&timer);
+            uv_close((uv_handle_t *)&timer, NULL);
+
+            uv_close((uv_handle_t *)&async, Runnable::asyncCloseCallback);
             uv_thread_join(&this->thread);
         }
 
@@ -88,6 +109,7 @@ namespace haicam
         uv_async_t async;
         uv_timer_t timer;
         uv_thread_t thread;
+        bool isStopped;
 
     protected:
         SafeQueue<ByteBufferPtr> input;

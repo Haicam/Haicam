@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.4.1)
 project(haicam-core)
 
 if (HAICAM_PLATFORM MATCHES "gm8136")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -O0 -g3 ")
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O0 -g3 ")
 endif()
 
 include_directories(
@@ -34,9 +34,9 @@ file(GLOB HAICAM_APP_SRCS
 )
 
 file(GLOB HAICAM_TEST_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/${HAICAM_PLATFORM}/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/${HAICAM_PLATFORM}/${HAICAM_TARGET}/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/TCPTest.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/test/${HAICAM_PLATFORM}/*.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/test/${HAICAM_PLATFORM}/${HAICAM_TARGET}/*.cpp
 )
 
 add_library(haicam-core_a STATIC 
@@ -98,9 +98,9 @@ else()
 
     target_link_libraries (haicam-app
         haicam-core_a
-        zbar.a
-        liquid.a
-        openlibm.a
+        #zbar.a
+        #liquid.a
+        #openlibm.a
         uv_a.a
         pthread
         dl
@@ -152,9 +152,9 @@ else()
 
     target_link_libraries (haicam-test
         haicam-core_a
-        zbar.a
-        liquid.a
-        openlibm.a
+        #zbar.a
+        #liquid.a
+        #openlibm.a
         uv_a.a
         gtest.a
         gtest_main.a

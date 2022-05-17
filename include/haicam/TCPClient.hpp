@@ -9,13 +9,15 @@
 namespace haicam
 {
     class TCPClient;
-    typedef std::shared_ptr<TCPClient> TcpClientPtr;
+    typedef std::shared_ptr<TCPClient> TCPClientPtr;
 
     class TCPClient
     {
     private:
         TCPClient(Context *context, std::string serverIp, int serverPort)
             : context(context),
+              serverIp(serverIp),
+              serverPort(serverPort),
               connection(),
               client(),
               addr(),
@@ -40,11 +42,15 @@ namespace haicam
                     thiz->onConnectErrorCallback();
                 }
             } else {
-                thiz->conntPtr = TCPConnection::create(*(uv_stream_t*)conn->handle);
+                thiz->conntPtr = TCPConnection::create((uv_stream_t*)conn->handle);
                 thiz->conntPtr->onSentErrorCallback = thiz->onSentErrorCallback;
                 thiz->conntPtr->onSentCallback = thiz->onSentCallback;
                 thiz->conntPtr->onCloseCallback = thiz->onCloseCallback;
                 thiz->conntPtr->onDataCallback = thiz->onDataCallback;
+
+                thiz->conntPtr->remoteIP = thiz->serverIp;
+                thiz->conntPtr->remotePort = thiz->serverPort;
+
                 thiz->conntPtr->readStart();
                 if (thiz->onConnectedCallback != NULL) {
                     thiz->onConnectedCallback(thiz->conntPtr);
@@ -53,9 +59,9 @@ namespace haicam
         }
 
     public:
-        static TcpClientPtr create(Context *context, std::string serverIp, int serverPort)
+        static TCPClientPtr create(Context *context, std::string serverIp, int serverPort)
         {
-            return TcpClientPtr(new TCPClient(context, serverIp, serverPort));
+            return TCPClientPtr(new TCPClient(context, serverIp, serverPort));
         };
         ~TCPClient(){
 
@@ -71,24 +77,36 @@ namespace haicam
         {
             if (conntPtr.get() != NULL) {
                 conntPtr->close();
+            } else {
+                if (uv_is_active((uv_handle_t *)&client))
+                {
+                    uv_read_stop((uv_stream_t *)&client);
+                }
+
+                if (!uv_is_closing((uv_handle_t *)&client))
+                {
+                    uv_close((uv_handle_t *)&client, NULL);
+                }
             }
         }
 
     private:
         Context *context;
+        std::string serverIp;
+        int serverPort;
         uv_connect_t connection;
         uv_tcp_t client;
         struct sockaddr_in addr;
-        TcpConnectionPtr conntPtr;
+        TCPConnectionPtr conntPtr;
 
     public:
         std::function<void()> onConnectErrorCallback;
-        std::function<void(TcpConnectionPtr)> onConnectedCallback;
+        std::function<void(TCPConnectionPtr)> onConnectedCallback;
 
-        std::function<void(TcpConnectionPtr)> onSentErrorCallback;
-        std::function<void(TcpConnectionPtr)> onSentCallback;
-        std::function<void(TcpConnectionPtr)> onCloseCallback;
-        std::function<void(TcpConnectionPtr, ByteBufferPtr)> onDataCallback;
+        std::function<void(TCPConnectionPtr)> onSentErrorCallback;
+        std::function<void(TCPConnectionPtr)> onSentCallback;
+        std::function<void(TCPConnectionPtr)> onCloseCallback;
+        std::function<void(TCPConnectionPtr, ByteBufferPtr)> onDataCallback;
     };
 }
 #endif

@@ -8,7 +8,7 @@
 namespace haicam
 {
     class UDP;
-    typedef std::shared_ptr<UDP> UdpPtr;
+    typedef std::shared_ptr<UDP> UDPPtr;
 
     struct ReqObj
     {
@@ -88,12 +88,13 @@ namespace haicam
                     thiz->onSentCallback();
             }
             delete reqObj; // reqObj->data use_count - 1
+            delete req;
         };
 
     public:
-        static UdpPtr create(Context *context, std::string bindIp = "0.0.0.0", int bindPort = 0)
+        static UDPPtr create(Context *context, std::string bindIp = "0.0.0.0", int bindPort = 0)
         {
-            return UdpPtr(new UDP(context, bindIp, bindPort));
+            return UDPPtr(new UDP(context, bindIp, bindPort));
         };
         ~UDP(){
 
@@ -111,10 +112,10 @@ namespace haicam
             reqObj->thiz = this;
             reqObj->data = data; // data use_count + 1
 
-            uv_udp_send_t req;
-            req.data = static_cast<void *>(reqObj);
+            uv_udp_send_t* req = new uv_udp_send_t();
+            req->data = static_cast<void *>(reqObj);
 
-            uv_udp_send(&req, &socket, &buf, 1, (const struct sockaddr *)&toAddr, UDP::sentCallback);
+            uv_udp_send(req, &socket, &buf, 1, (const struct sockaddr *)&toAddr, UDP::sentCallback);
         }
 
         void open()
