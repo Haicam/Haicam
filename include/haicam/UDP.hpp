@@ -1,6 +1,5 @@
 #ifndef __HAICAM_UDP_HPP__
 #define __HAICAM_UDP_HPP__
-
 #include "haicam/Context.hpp"
 #include "haicam/ByteBuffer.hpp"
 #include <functional>
@@ -8,13 +7,7 @@
 namespace haicam
 {
     class UDP;
-    typedef std::shared_ptr<UDP> UdpPtr;
-
-    struct ReqObj
-    {
-        UDP *thiz;
-        ByteBufferPtr data;
-    };
+    typedef std::shared_ptr<UDP> UDPPtr;
 
     class UDP
     {
@@ -32,6 +25,12 @@ namespace haicam
             socket.data = static_cast<void *>(this);
 
             uv_ip4_addr(bindIp.c_str(), bindPort, &addr);
+        };
+
+        struct ReqObj
+        {
+            UDP *thiz;
+            ByteBufferPtr data;
         };
 
         static void allocReceiveBuffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf)
@@ -62,12 +61,12 @@ namespace haicam
             {
                 char senderIP[17] = {0};
                 uv_ip4_name((const struct sockaddr_in *)addr, senderIP, 16);
-                std::string fromIP = senderIP;
-                int fromPort = ntohs(((const struct sockaddr_in *)addr)->sin_port);
+                std::string remoteIP = senderIP;
+                int remotePort = ntohs(((const struct sockaddr_in *)addr)->sin_port);
 
                 UDP *thiz = static_cast<UDP *>(socket->data);
                 if (thiz->onDataCallback != NULL)
-                    thiz->onDataCallback(ByteBuffer::create(buf->base, buf->len), fromIP, fromPort);
+                    thiz->onDataCallback(ByteBuffer::create(buf->base, nread), remoteIP, remotePort);
             }
 
             free(buf->base);
@@ -88,12 +87,13 @@ namespace haicam
                     thiz->onSentCallback();
             }
             delete reqObj; // reqObj->data use_count - 1
+            delete req;
         };
 
     public:
-        static UdpPtr create(Context *context, std::string bindIp = "0.0.0.0", int bindPort = 0)
+        static UDPPtr create(Context *context, std::string bindIp = "0.0.0.0", int bindPort = 0)
         {
-            return UdpPtr(new UDP(context, bindIp, bindPort));
+            return UDPPtr(new UDP(context, bindIp, bindPort));
         };
         ~UDP(){
 
@@ -111,10 +111,10 @@ namespace haicam
             reqObj->thiz = this;
             reqObj->data = data; // data use_count + 1
 
-            uv_udp_send_t req;
-            req.data = static_cast<void *>(reqObj);
+            uv_udp_send_t* req = new uv_udp_send_t();
+            req->data = static_cast<void *>(reqObj);
 
-            uv_udp_send(&req, &socket, &buf, 1, (const struct sockaddr *)&toAddr, UDP::sentCallback);
+            uv_udp_send(req, &socket, &buf, 1, (const struct sockaddr *)&toAddr, UDP::sentCallback);
         }
 
         void open()

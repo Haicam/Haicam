@@ -1,5 +1,5 @@
 #include "haicam/QRCodeScanner.hpp"
-#include "zbar.h"
+//#include "zbar.h"
 
 using namespace haicam;
 
