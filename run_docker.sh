@@ -4,5 +4,4 @@ docker run -it --rm \
     -v ~/go:/home/haicam/go \
     -v ~/toolchain:/home/haicam/toolchain:ro \
     -v `pwd`:/home/haicam/workspace \
-    -v ~/Dropbox/test-libs/uv-cpp:/tmp/uv-cpp \
     haicam/haicam-toolchain:latest

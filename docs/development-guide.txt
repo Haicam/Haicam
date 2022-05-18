@@ -1,0 +1,50 @@
+Welcome to contribute to Haicam project, please follow steps for development 
+
+1. Fork project https://github.com/Haicam/Haicam to your account
+2. git clone the forked project in your account to your local computer 
+3. git switch to develop branch
+4. docker pull haicam/haicam-toolchain:latest
+5. Directories for development
+    ~/toolchain #location for any third party toolchain not installed in the docker
+    ~/go # golang modules directory, leave it empty, that will be used in the docker
+    current Haicam project directory  
+6. Run haicam toolchain docker by command: ./run_docker.sh, enter the docker build enviroment
+7. Build the project for all platforms, by run command: ./build/haicam.sh
+You may get errors if you do not setup the third party toolchain correctly
+8. Build for Linux x86_64 only by command: ./build/apps/linux-x86_64.sh
+9. Run all test cases for Linux x86_64, by command: ./bin/linux/x86_64/generic/haicam-test
+10. If the test cases crash, run gdb command below for debug
+$ gdb ./bin/linux/x86_64/generic/haicam-test
+(gdb) r
+(gdb) bt full
+You will find the crash location
+11. Memory leak check by command below
+
+$valgrind ./bin/linux/x86_64/generic/haicam-test
+
+12. You can run one test case by command below (For example)
+
+$ ./bin/linux/x86_64/generic/haicam-test --gtest_filter=haicam_UDPTest.udp_test
+$ gdb --args ./bin/linux/x86_64/generic/haicam-test --gtest_filter=haicam_UDPTest.udp_test
+$ valgrind ./bin/linux/x86_64/generic/haicam-test --gtest_filter=haicam_UDPTest.udp_test
+
+13. Build for GM8136 by command: build/apps/gm8136-armv5.sh
+GM8136 executable files cannot be executed in the docker, that can only run in the qemu simulator enviroment 
+
+14. Do development in the directory below
+header files: include
+source codes: src 
+test codes: test
+
+15. After run your test case and do memory leak check, push your codes to github, and do pull reqest to contribute your codes
+
+
+
+
+
+
+
+
+
+
+
