@@ -1,0 +1,4 @@
+/home/haicam/workspace/bin/rpi/armv7/generic/haicam-app
+/home/haicam/workspace/bin/rpi/armv7/generic/haicam-test
+/home/haicam/workspace/bin/rpi/armv7/generic/libs/libhaicam-core.so
+/home/haicam/workspace/bin/rpi/armv7/generic/libs/libhaicam-core_a.a

@@ -1,0 +1,5 @@
+/home/haicam/workspace/bin/windows/x86_64/generic/haicam-app.exe
+/home/haicam/workspace/bin/windows/x86_64/generic/haicam-test.exe
+/home/haicam/workspace/bin/windows/x86_64/generic/libs/libhaicam-core.dll.a
+/home/haicam/workspace/bin/windows/x86_64/generic/libhaicam-core.dll
+/home/haicam/workspace/bin/windows/x86_64/generic/libs/libhaicam-core_a.a

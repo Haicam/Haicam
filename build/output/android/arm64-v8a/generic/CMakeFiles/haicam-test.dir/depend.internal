@@ -260,6 +260,28 @@ CMakeFiles/haicam-test.dir/test/UDPTest2.cpp.o
  ../../../../../include/haicam/ByteBuffer.hpp
  ../../../../../include/haicam/Context.hpp
  ../../../../../include/haicam/UDP.hpp
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/gtest-death-test.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/gtest-message.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/gtest-param-test.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/gtest-printers.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/gtest-test-part.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/gtest-typed-test.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/gtest.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/gtest_pred_impl.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/gtest_prod.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/custom/gtest-port.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/custom/gtest-printers.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/gtest-death-test-internal.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/gtest-filepath.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/gtest-internal.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/gtest-linked_ptr.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/gtest-param-util-generated.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/gtest-param-util.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/gtest-port-arch.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/gtest-port.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/gtest-string.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/gtest-tuple.h
+ ../../../../../libs/googletest/android/arm64-v8a/include/gtest/internal/gtest-type-util.h
  ../../../../../libs/libuv/android/arm64-v8a/include/uv.h
  ../../../../../libs/libuv/android/arm64-v8a/include/uv/aix.h
  ../../../../../libs/libuv/android/arm64-v8a/include/uv/bsd.h

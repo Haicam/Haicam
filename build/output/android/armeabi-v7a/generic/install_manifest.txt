@@ -1,0 +1,4 @@
+/home/haicam/workspace/bin/android/armeabi-v7a/generic/haicam-app
+/home/haicam/workspace/bin/android/armeabi-v7a/generic/haicam-test
+/home/haicam/workspace/bin/android/armeabi-v7a/generic/libs/libhaicam-core.so
+/home/haicam/workspace/bin/android/armeabi-v7a/generic/libs/libhaicam-core_a.a

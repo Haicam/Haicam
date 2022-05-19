@@ -7,7 +7,7 @@ using namespace std::placeholders;
 int err = 0, sent_cb = 0, close_cb = 0, data_cb = 0;
 
 void haicam_UDPTest_onDataCallback(UDP *udp,ByteBufferPtr data,std::string ip,int port){
-    std::;string str = data->toString();
+    std::string str = data->toString();
     ASSERT_EQ(str, "world");
     udp->sendDataTo(ByteBuffer::create("world"), ip, port);
     udp->close();
@@ -34,7 +34,7 @@ TEST(haicam_UDPTest2, udp_test2){
 	  Context *context = Context::getInstance();
 
    UDPPtr udp1 = UDP::create(context, "127.0.0.1", 9898);
-   udp1->onDataCallback = std::bind(haicam_UDPTest_onDataCallback, ud1.get(), _1, _2, _3);
+   udp1->onDataCallback = std::bind(haicam_UDPTest_onDataCallback, udp1.get(), _1, _2, _3);
    udp1->onCloseCallback = std::bind(haicam_UDPTest_onCloseCallback);
    udp1->onSentCallback = std::bind(haicam_UDPTest_onSentCallback);
    udp1->onSentErrorCallback = std::bind(haicam_UDPTest_onSentErrorCallback);
@@ -47,7 +47,7 @@ TEST(haicam_UDPTest2, udp_test2){
    udp2->onSentErrorCallback = std::bind(haicam_UDPTest_onSentErrorCallback);
    udp2->open();
     
-   udp2->sendDataTo(ByteBuffer::create("hello"), "127.0.0.1", 9898);
+   udp2->sendDataTo(ByteBuffer::create("world"), "127.0.0.1", 9898);
 
    context->run();
    delete context;
