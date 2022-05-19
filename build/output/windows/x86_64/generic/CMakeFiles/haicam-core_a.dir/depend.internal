@@ -3,6 +3,21 @@
 
 CMakeFiles/haicam-core_a.dir/src/Context.cpp.obj
  ../../../../../include/haicam/Context.hpp
+ ../../../../../libs/libuv/windows/x86_64/include/uv.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/aix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/bsd.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/darwin.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/errno.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/linux.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/os390.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/posix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/stdint-msvc2008.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/sunos.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/threadpool.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/tree.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/unix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/version.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/win.h
  /home/haicam/workspace/src/Context.cpp
 CMakeFiles/haicam-core_a.dir/src/QRCodeScanner.cpp.obj
  ../../../../../include/haicam/ByteBuffer.hpp
@@ -10,6 +25,21 @@ CMakeFiles/haicam-core_a.dir/src/QRCodeScanner.cpp.obj
  ../../../../../include/haicam/QRCodeScanner.hpp
  ../../../../../include/haicam/Runnable.hpp
  ../../../../../include/haicam/SafeQueue.hpp
+ ../../../../../libs/libuv/windows/x86_64/include/uv.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/aix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/bsd.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/darwin.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/errno.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/linux.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/os390.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/posix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/stdint-msvc2008.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/sunos.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/threadpool.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/tree.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/unix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/version.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/win.h
  /home/haicam/workspace/src/QRCodeScanner.cpp
 CMakeFiles/haicam-core_a.dir/src/SoundWaveReceiver.cpp.obj
  ../../../../../include/haicam/ByteBuffer.hpp
@@ -17,12 +47,42 @@ CMakeFiles/haicam-core_a.dir/src/SoundWaveReceiver.cpp.obj
  ../../../../../include/haicam/Runnable.hpp
  ../../../../../include/haicam/SafeQueue.hpp
  ../../../../../include/haicam/SoundWaveReceiver.hpp
+ ../../../../../libs/libuv/windows/x86_64/include/uv.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/aix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/bsd.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/darwin.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/errno.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/linux.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/os390.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/posix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/stdint-msvc2008.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/sunos.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/threadpool.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/tree.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/unix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/version.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/win.h
  /home/haicam/workspace/src/SoundWaveReceiver.cpp
 CMakeFiles/haicam-core_a.dir/src/TCPClient.cpp.obj
  ../../../../../include/haicam/ByteBuffer.hpp
  ../../../../../include/haicam/Context.hpp
  ../../../../../include/haicam/TCPClient.hpp
  ../../../../../include/haicam/TCPConnection.hpp
+ ../../../../../libs/libuv/windows/x86_64/include/uv.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/aix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/bsd.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/darwin.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/errno.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/linux.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/os390.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/posix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/stdint-msvc2008.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/sunos.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/threadpool.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/tree.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/unix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/version.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/win.h
  /home/haicam/workspace/src/TCPClient.cpp
 CMakeFiles/haicam-core_a.dir/src/TCPConnection.cpp.obj
  ../../../../../include/haicam/ByteBuffer.hpp
@@ -30,10 +90,40 @@ CMakeFiles/haicam-core_a.dir/src/TCPConnection.cpp.obj
  ../../../../../include/haicam/TCPClient.hpp
  ../../../../../include/haicam/TCPConnection.hpp
  ../../../../../include/haicam/TCPServer.hpp
+ ../../../../../libs/libuv/windows/x86_64/include/uv.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/aix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/bsd.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/darwin.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/errno.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/linux.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/os390.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/posix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/stdint-msvc2008.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/sunos.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/threadpool.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/tree.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/unix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/version.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/win.h
  /home/haicam/workspace/src/TCPConnection.cpp
 CMakeFiles/haicam-core_a.dir/src/TCPServer.cpp.obj
  ../../../../../include/haicam/ByteBuffer.hpp
  ../../../../../include/haicam/Context.hpp
  ../../../../../include/haicam/TCPConnection.hpp
  ../../../../../include/haicam/TCPServer.hpp
+ ../../../../../libs/libuv/windows/x86_64/include/uv.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/aix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/bsd.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/darwin.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/errno.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/linux.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/os390.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/posix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/stdint-msvc2008.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/sunos.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/threadpool.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/tree.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/unix.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/version.h
+ ../../../../../libs/libuv/windows/x86_64/include/uv/win.h
  /home/haicam/workspace/src/TCPServer.cpp

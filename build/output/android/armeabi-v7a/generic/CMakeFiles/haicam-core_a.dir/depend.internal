@@ -3,6 +3,21 @@
 
 CMakeFiles/haicam-core_a.dir/src/Context.cpp.o
  ../../../../../include/haicam/Context.hpp
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/aix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/bsd.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/darwin.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/errno.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/linux.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/os390.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/posix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/stdint-msvc2008.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/sunos.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/threadpool.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/tree.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/unix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/version.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/win.h
  /home/haicam/workspace/src/Context.cpp
 CMakeFiles/haicam-core_a.dir/src/QRCodeScanner.cpp.o
  ../../../../../include/haicam/ByteBuffer.hpp
@@ -10,6 +25,21 @@ CMakeFiles/haicam-core_a.dir/src/QRCodeScanner.cpp.o
  ../../../../../include/haicam/QRCodeScanner.hpp
  ../../../../../include/haicam/Runnable.hpp
  ../../../../../include/haicam/SafeQueue.hpp
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/aix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/bsd.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/darwin.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/errno.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/linux.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/os390.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/posix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/stdint-msvc2008.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/sunos.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/threadpool.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/tree.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/unix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/version.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/win.h
  /home/haicam/workspace/src/QRCodeScanner.cpp
 CMakeFiles/haicam-core_a.dir/src/SoundWaveReceiver.cpp.o
  ../../../../../include/haicam/ByteBuffer.hpp
@@ -17,12 +47,42 @@ CMakeFiles/haicam-core_a.dir/src/SoundWaveReceiver.cpp.o
  ../../../../../include/haicam/Runnable.hpp
  ../../../../../include/haicam/SafeQueue.hpp
  ../../../../../include/haicam/SoundWaveReceiver.hpp
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/aix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/bsd.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/darwin.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/errno.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/linux.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/os390.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/posix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/stdint-msvc2008.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/sunos.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/threadpool.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/tree.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/unix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/version.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/win.h
  /home/haicam/workspace/src/SoundWaveReceiver.cpp
 CMakeFiles/haicam-core_a.dir/src/TCPClient.cpp.o
  ../../../../../include/haicam/ByteBuffer.hpp
  ../../../../../include/haicam/Context.hpp
  ../../../../../include/haicam/TCPClient.hpp
  ../../../../../include/haicam/TCPConnection.hpp
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/aix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/bsd.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/darwin.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/errno.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/linux.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/os390.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/posix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/stdint-msvc2008.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/sunos.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/threadpool.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/tree.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/unix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/version.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/win.h
  /home/haicam/workspace/src/TCPClient.cpp
 CMakeFiles/haicam-core_a.dir/src/TCPConnection.cpp.o
  ../../../../../include/haicam/ByteBuffer.hpp
@@ -30,10 +90,40 @@ CMakeFiles/haicam-core_a.dir/src/TCPConnection.cpp.o
  ../../../../../include/haicam/TCPClient.hpp
  ../../../../../include/haicam/TCPConnection.hpp
  ../../../../../include/haicam/TCPServer.hpp
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/aix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/bsd.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/darwin.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/errno.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/linux.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/os390.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/posix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/stdint-msvc2008.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/sunos.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/threadpool.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/tree.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/unix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/version.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/win.h
  /home/haicam/workspace/src/TCPConnection.cpp
 CMakeFiles/haicam-core_a.dir/src/TCPServer.cpp.o
  ../../../../../include/haicam/ByteBuffer.hpp
  ../../../../../include/haicam/Context.hpp
  ../../../../../include/haicam/TCPConnection.hpp
  ../../../../../include/haicam/TCPServer.hpp
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/aix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/bsd.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/darwin.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/errno.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/linux.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/os390.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/posix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/stdint-msvc2008.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/sunos.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/threadpool.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/tree.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/unix.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/version.h
+ ../../../../../libs/libuv/android/armeabi-v7a/include/uv/win.h
  /home/haicam/workspace/src/TCPServer.cpp
