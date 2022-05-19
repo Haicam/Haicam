@@ -48,7 +48,7 @@ void test1(){
    context->run();
    delete context;
 
-   ASSERT_EQ(sent_cb, 2);
+   ASSERT_EQ(sent_cb, 3);
    ASSERT_EQ(data_cb, 2);
    ASSERT_EQ(close_cb ,2);
    ASSERT_EQ(err, 0);
