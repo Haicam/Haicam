@@ -1,0 +1,3 @@
+/usr/bin/cmake -E remove -f CMakeFiles/haicam-core.dir/objects.a
+/usr/bin/i686-w64-mingw32-ar cr CMakeFiles/haicam-core.dir/objects.a @CMakeFiles/haicam-core.dir/objects1.rsp
+/usr/bin/i686-w64-mingw32-g++   -std=c++11 -O0 -g3   -shared -o libhaicam-core.dll -Wl,--out-implib,libhaicam-core.dll.a -Wl,--major-image-version,0,--minor-image-version,0 -Wl,--whole-archive CMakeFiles/haicam-core.dir/objects.a -Wl,--no-whole-archive @CMakeFiles/haicam-core.dir/linklibs.rsp

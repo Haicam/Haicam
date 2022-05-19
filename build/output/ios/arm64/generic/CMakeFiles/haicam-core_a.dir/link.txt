@@ -1,0 +1,2 @@
+/home/haicam/toolchain/iPhoneOS15.4/bin/arm-apple-darwin11-ar qc libhaicam-core_a.a  CMakeFiles/haicam-core_a.dir/src/Context.cpp.o CMakeFiles/haicam-core_a.dir/src/QRCodeScanner.cpp.o CMakeFiles/haicam-core_a.dir/src/SoundWaveReceiver.cpp.o CMakeFiles/haicam-core_a.dir/src/TCPClient.cpp.o CMakeFiles/haicam-core_a.dir/src/TCPConnection.cpp.o CMakeFiles/haicam-core_a.dir/src/TCPServer.cpp.o
+/home/haicam/toolchain/iPhoneOS15.4/bin/arm-apple-darwin11-ranlib libhaicam-core_a.a

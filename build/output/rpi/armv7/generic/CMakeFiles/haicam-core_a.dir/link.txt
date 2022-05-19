@@ -1,0 +1,2 @@
+/home/haicam/toolchain/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ar qc libhaicam-core_a.a  CMakeFiles/haicam-core_a.dir/src/Context.cpp.o CMakeFiles/haicam-core_a.dir/src/QRCodeScanner.cpp.o CMakeFiles/haicam-core_a.dir/src/SoundWaveReceiver.cpp.o CMakeFiles/haicam-core_a.dir/src/TCPClient.cpp.o CMakeFiles/haicam-core_a.dir/src/TCPConnection.cpp.o CMakeFiles/haicam-core_a.dir/src/TCPServer.cpp.o
+/home/haicam/toolchain/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi-ranlib libhaicam-core_a.a

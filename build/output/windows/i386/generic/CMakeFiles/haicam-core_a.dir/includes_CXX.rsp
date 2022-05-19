@@ -1,0 +1,1 @@
+-I/home/haicam/workspace/include -I/home/haicam/workspace/libs/googletest/windows/i386/include -I/home/haicam/workspace/libs/libuv/windows/i386/include -I/home/haicam/workspace/libs/zbar/windows/i386/include -I/home/haicam/workspace/libs/quid/windows/i386/include 

@@ -1,0 +1,12 @@
+prefix=/home/haicam/workspace/libs/libuv/android/armeabi-v7a
+exec_prefix=${prefix}
+libdir=/home/haicam/workspace/libs/libuv/android/armeabi-v7a/lib
+includedir=/home/haicam/workspace/libs/libuv/android/armeabi-v7a/include
+
+Name: libuv
+Version: 1.44.2
+Description: multi-platform support library with a focus on asynchronous I/O.
+URL: http://libuv.org/
+
+Libs: -L${libdir} -luv -ldl
+Cflags: -I${includedir}

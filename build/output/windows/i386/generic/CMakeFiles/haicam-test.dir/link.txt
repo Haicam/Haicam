@@ -1,0 +1,3 @@
+/usr/bin/cmake -E remove -f CMakeFiles/haicam-test.dir/objects.a
+/usr/bin/i686-w64-mingw32-ar cr CMakeFiles/haicam-test.dir/objects.a @CMakeFiles/haicam-test.dir/objects1.rsp
+/usr/bin/i686-w64-mingw32-g++  -std=c++11 -O0 -g3    -Wl,--whole-archive CMakeFiles/haicam-test.dir/objects.a -Wl,--no-whole-archive  -o haicam-test.exe -Wl,--out-implib,libhaicam-test.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles/haicam-test.dir/linklibs.rsp

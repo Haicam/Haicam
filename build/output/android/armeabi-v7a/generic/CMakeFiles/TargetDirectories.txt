@@ -1,0 +1,10 @@
+/home/haicam/workspace/build/output/android/armeabi-v7a/generic/CMakeFiles/install/strip.dir
+/home/haicam/workspace/build/output/android/armeabi-v7a/generic/CMakeFiles/install/local.dir
+/home/haicam/workspace/build/output/android/armeabi-v7a/generic/CMakeFiles/install.dir
+/home/haicam/workspace/build/output/android/armeabi-v7a/generic/CMakeFiles/list_install_components.dir
+/home/haicam/workspace/build/output/android/armeabi-v7a/generic/CMakeFiles/rebuild_cache.dir
+/home/haicam/workspace/build/output/android/armeabi-v7a/generic/CMakeFiles/haicam-test.dir
+/home/haicam/workspace/build/output/android/armeabi-v7a/generic/CMakeFiles/haicam-app.dir
+/home/haicam/workspace/build/output/android/armeabi-v7a/generic/CMakeFiles/edit_cache.dir
+/home/haicam/workspace/build/output/android/armeabi-v7a/generic/CMakeFiles/haicam-core.dir
+/home/haicam/workspace/build/output/android/armeabi-v7a/generic/CMakeFiles/haicam-core_a.dir

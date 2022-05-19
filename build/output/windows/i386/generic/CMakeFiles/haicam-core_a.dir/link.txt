@@ -1,0 +1,2 @@
+/usr/bin/i686-w64-mingw32-ar qc libhaicam-core_a.a  CMakeFiles/haicam-core_a.dir/src/Context.cpp.obj CMakeFiles/haicam-core_a.dir/src/QRCodeScanner.cpp.obj CMakeFiles/haicam-core_a.dir/src/SoundWaveReceiver.cpp.obj CMakeFiles/haicam-core_a.dir/src/TCPClient.cpp.obj CMakeFiles/haicam-core_a.dir/src/TCPConnection.cpp.obj CMakeFiles/haicam-core_a.dir/src/TCPServer.cpp.obj
+/usr/bin/i686-w64-mingw32-ranlib libhaicam-core_a.a

@@ -1,0 +1,12 @@
+prefix=/home/haicam/workspace/libs/libuv/linux/i386
+exec_prefix=${prefix}
+libdir=/home/haicam/workspace/libs/libuv/linux/i386/lib
+includedir=/home/haicam/workspace/libs/libuv/linux/i386/include
+
+Name: libuv-static
+Version: 1.44.2
+Description: multi-platform support library with a focus on asynchronous I/O.
+URL: http://libuv.org/
+
+Libs: -L${libdir} -luv_a -lpthread -ldl -lrt
+Cflags: -I${includedir}
