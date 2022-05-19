@@ -29,9 +29,24 @@ $ gdb --args ./bin/linux/x86_64/generic/haicam-test --gtest_filter=haicam_UDPTes
 $ valgrind ./bin/linux/x86_64/generic/haicam-test --gtest_filter=haicam_UDPTest.udp_test
 
 13. Build for GM8136 by command: build/apps/gm8136-armv5.sh
-GM8136 executable files cannot be executed in the docker, that can only run in the qemu simulator enviroment 
+
+# run in docker by qemu simulator: 
+
+./bin/gm8136/armv5/generic/haicam-app.sh
+or
+./bin/gm8136/armv5/generic/haicam-test.sh
+
+# gdb debug in docker
+
+./bin/gm8136/armv5/generic/haicam-test-gdb-server.sh
+
+# then open another terminal to connect to the gdb server
+
+docker exec -it haicam-docker bash
+./bin/gm8136/armv5/generic/haicam-test-gdb.sh
 
 14. Do development in the directory below
+
 header files: include
 source codes: src 
 test codes: test

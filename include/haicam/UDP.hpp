@@ -16,6 +16,7 @@ namespace haicam
             : context(context),
               socket(),
               addr(),
+              multicastAddr(),
               onSentErrorCallback(NULL),
               onSentCallback(NULL),
               onCloseCallback(NULL),
@@ -117,14 +118,33 @@ namespace haicam
             uv_udp_send(req, &socket, &buf, 1, (const struct sockaddr *)&toAddr, UDP::sentCallback);
         }
 
+        void enableBroadcast()
+        {
+            uv_udp_set_broadcast(&socket, 1);
+        }
+
+        void enableMulticast(std::string multicastAddr)
+        {
+            this->multicastAddr = multicastAddr;
+            uv_udp_set_multicast_loop(&socket, 0);
+            uv_udp_set_multicast_ttl(&socket, 10);
+            //uv_udp_set_multicast_interface(&socket, interfaceAddr);
+            //uv_udp_set_membership(&socket, multicastAddr.c_str(), interfaceAddr.c_str(), UV_JOIN_GROUP);
+            uv_udp_set_membership(&socket, multicastAddr.c_str(), NULL, UV_JOIN_GROUP);
+        }
+
         void open()
         {
-            uv_udp_bind(&socket, (const struct sockaddr *)&addr, 0);
+            uv_udp_bind(&socket, (const struct sockaddr *)&addr, UV_UDP_REUSEADDR);
             uv_udp_recv_start(&socket, UDP::allocReceiveBuffer, UDP::onDataReceived);
         }
 
         void close()
         {
+            if(!this->multicastAddr.empty()) {
+                uv_udp_set_membership(&socket, multicastAddr.c_str(), NULL, UV_LEAVE_GROUP);
+            }
+
             if (uv_is_active((uv_handle_t *)&socket))
             {
                 uv_udp_recv_stop(&socket);
@@ -140,6 +160,7 @@ namespace haicam
         Context *context;
         uv_udp_t socket;
         struct sockaddr_in addr;
+        std::string multicastAddr;
 
     public:
         std::function<void()> onSentErrorCallback;
