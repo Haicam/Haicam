@@ -47,13 +47,20 @@ namespace haicam
             return ByteBufferPtr(new ByteBuffer((void*)str.data(), str.size()));
         }
 
-        bool fillData(void *data, int length, int offset = 0)
+        void appendData(char* data, int length)
         {
+            buffer.insert(buffer.end(), data, data + length);
+        }
+
+        bool fillData(char *data, int length, int offset = 0)
+        {
+            H_ASSERT(offset + length <= buffer.size());
+
             if (offset + length > buffer.size())
             {
                 return false;
             }
-            std::copy((char *)data, (char *)data + length, buffer.begin() + offset);
+            std::copy(data, data + length, buffer.begin() + offset);
             return true;
         }
 
