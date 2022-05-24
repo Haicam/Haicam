@@ -14,7 +14,6 @@ namespace haicam
     private:
         static void asyncCloseCallback(uv_handle_t *handle)
         {
-           
         }
 
         static void asyncCallback(uv_async_t *handle)
@@ -56,27 +55,33 @@ namespace haicam
 
         void sendDataOut(ByteBufferPtr buf)
         {
-            uv_timer_stop(&timer);
+            if (timeoutMillisecs > 0)
+                uv_timer_stop(&timer);
+
             uv_async_send(&this->async);
             this->output.enqueue(buf);
         }
 
     public:
         Runnable(Context *context)
-            : context(context), input(), output(), onSuccessCallback(NULL), onTimeoutCallback(NULL), async(), timer(), thread(), isStopped(true){};
+            : context(context), input(), output(), onSuccessCallback(NULL), onTimeoutCallback(NULL), async(), timer(), thread(), isStopped(true), timeoutMillisecs(0){};
         ~Runnable(){};
 
-        void start(int timeoutMillisecs)
+        void start(int timeoutMillisecs = 0)
         {
-            if (!isStopped) return;
+            if (!isStopped)
+                return;
             isStopped = false;
 
             H_ASSERT(context->uv_loop != NULL);
             H_ASSERT(isRunning());
 
-            uv_timer_init(context->uv_loop, &timer);
-            timer.data = static_cast<void *>(this);
-            uv_timer_start(&timer, Runnable::timerCallback, timeoutMillisecs, 0);
+            if (timeoutMillisecs > 0)
+            {
+                uv_timer_init(context->uv_loop, &timer);
+                timer.data = static_cast<void *>(this);
+                uv_timer_start(&timer, Runnable::timerCallback, timeoutMillisecs, 0);
+            }
 
             uv_async_init(context->uv_loop, &async, Runnable::asyncCallback);
             async.data = static_cast<void *>(this);
@@ -90,14 +95,18 @@ namespace haicam
 
         void stop()
         {
-            if (isStopped) return;
+            if (isStopped)
+                return;
             isStopped = true;
 
             input.close();
             output.close();
 
-            uv_timer_stop(&timer);
-            uv_close((uv_handle_t *)&timer, NULL);
+            if (timeoutMillisecs > 0)
+            {
+                uv_timer_stop(&timer);
+                uv_close((uv_handle_t *)&timer, NULL);
+            }
 
             uv_close((uv_handle_t *)&async, Runnable::asyncCloseCallback);
             uv_thread_join(&this->thread);
@@ -110,6 +119,7 @@ namespace haicam
         uv_timer_t timer;
         uv_thread_t thread;
         bool isStopped;
+        int timeoutMillisecs;
 
     protected:
         SafeQueue<ByteBufferPtr> input;
