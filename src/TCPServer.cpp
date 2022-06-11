@@ -23,8 +23,8 @@ TCPServer::TCPServer(Context *context, std::string listenIp, int listenPort)
     uv_ip4_addr(listenIp.c_str(), listenPort, &addr);
 }
 
-void TCPServer::onSocketClose(uv_handle_t *handle){
-
+void TCPServer::onSocketClose(uv_handle_t *handle)
+{
 }
 
 void TCPServer::onNewConnection(uv_stream_t *serverConn, int status)
@@ -44,7 +44,7 @@ void TCPServer::onNewConnection(uv_stream_t *serverConn, int status)
         if (uv_accept(serverConn, (uv_stream_t *)newConn) == 0)
         {
             struct sockaddr_storage saddr;
-            int addrLen = 0;
+            int addrLen = sizeof saddr;
             uv_tcp_getpeername(newConn, (sockaddr *)&saddr, &addrLen);
 
             char senderIP[17] = {0};
@@ -88,8 +88,8 @@ TCPServerPtr TCPServer::getPtr()
     return shared_from_this();
 }
 
-TCPServer::~TCPServer(){
-
+TCPServer::~TCPServer()
+{
 }
 
 bool TCPServer::listen()
