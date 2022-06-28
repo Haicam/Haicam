@@ -37,12 +37,12 @@ You can help us to write a better documentation.
      - Run Command "git checkout develop"
    
    - To check the current branch you are present
-      - Run Command "git branch" will give the name of the current branch with *mark.
+   - Run Command "git branch" will give the name of the current branch with *mark.
 
 5. Install docker in your machine to bulid the project.
     - Initially Run command "docker --version" to check current version if docker is already installed in your machine.
     - To install Docker follow the below steps.
-       - Check if the system is up-to-date using the following command: "sudo apt-get update"
+    - Check if the system is up-to-date using the following command: "sudo apt-get update"
         
         - Install Docker using the following command: "sudo apt install docker.io"
           You’ll then get a prompt asking you to choose between y/n - choose y
@@ -70,7 +70,7 @@ You can help us to write a better documentation.
 
 8. To enter into the docker build enviroment.Run haicam toolchain docker by command:"./run_docker.sh" to enter the docker build enviroment.
     - If you are in user directory run: "sudo ./run_docker.sh"          
-      - The output will be "haicam@43ffc785dd6e:~/workspace"
+    - The output will be "haicam@43ffc785dd6e:~/workspace"
 
 9. Build the project for all platforms, by run command: ./build/haicam.sh
     - You may get errors if you do not setup the third party toolchain correctly.
@@ -82,7 +82,7 @@ You can help us to write a better documentation.
 
 11. If 9 or 10 steps are failing either tool chain is not installed properly or "libs" are not added.
     - In that case check "CMakeOutput.log" ,"CMakeerror.log"
-      - Try to pull the latest docker image for toolchain from docker. 
+    - Try to pull the latest docker image for toolchain from docker. 
 
 12. Once the build is successful.Run all testcases for Linux x86_64, by command:"./bin/linux/x86_64/generic/haicam-test"
 
@@ -98,8 +98,8 @@ You can help us to write a better documentation.
 15. You can check one test case by giving command below (For example)
    
      - ./bin/linux/x86_64/generic/haicam-test --gtest_filter=haicam_UDPTest.udp_test
-        - gdb --args ./bin/linux/x86_64/generic/haicam-test --gtest_filter=haicam_UDPTest.udp_test
-         - valgrind ./bin/linux/x86_64/generic/haicam-test --gtest_filter=haicam_UDPTest.udp_test
+     - gdb --args ./bin/linux/x86_64/generic/haicam-test --gtest_filter=haicam_UDPTest.udp_test
+     - valgrind ./bin/linux/x86_64/generic/haicam-test --gtest_filter=haicam_UDPTest.udp_test
 
 16. Build for GM8136 by command: build/apps/gm8136-armv5.sh
    - After successfull build.The following files will be generated
@@ -112,8 +112,8 @@ You can help us to write a better documentation.
       - The output will be "Hello,Haicam!"
     
          - To run the hiacam-test generate after build:"./bin/gm8136/armv5/generic/haicam-test.sh"
-            - This haicam-test.sh consists of Test cases. 
-            - If all are pass the project build is successfully done.
+         - This haicam-test.sh consists of Test cases. 
+         - If all are pass the project build is successfully done.
 
 18. To debug remotley use gdb debug in docker.
      - Run Command "./bin/gm8136/armv5/generic/haicam-test-gdb-server.sh"
@@ -122,10 +122,10 @@ You can help us to write a better documentation.
       - The output will be "haicam@94ab16cc0682:~/workspace$"
       - Then run the command "./bin/gm8136/armv5/generic/haicam-test-gdb.sh"
       - You will be successfully eneter in to remote debug session.
-       -The output will be: For help, type "help".
-           - Type "apropos word" to search for commands related to "word"...
-             - Reading symbols from ./bin/gm8136/armv5/generic/haicam-test...
-               - (gdb)
+      -The output will be: For help, type "help".
+        - Type "apropos word" to search for commands related to "word"...
+        - Reading symbols from ./bin/gm8136/armv5/generic/haicam-test...
+        - (gdb)
      
 
 19. Do the development in the directories below.
