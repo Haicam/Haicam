@@ -1,0 +1,2 @@
+# set solib-search-path /usr/src/arm-linux-3.3/toolchain_gnueabi-4.4.0_ARMv5TE/usr/arm-unknown-linux-uclibcgnueabi/sysroot/lib
+gdb-multiarch -ex 'set architecture arm' -ex 'file /home/haicam/workspace/bin/gm8136/armv5/generic/haicam-test' -ex 'target remote localhost:10001'

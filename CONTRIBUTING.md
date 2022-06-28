@@ -5,6 +5,7 @@ Everybody is invited and welcome to contribute to Haicam project. There is a lot
 The process is straight-forward.
 
  - Fork the Haicam project [git repository](https://github.com/Haicam/Haicam).
+ - Following [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
  - Write the code for your device, notification service, sensor, or IoT thing.
  - Ensure tests work.
  - Create a Pull Request against the [**develop**] branch.
