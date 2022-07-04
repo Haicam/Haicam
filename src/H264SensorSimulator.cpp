@@ -33,8 +33,7 @@ void H264SensorSimulator::run()
         lastFrameTime = frameHeader.millTimestamp;
 
         ByteBufferPtr frame = ByteBuffer::create(frameHeader.length);
-        frame->getDataPtr();
-        //fread((void*) data->getDataPtr(), 1, frameHeader.length, fp);
+        //fread((void*) frame->getDataPtr(), 1, frameHeader.length, fp);
         notify(frame, frameHeader.isKeyframe);
     }
 }
