@@ -106,7 +106,7 @@ namespace haicam
             uv_ip4_addr(ip.c_str(), port, &toAddr);
 
             // Data are not copied over to the uv_buf_t, uv_buf_t.base refers to the same array of characters you used to create it.
-            uv_buf_t buf = uv_buf_init(data->getData(), data->getLength());
+            uv_buf_t buf = uv_buf_init(data->getDataPtr(), data->getLength());
 
             ReqObj *reqObj = new ReqObj();
             reqObj->thiz = this;

@@ -1,6 +1,7 @@
 #ifndef __HAICAM_BYTE_BUFFER__
 #define __HAICAM_BYTE_BUFFER__
 
+#include "haicam/Context.hpp"
 #include <vector>
 #include <memory>
 
@@ -37,7 +38,6 @@ namespace haicam
 
         static ByteBufferPtr create(void *data, int length)
         {
-
             return ByteBufferPtr(new ByteBuffer(data, length));
         }
 
@@ -64,7 +64,7 @@ namespace haicam
             return true;
         }
 
-        char * getData()
+        char * getDataPtr()
         {
             return buffer.data();
         }

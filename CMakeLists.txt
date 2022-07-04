@@ -5,6 +5,7 @@ project(haicam-core)
 set(CMAKE_BUILD_TYPE "Debug")
 
 if (HAICAM_PLATFORM MATCHES "gm8136")
+    add_definitions(-DHAICAM_GM8135_GCC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -O0 -ggdb3 ")
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O0 -ggdb3 ")
@@ -66,67 +67,23 @@ add_executable(haicam-app
 if (HAICAM_PLATFORM MATCHES "android")
 
     target_link_libraries (haicam-core
-        curl.a
-        ssl
-        crypto
-        cares.a
-        avformat.a
-        avcodec.a
-        swscale.a
-        avutil.a
-        avfilter.a
-        swresample.a
-        avdevice.a
         uv_a.a
     )
 
     target_link_libraries (haicam-app
         haicam-core_a
-        curl.a
-        ssl
-        crypto
-        cares.a
-        avformat.a
-        avcodec.a
-        swscale.a
-        avutil.a
-        avfilter.a
-        swresample.a
-        avdevice.a
         uv_a.a
     )
 
 elseif (HAICAM_PLATFORM MATCHES "windows")
 
     target_link_libraries (haicam-core
-        curl.a
-        ssl
-        crypto
-        cares.a
-        avformat.a
-        avcodec.a
-        swscale.a
-        avutil.a
-        avfilter.a
-        swresample.a
-        avdevice.a
         uv_a.a
         wsock32.a ws2_32.a wldap32.a iphlpapi.a secur32.a userenv.a
     )
 
     target_link_libraries (haicam-app
         haicam-core_a
-        curl.a
-        ssl
-        crypto
-        cares.a
-        avformat.a
-        avcodec.a
-        swscale.a
-        avutil.a
-        avfilter.a
-        swresample.a
-        avdevice.a
         uv_a.a
         wsock32.a ws2_32.a wldap32.a iphlpapi.a secur32.a userenv.a
     )
@@ -135,39 +92,11 @@ elseif (HAICAM_PLATFORM MATCHES "mac" OR HAICAM_PLATFORM MATCHES "ios")
 
     target_link_libraries (haicam-core
         uv_a.a
-        curl.a
-        ssl
-        crypto
-        cares.a
-        avformat.a
-        avcodec.a
-        swscale.a
-        avutil.a
-        avfilter.a
-        swresample.a
-        avdevice.a
-        zbar.a
-        liquid.a
-        openlibm.a
     )
 
     target_link_libraries (haicam-app
         haicam-core_a
-        curl.a
-        ssl
-        crypto
-        cares.a
-        avformat.a
-        avcodec.a
-        swscale.a
-        avutil.a
-        avfilter.a
-        swresample.a
-        avdevice.a
         uv_a.a
-        zbar.a
-        liquid.a
-        openlibm.a
         pthread
         dl
     )
@@ -176,20 +105,6 @@ else()
 
     target_link_libraries (haicam-app
         haicam-core_a
-        curl.a
-        ssl
-        crypto
-        cares.a
-        avformat.a
-        avcodec.a
-        swscale.a
-        avutil.a
-        avfilter.a
-        swresample.a
-        avdevice.a
-        zbar.a
-        liquid.a
-        openlibm.a
         uv_a.a
         pthread
         dl
@@ -205,17 +120,6 @@ if (HAICAM_PLATFORM MATCHES "android")
 
     target_link_libraries (haicam-test
         haicam-core_a
-        curl.a
-        ssl
-        crypto
-        cares.a
-        avformat.a
-        avcodec.a
-        swscale.a
-        avutil.a
-        avfilter.a
-        swresample.a
-        avdevice.a
         uv_a.a
         gtest.a
         gtest_main.a
@@ -228,17 +132,6 @@ elseif (HAICAM_PLATFORM MATCHES "windows")
     target_link_libraries (haicam-test
         haicam-core_a
         uv_a.a
-        curl.a
-        ssl
-        crypto
-        cares.a
-        avformat.a
-        avcodec.a
-        swscale.a
-        avutil.a
-        avfilter.a
-        swresample.a
-        avdevice.a
         gtest.a
         gtest_main.a
         gmock.a
@@ -250,17 +143,6 @@ elseif (HAICAM_PLATFORM MATCHES "mac" OR HAICAM_PLATFORM MATCHES "ios")
 
     target_link_libraries (haicam-test
         haicam-core_a
-        curl.a
-        ssl
-        crypto
-        cares.a
-        avformat.a
-        avcodec.a
-        swscale.a
-        avutil.a
-        avfilter.a
-        swresample.a
-        avdevice.a
         uv_a.a
         gtest.a
         gtest_main.a
@@ -274,20 +156,6 @@ else()
 
     target_link_libraries (haicam-test
         haicam-core_a
-        curl.a
-        ssl
-        crypto
-        cares.a
-        avformat.a
-        avcodec.a
-        swscale.a
-        avutil.a
-        avfilter.a
-        swresample.a
-        avdevice.a
-        zbar.a
-        liquid.a
-        openlibm.a
         uv_a.a
         gtest.a
         gtest_main.a
