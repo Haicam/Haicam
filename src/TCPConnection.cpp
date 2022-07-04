@@ -109,7 +109,7 @@ TCPConnectionPtr TCPConnection::getPtr()
 void TCPConnection::sendData(ByteBufferPtr data)
 {
     // Data are not copied over to the uv_buf_t, uv_buf_t.base refers to the same array of characters you used to create it.
-    uv_buf_t buf = uv_buf_init(data->getData(), data->getLength());
+    uv_buf_t buf = uv_buf_init(data->getDataPtr(), data->getLength());
 
     WriteReq *writeReq = new WriteReq();
     writeReq->thiz = this;

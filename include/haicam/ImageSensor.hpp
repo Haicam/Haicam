@@ -2,7 +2,8 @@
 
 #include "haicam/ByteBuffer.hpp"
 #include <mutex>
-#ifdef __GXX_EXPERIMENTAL_CXX0X__
+#include <list>
+#ifdef HAICAM_GM8135_GCC
 #include <cstdatomic>
 #else
 #include <atomic>
@@ -24,17 +25,17 @@ namespace haicam
         
         ~ImageSensor();
 
-        void Attach(std::shared_ptr<ImageObserver> observer);
+        void attach(std::shared_ptr<ImageObserver> observer);
 
-        void Detach(std::shared_ptr<ImageObserver> observer);
+        void detach(std::shared_ptr<ImageObserver> observer);
 
-        void Notify(ByteBufferPtr data, bool isKeyFrame);
+        void notify(ByteBufferPtr data, bool isKeyFrame);
 
         void start();
 
         static void process(void *arg);
 
-        virtual run();
+        virtual void run() = 0;
 
         void stop();
 
@@ -47,55 +48,5 @@ namespace haicam
     protected:
         std::atomic<bool> isRunning;
     };
-
-    ImageSensor::ImageSensor() : listImageObserver(), mtx(), thread(), isRunning(false)
-    {
-    }
-
-    ImageSensor::~ImageSensor()
-    {
-    }
-
-    void ImageSensor::Attach(std::shared_ptr<ImageObserver> observer)
-    {
-        std::lock_guard<std::mutex> lock(mmtx);
-        listImageObserver.push_back(observer);
-    }
-
-    void ImageSensor::Detach(std::shared_ptr<ImageObserver> observer)
-    {
-        std::lock_guard<std::mutex> lock(mmtx);
-        listImageObserver.remove(observer);
-    }
-
-    void ImageSensor::Notify(ByteBufferPtr data, bool isKeyFrame)
-    {
-        std::lock_guard<std::mutex> lock(mmtx);
-
-        std::list<IObserver *>::iterator iterator = listImageObserver.begin();
-        while (iterator != listImageObserver.end())
-        {
-            (*iterator)->onImage(data, isKeyFrame);
-            ++iterator;
-        }
-    }
-
-    void ImageSensor::start()
-    {
-        isRunning = true;
-        uv_thread_create(&this->thread, ImageSensor::process, this);
-    }
-
-    void ImageSensor::process(void *arg)
-    {
-        ImageSensor *thiz = static_cast<ImageSensor *>(arg);
-        thiz->run();
-    }
-
-    void ImageSensor::stop()
-    {
-        isRunning = false;
-        uv_thread_join(&this->thread);
-    }
 
 }
