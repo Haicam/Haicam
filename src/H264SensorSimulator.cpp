@@ -4,12 +4,11 @@ using namespace haicam;
 
 H264SensorSimulator::H264SensorSimulator() : ImageSensor()
 {
-
 }
 
 void H264SensorSimulator::run()
 {
-    struct __attribute__((__packed__))  
+    struct __attribute__((__packed__))
     {
         long long millTimestamp;
         bool isKeyframe;
@@ -17,28 +16,59 @@ void H264SensorSimulator::run()
     } frameHeader;
 
     long long lastFrameTime = -1;
-    
-    while (isRunning)
+    size_t bytesRead = 0, Total_Size = 0;
+    const size_t headerFrame = 512; // Taken as a reference only
+
+    FILE *fp = NULL;
+
+    fp = fopen("h264.data", "rb");
+    printf("fp=%p\n", fp);
+
+    if (ferror(fp))
     {
-        //fread((void*) &frameHeader, sizeof(frameHeader), 1, fp);
-        // fake data
-        frameHeader.length = 1024;
-        frameHeader.millTimestamp = 1000;
-        lastFrameTime = 0;
+        printf("\n Error writing in file");
+        exit(1);
+    }
 
-        if (lastFrameTime > -1 && frameHeader.millTimestamp > lastFrameTime) {
-            uv_sleep(frameHeader.millTimestamp - lastFrameTime);   
+    fseek(fp, 0, SEEK_END);
+    Total_Size = ftell(fp);
+    fseek(fp, 1, SEEK_SET);
+
+    while (!feof(fp) && !ferror(fp))
+    {
+
+        while (isRunning)
+        {
+            // fread((void*) &frameHeader, sizeof(frameHeader), 1, fp);
+
+            //  fake data
+            frameHeader.length = 1024;
+            frameHeader.millTimestamp = 1000;
+            lastFrameTime = 0;
+            fseek(fp, bytesRead, SEEK_SET);
+            
+            printf("size of file=%ld\n", Total_Size);
+            printf("frameHeader.length=%d\n", frameHeader.length);
+
+            if (lastFrameTime > -1 && frameHeader.millTimestamp > lastFrameTime)
+            {
+                uv_sleep(frameHeader.millTimestamp - lastFrameTime);
+            }
+
+            lastFrameTime = frameHeader.millTimestamp;
+
+            ByteBufferPtr frame = ByteBuffer::create(frameHeader.length);
+            //fseek(fp, frameHeader.length, SEEK_SET);
+            printf("ftell=%ld\n",ftell(fp));
+
+            size_t result = fread((void *)frame->getDataPtr(), 1, frameHeader.length, fp);
+            bytesRead += result;
+            printf("No.of bytes Read=%lu\n", bytesRead);
+            notify(frame, frameHeader.isKeyframe);
+            //fseek(fp, bytesRead, SEEK_SET);
         }
-
-        lastFrameTime = frameHeader.millTimestamp;
-
-        ByteBufferPtr frame = ByteBuffer::create(frameHeader.length);
-        //fread((void*) frame->getDataPtr(), 1, frameHeader.length, fp);
-        notify(frame, frameHeader.isKeyframe);
     }
 }
-
 H264SensorSimulator::~H264SensorSimulator()
 {
-    
 }
