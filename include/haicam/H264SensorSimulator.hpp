@@ -1,8 +1,5 @@
 #pragma once
 #include "haicam/ImageSensor.hpp"
-#include "haicam/Runnable.hpp"
-#include <list>
-#include <memory>
 
 namespace haicam
 {
