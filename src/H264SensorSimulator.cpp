@@ -35,7 +35,6 @@ void H264SensorSimulator::run()
             ByteBufferPtr frame = ByteBuffer::create(frameHeader.length);
             //size_t result = fread((void *)frame->getDataPtr(), 1, frameHeader.length, fp);
             notify(frame, frameHeader.isKeyframe);
-            //fseek(fp, bytesRead, SEEK_SET);
         }
 }
 H264SensorSimulator::~H264SensorSimulator()
