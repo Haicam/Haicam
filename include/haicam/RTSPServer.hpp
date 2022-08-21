@@ -1,3 +1,4 @@
+#pragma once
 #include "haicam/ImageSensor.hpp"
 
 namespace haicam

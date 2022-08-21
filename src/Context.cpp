@@ -1,11 +1,12 @@
 #include "haicam/Context.hpp"
+#include "haicam/RSAKey.hpp"
 
 using namespace haicam;
 
 Context* Context::instance = NULL;
 std::mutex Context::mtx;
 
-Context::Context() : uv_loop(NULL)
+Context::Context() : uv_loop(NULL), localAddr(0)
 {
     uv_loop = (uv_loop_t *)malloc(sizeof(uv_loop_t));
     uv_loop_init(uv_loop);
@@ -36,6 +37,32 @@ int Context::run()
 void Context::stop()
 {
     uv_stop(uv_loop);
+}
+
+std::string getServerRSAKey1024()
+{
+    H_ASSERT_ERR_STR("Does not support getServerRSAKey1024 func");
+    return "";
+}
+
+std::string getAESKey1024()
+{
+    H_ASSERT(false);
+    return "";
+}
+
+std::string getServerRSAKey2048()
+{
+#if HAICAM_DEV
+    return SERVER_DEV_RSA2048_PUBLIC_KEY;
+#else
+    return SERVER_RSA2048_PUBLIC_KEY;
+#endif
+}
+
+std::string getAESKey2048()
+{
+    return "";
 }
 
 Context::~Context()

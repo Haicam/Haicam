@@ -5,24 +5,20 @@ namespace haicam{
 
     namespace Encryption
     {
-        extern int ENCODE_DATA_LENGTH;
-        extern int DECODE_DATA_LENGTH;
 
-        bool generateKey(std::string PRIKeyPath,std::string PubKeyPath);
+        bool generateKey(std::string PriKeyPath, std::string PubKeyPath, int keyBits);
 
-        std::string EncodeRSAData( const std::string& strPublicKey, const std::string& strData ,int length = ENCODE_DATA_LENGTH);
+        std::string EncodeRSAData( const std::string& strPublicKey, const std::string& strData, int keyBytes);
 
-        std::string DecodeRSAData( const std::string& strPrivateKey, const std::string& strData ,int length = DECODE_DATA_LENGTH);
+        std::string DecodeRSAData( const std::string& strPrivateKey, const std::string& strData, int keyBytes);
 
-        std::string EncodeRSAKeyFile( const std::string& strPublicKey, const char* strData ,int len);
+        std::string EncodeRSABlock( const std::string& strPublicKey, const char* strData, int len);
 
-        std::string DecodeRSAKeyFile( const std::string& strPrivateKey, const char* strData ,int len);
+        std::string DecodeRSABlock( const std::string& strPrivateKey, const char* strData, int len);
 
-        std::string EncodeAES( const std::string& password, const std::string& data , bool bIsComplement = true);
+        std::string EncodeAES( const std::string& strKey, const std::string& data , bool bIsComplement = true);
 
-        std::string DecodeAES( const std::string& password, const std::string& strData , bool bIsComplement = true);
-
-        //cIV  default   unsigned char iv[AES_BLOCK_SIZE]; memset(iv, 0x00, AES_BLOCK_SIZE);
+        std::string DecodeAES( const std::string& strKey, const std::string& strData , bool bIsComplement = true);
 
         std::string EncodeCBCAES( const std::string& strKey, const std::string& strdata,unsigned char* cIV);
 

@@ -35,15 +35,15 @@ namespace haicam
     public:
         static TCPConnectionPtr create(uv_stream_t *conn);
 
-        ~TCPConnection();
+        virtual ~TCPConnection();
 
-        void readStart();
+        virtual void readStart();
 
         TCPConnectionPtr getPtr();
 
-        void sendData(ByteBufferPtr data);
+        virtual void sendData(ByteBufferPtr data);
 
-        void close();
+        virtual void close();
 
     private:
         uv_stream_t *conn;
