@@ -16,8 +16,8 @@ typedef unsigned int		uint32;
 typedef long long            int64;
 typedef unsigned long long   uint64;
 
-#define FRAME_CMD_SOF                                   0xFF
-#define FRAME_SIGN_HEART_BEAT                                   0xFE
+#define FRAME_CMD_SOF                            0xFF
+#define FRAME_SIGN_HEART_BEAT                    0xFE
 
 #define FRAME_RSA_1024                           0xFF
 #define FRAME_AES_1024                           0xFE
@@ -25,8 +25,8 @@ typedef unsigned long long   uint64;
 #define FRAME_RSA_2048                           0xFC
 #define FRAME_AES_2048                           0xFB
 
-#define FRAME_CMD_REQ                                   0x00
-#define FRAME_CMD_RES                                   0x01
+#define FRAME_CMD_REQ                            0x00
+#define FRAME_CMD_RES                            0x01
 
 
 #define FRAME_ADDR_SERVER						        0xFFFFFFFF
