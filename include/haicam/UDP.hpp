@@ -96,7 +96,7 @@ namespace haicam
         {
             return UDPPtr(new UDP(context, bindIp, bindPort));
         };
-        ~UDP(){
+        virtual ~UDP(){
 
         };
 
@@ -133,13 +133,13 @@ namespace haicam
             uv_udp_set_membership(&socket, multicastAddr.c_str(), NULL, UV_JOIN_GROUP);
         }
 
-        void open()
+        virtual void open()
         {
             uv_udp_bind(&socket, (const struct sockaddr *)&addr, UV_UDP_REUSEADDR);
             uv_udp_recv_start(&socket, UDP::allocReceiveBuffer, UDP::onDataReceived);
         }
 
-        void close()
+        virtual void close()
         {
             if(!this->multicastAddr.empty()) {
                 uv_udp_set_membership(&socket, multicastAddr.c_str(), NULL, UV_LEAVE_GROUP);

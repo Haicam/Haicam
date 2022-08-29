@@ -16,13 +16,10 @@ using namespace haicam;
  Features    : half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae evtstrm aes pmull sha1 sha2 crc32
 */
 
-int Encryption::ENCODE_DATA_LENGTH = 128;
-int Encryption::DECODE_DATA_LENGTH = 128;
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
-std::string Encryption::EncodeRSAData( const std::string& strPublicKey, const std::string& strData ,int length)
+std::string Encryption::EncodeRSAData( const std::string& strPublicKey, const std::string& strData ,int keyBytes)
 {
     std::string strEncodeData = "";
     std::string strResourData = strData;
@@ -32,25 +29,25 @@ std::string Encryption::EncodeRSAData( const std::string& strPublicKey, const st
     bool bIsBreak = false;
     while (!bIsBreak) {
         
-        char strSub[ENCODE_DATA_LENGTH+1];
-        memset(strSub, 0, ENCODE_DATA_LENGTH+1);
-        if (strResourData.length() > length)
+        char strSub[keyBytes];
+        memset(strSub, 0, keyBytes);
+        if (strResourData.length() > keyBytes)
         {
-            memcpy(strSub, strResourData.substr(0,length).c_str(), length);
-            strResourData = strResourData.substr(length,(strResourData.size()-1));
+            memcpy(strSub, strResourData.substr(0,keyBytes).c_str(), keyBytes);
+            strResourData = strResourData.substr(keyBytes);
         }
         else
         {
             memcpy(strSub, strResourData.c_str(), strResourData.size());
             bIsBreak = true;
         }
-        strEncodeData += EncodeRSAKeyFile(strPublicKey, strSub,ENCODE_DATA_LENGTH);
+        strEncodeData += EncodeRSABlock(strPublicKey, strSub, keyBytes);
     }
     
     return strEncodeData;
 }
 
-std::string Encryption::DecodeRSAData( const std::string& strPrivateKey, const std::string& strData ,int length)
+std::string Encryption::DecodeRSAData( const std::string& strPrivateKey, const std::string& strData ,int keyBytes)
 {
     std::string strEncodeData = "";
     std::string strResourData = strData;
@@ -60,12 +57,12 @@ std::string Encryption::DecodeRSAData( const std::string& strPrivateKey, const s
     bool bIsBreak = false;
     while (!bIsBreak) {
         
-        char strSub[DECODE_DATA_LENGTH];
-        memset(strSub, 0, DECODE_DATA_LENGTH);
-        if (strResourData.length() > length)
+        char strSub[keyBytes];
+        memset(strSub, 0, keyBytes);
+        if (strResourData.length() > keyBytes)
         {
-            memcpy(strSub, strResourData.substr(0,length).c_str(), length);
-            strResourData = strResourData.substr(length,(strResourData.size()-1));
+            memcpy(strSub, strResourData.substr(0,keyBytes).c_str(), keyBytes);
+            strResourData = strResourData.substr(keyBytes);
         }
         else
         {
@@ -73,14 +70,14 @@ std::string Encryption::DecodeRSAData( const std::string& strPrivateKey, const s
             bIsBreak = true;
         }
 
-        strEncodeData += DecodeRSAKeyFile(strPrivateKey, strSub,DECODE_DATA_LENGTH);
+        strEncodeData += DecodeRSABlock(strPrivateKey, strSub, keyBytes);
     }
     
     return strEncodeData;
 
 }
 
-std::string Encryption::EncodeRSAKeyFile( const std::string& strPublicKey, const char* strData ,int len)
+std::string Encryption::EncodeRSABlock( const std::string& strPublicKey, const char* strData ,int len)
 {
     if (strPublicKey.empty() || !strData)
     {
@@ -120,7 +117,7 @@ std::string Encryption::EncodeRSAKeyFile( const std::string& strPublicKey, const
     return strRet;
 }
 
-std::string Encryption::DecodeRSAKeyFile( const std::string& strPrivateKey, const char* strData ,int len)
+std::string Encryption::DecodeRSABlock( const std::string& strPrivateKey, const char* strData ,int len)
 {
     if (strPrivateKey.empty() || !strData)
     {
@@ -153,8 +150,6 @@ std::string Encryption::DecodeRSAKeyFile( const std::string& strPrivateKey, cons
         ERR_load_crypto_strings();
         ERR_error_string(ERR_get_error(), err);
         fprintf(stderr, "Error decrypting message: %s\n", err);
-
-        strRet="";
     }
 
     delete [] pDecode;
@@ -166,10 +161,10 @@ std::string Encryption::DecodeRSAKeyFile( const std::string& strPrivateKey, cons
     return strRet;
 }
 
-std::string Encryption::EncodeAES( const std::string& password, const std::string& data , bool bIsComplement)
+std::string Encryption::EncodeAES( const std::string& strKey, const std::string& data , bool bIsComplement)
 {
     AES_KEY aes_key;
-    if(AES_set_encrypt_key((const unsigned char*)password.c_str(), (int)(password.length()*8), &aes_key) < 0)
+    if(AES_set_encrypt_key((const unsigned char*)strKey.c_str(), (int)(strKey.length()*8), &aes_key) < 0)
     {
         return "";
     }
@@ -204,16 +199,17 @@ std::string Encryption::EncodeAES( const std::string& password, const std::strin
         unsigned char out[AES_BLOCK_SIZE];
         memset(out, 0, AES_BLOCK_SIZE);
 
+        // can do mutiple AES_BLOCK_SIZE
         AES_cbc_encrypt((const unsigned char*)str16.c_str(), out, str16.length(), &aes_key, civ, AES_ENCRYPT);
         strRet += std::string((const char*)out, AES_BLOCK_SIZE);
     }
     return strRet;
 }
 
-std::string Encryption::DecodeAES( const std::string& password, const std::string& strData , bool bIsComplement)
+std::string Encryption::DecodeAES( const std::string& strKey, const std::string& strData , bool bIsComplement)
 {
     AES_KEY aes_key;
-    if(AES_set_decrypt_key((const unsigned char*)(password.c_str()),(int)(password.length()*8), &aes_key) < 0)
+    if(AES_set_decrypt_key((const unsigned char*)(strKey.c_str()),(int)(strKey.length()*8), &aes_key) < 0)
     {
         return "";
     }
@@ -227,6 +223,7 @@ std::string Encryption::DecodeAES( const std::string& password, const std::strin
         unsigned char out[AES_BLOCK_SIZE];
         memset(out, 0, AES_BLOCK_SIZE);
 
+        // can do mutiple AES_BLOCK_SIZE
         AES_cbc_encrypt((const unsigned char*)str16.c_str(), out, str16.length(), &aes_key, civ, AES_DECRYPT);
         if (bIsComplement && i == strDataAESLength-1)
         {
@@ -311,14 +308,13 @@ std::string Encryption::DecodeCBCAES( const std::string& strKey, const std::stri
 }
 
 
-bool Encryption::generateKey(std::string PRIKeyPath,std::string PubKeyPath)
+bool Encryption::generateKey(std::string PriKeyPath,std::string PubKeyPath, int keyBits)
 {
     int             ret = 0;
     RSA             *r = NULL;
     BIGNUM          *bne = NULL;
     BIO             *bp_public = NULL;
     BIO             *bp_private = NULL;
-    int             bits = 1024;
     unsigned long   e = RSA_F4;
     
     bne = BN_new();
@@ -329,14 +325,14 @@ bool Encryption::generateKey(std::string PRIKeyPath,std::string PubKeyPath)
     }
     
     r = RSA_new();
-    ret = RSA_generate_key_ex(r, bits, bne, NULL);
+    ret = RSA_generate_key_ex(r, keyBits, bne, NULL);
     if (ret != 1) {
         RSA_free(r);
         BN_free(bne);
         return false;
     }
     
-    bp_private = BIO_new_file(PRIKeyPath.c_str(), "wb+");
+    bp_private = BIO_new_file(PriKeyPath.c_str(), "wb+");
     ret = PEM_write_bio_RSAPrivateKey(bp_private, r, NULL, NULL, 0, NULL, NULL);
     if(ret != 1){
         BIO_free_all(bp_private);

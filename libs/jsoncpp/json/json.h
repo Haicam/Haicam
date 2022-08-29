@@ -205,7 +205,7 @@ license you like.
 #define JSONCPP_DEPRECATED(message)
 #endif // if !defined(JSONCPP_DEPRECATED)
 
-namespace MYJson {
+namespace Json {
 typedef int Int;
 typedef unsigned int UInt;
 #if defined(JSON_NO_INT64)
@@ -225,7 +225,7 @@ typedef Int64 LargestInt;
 typedef UInt64 LargestUInt;
 #define JSON_HAS_INT64
 #endif // if defined(JSON_NO_INT64)
-} // end namespace MYJson
+} // end namespace Json
 
 #endif // JSON_CONFIG_H_INCLUDED
 
@@ -254,7 +254,7 @@ typedef UInt64 LargestUInt;
 #include "config.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 
-namespace MYJson {
+namespace Json {
 
 // writer.h
 class FastWriter;
@@ -276,7 +276,7 @@ class ValueIteratorBase;
 class ValueIterator;
 class ValueConstIterator;
 
-} // namespace MYJson
+} // namespace Json
 
 #endif // JSON_FORWARDS_H_INCLUDED
 
@@ -305,7 +305,7 @@ class ValueConstIterator;
 #include "forwards.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 
-namespace MYJson {
+namespace Json {
 
 /** \brief Configuration passed to reader and writer.
  * This configuration object can be used to force the Reader or Writer
@@ -341,7 +341,7 @@ public:
   bool strictRoot_;
 };
 
-} // namespace MYJson
+} // namespace Json
 
 #endif // CPPTL_JSON_FEATURES_H_INCLUDED
 
@@ -404,7 +404,7 @@ public:
 
 /** \brief JSON (JavaScript Object Notation).
  */
-namespace MYJson {
+namespace Json {
 
 /** Base class for all exceptions we throw.
  *
@@ -423,7 +423,7 @@ protected:
  *
  * E.g. out-of-memory (when we use malloc), stack-overflow, malicious input
  * 
- * \remark derived from MYJson::Exception
+ * \remark derived from Json::Exception
  */
 class JSON_API RuntimeError : public Exception {
 public:
@@ -434,7 +434,7 @@ public:
  *
  * These are precondition-violations (user bugs) and internal errors (our bugs).
  * 
- * \remark derived from MYJson::Exception
+ * \remark derived from Json::Exception
  */
 class JSON_API LogicError : public Exception {
 public:
@@ -480,8 +480,8 @@ enum CommentPlacement {
  *
  * Example of usage:
  * \code
- * MYJson::Value aValue( StaticString("some text") );
- * MYJson::Value object;
+ * Json::Value aValue( StaticString("some text") );
+ * Json::Value object;
  * static const StaticString code("code");
  * object[code] = 1234;
  * \endcode
@@ -538,41 +538,41 @@ public:
   typedef std::vector<std::string> Members;
   typedef ValueIterator iterator;
   typedef ValueConstIterator const_iterator;
-  typedef MYJson::UInt UInt;
-  typedef MYJson::Int Int;
+  typedef Json::UInt UInt;
+  typedef Json::Int Int;
 #if defined(JSON_HAS_INT64)
-  typedef MYJson::UInt64 UInt64;
-  typedef MYJson::Int64 Int64;
+  typedef Json::UInt64 UInt64;
+  typedef Json::Int64 Int64;
 #endif // defined(JSON_HAS_INT64)
-  typedef MYJson::LargestInt LargestInt;
-  typedef MYJson::LargestUInt LargestUInt;
-  typedef MYJson::ArrayIndex ArrayIndex;
+  typedef Json::LargestInt LargestInt;
+  typedef Json::LargestUInt LargestUInt;
+  typedef Json::ArrayIndex ArrayIndex;
 
   static const Value& nullRef;
 #if !defined(__ARMEL__)
   /// \deprecated This exists for binary compatibility only. Use nullRef.
   static const Value null;
 #endif
-  /// Minimum signed integer value that can be stored in a MYJson::Value.
+  /// Minimum signed integer value that can be stored in a Json::Value.
   static const LargestInt minLargestInt;
-  /// Maximum signed integer value that can be stored in a MYJson::Value.
+  /// Maximum signed integer value that can be stored in a Json::Value.
   static const LargestInt maxLargestInt;
-  /// Maximum unsigned integer value that can be stored in a MYJson::Value.
+  /// Maximum unsigned integer value that can be stored in a Json::Value.
   static const LargestUInt maxLargestUInt;
 
-  /// Minimum signed int value that can be stored in a MYJson::Value.
+  /// Minimum signed int value that can be stored in a Json::Value.
   static const Int minInt;
-  /// Maximum signed int value that can be stored in a MYJson::Value.
+  /// Maximum signed int value that can be stored in a Json::Value.
   static const Int maxInt;
-  /// Maximum unsigned int value that can be stored in a MYJson::Value.
+  /// Maximum unsigned int value that can be stored in a Json::Value.
   static const UInt maxUInt;
 
 #if defined(JSON_HAS_INT64)
-  /// Minimum signed 64 bits int value that can be stored in a MYJson::Value.
+  /// Minimum signed 64 bits int value that can be stored in a Json::Value.
   static const Int64 minInt64;
-  /// Maximum signed 64 bits int value that can be stored in a MYJson::Value.
+  /// Maximum signed 64 bits int value that can be stored in a Json::Value.
   static const Int64 maxInt64;
-  /// Maximum unsigned 64 bits int value that can be stored in a MYJson::Value.
+  /// Maximum unsigned 64 bits int value that can be stored in a Json::Value.
   static const UInt64 maxUInt64;
 #endif // defined(JSON_HAS_INT64)
 
@@ -637,9 +637,9 @@ This is useful since clear() and resize() will not alter types.
 
     Examples:
 \code
-MYJson::Value null_value; // null
-MYJson::Value arr_value(MYJson::arrayValue); // []
-MYJson::Value obj_value(MYJson::objectValue); // {}
+Json::Value null_value; // null
+Json::Value arr_value(Json::arrayValue); // []
+Json::Value obj_value(Json::objectValue); // {}
 \endcode
   */
   Value(ValueType type = nullValue);
@@ -664,7 +664,7 @@ MYJson::Value obj_value(MYJson::objectValue); // {}
    * Example of usage:
    * \code
    * static StaticString foo("some text");
-   * MYJson::Value aValue(foo);
+   * Json::Value aValue(foo);
    * \endcode
    */
   Value(const StaticString& value);
@@ -813,7 +813,7 @@ MYJson::Value obj_value(MYJson::objectValue); // {}
    * the new entry is not duplicated.
    * Example of use:
    * \code
-   * MYJson::Value object;
+   * Json::Value object;
    * static const StaticString code("code");
    * object[code] = 1234;
    * \endcode
@@ -1193,13 +1193,13 @@ public:
   pointer operator->() const { return &deref(); }
 };
 
-} // namespace MYJson
+} // namespace Json
 
 
 namespace std {
-/// Specialize std::swap() for MYJson::Value.
+/// Specialize std::swap() for Json::Value.
 template<>
-inline void swap(MYJson::Value& a, MYJson::Value& b) { a.swap(b); }
+inline void swap(Json::Value& a, Json::Value& b) { a.swap(b); }
 }
 
 
@@ -1247,7 +1247,7 @@ inline void swap(MYJson::Value& a, MYJson::Value& b) { a.swap(b); }
 #pragma warning(disable : 4251)
 #endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 
-namespace MYJson {
+namespace Json {
 
 /** \brief Unserialize a <a HREF="http://www.json.org">JSON</a> document into a
  *Value.
@@ -1310,7 +1310,7 @@ public:
              bool collectComments = true);
 
   /// \brief Parse from input stream.
-  /// \see MYJson::operator>>(std::istream&, MYJson::Value&).
+  /// \see Json::operator>>(std::istream&, Json::Value&).
   bool parse(std::istream& is, Value& root, bool collectComments = true);
 
   /** \brief Returns a user friendly string that list errors in the parsed
@@ -1462,7 +1462,7 @@ public:
 
 Usage:
 \code
-  using namespace MYJson;
+  using namespace Json;
   CharReaderBuilder builder;
   builder["collectComments"] = false;
   Value value;
@@ -1472,7 +1472,7 @@ Usage:
 */
 class JSON_API CharReaderBuilder : public CharReader::Factory {
 public:
-  // Note: We use a MYJson::Value so that we can add data-members to this class
+  // Note: We use a Json::Value so that we can add data-members to this class
   // without a major version bump.
   /** Configuration of this builder.
     These are case-sensitive.
@@ -1510,7 +1510,7 @@ public:
     JSON Value.
     \sa setDefaults()
     */
-  MYJson::Value settings_;
+  Json::Value settings_;
 
   CharReaderBuilder();
   virtual ~CharReaderBuilder();
@@ -1520,24 +1520,24 @@ public:
   /** \return true if 'settings' are legal and consistent;
    *   otherwise, indicate bad settings via 'invalid'.
    */
-  bool validate(MYJson::Value* invalid) const;
+  bool validate(Json::Value* invalid) const;
 
   /** A simple way to update a specific setting.
    */
   Value& operator[](std::string key);
 
   /** Called by ctor, but you can use this to reset settings_.
-   * \pre 'settings' != NULL (but MYJson::null is fine)
+   * \pre 'settings' != NULL (but Json::null is fine)
    * \remark Defaults:
    * \snippet src/lib_json/json_reader.cpp CharReaderBuilderDefaults
    */
-  static void setDefaults(MYJson::Value* settings);
+  static void setDefaults(Json::Value* settings);
   /** Same as old Features::strictMode().
-   * \pre 'settings' != NULL (but MYJson::null is fine)
+   * \pre 'settings' != NULL (but Json::null is fine)
    * \remark Defaults:
    * \snippet src/lib_json/json_reader.cpp CharReaderBuilderStrictMode
    */
-  static void strictMode(MYJson::Value* settings);
+  static void strictMode(Json::Value* settings);
 };
 
 /** Consume entire stream and use its begin/end.
@@ -1556,7 +1556,7 @@ bool JSON_API parseFromStream(
  This can be used to read a file into a particular sub-object.
  For example:
  \code
- MYJson::Value root;
+ Json::Value root;
  cin >> root["dir"]["file"];
  cout << root;
  \endcode
@@ -1571,11 +1571,11 @@ bool JSON_API parseFromStream(
  }
  \endverbatim
  \throw std::exception on parse error.
- \see MYJson::operator<<()
+ \see Json::operator<<()
 */
 JSON_API std::istream& operator>>(std::istream&, Value&);
 
-} // namespace MYJson
+} // namespace Json
 
 #if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 #pragma warning(pop)
@@ -1618,7 +1618,7 @@ JSON_API std::istream& operator>>(std::istream&, Value&);
 #pragma warning(disable : 4251)
 #endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 
-namespace MYJson {
+namespace Json {
 
 class Value;
 
@@ -1626,7 +1626,7 @@ class Value;
 
 Usage:
 \code
-  using namespace MYJson;
+  using namespace Json;
   void writeToStdout(StreamWriter::Factory const& factory, Value const& value) {
     std::unique_ptr<StreamWriter> const writer(
       factory.newStreamWriter());
@@ -1671,12 +1671,12 @@ std::string JSON_API writeString(StreamWriter::Factory const& factory, Value con
 
 Usage:
 \code
-  using namespace MYJson;
+  using namespace Json;
   Value value = ...;
   StreamWriterBuilder builder;
   builder["commentStyle"] = "None";
   builder["indentation"] = "   ";  // or whatever you like
-  std::unique_ptr<MYJson::StreamWriter> writer(
+  std::unique_ptr<Json::StreamWriter> writer(
       builder.newStreamWriter());
   writer->write(value, &std::cout);
   std::cout << std::endl;  // add lf and flush
@@ -1684,7 +1684,7 @@ Usage:
 */
 class JSON_API StreamWriterBuilder : public StreamWriter::Factory {
 public:
-  // Note: We use a MYJson::Value so that we can add data-members to this class
+  // Note: We use a Json::Value so that we can add data-members to this class
   // without a major version bump.
   /** Configuration of this builder.
     Available settings (case-sensitive):
@@ -1707,7 +1707,7 @@ public:
     JSON Value.
     \sa setDefaults()
     */
-  MYJson::Value settings_;
+  Json::Value settings_;
 
   StreamWriterBuilder();
   virtual ~StreamWriterBuilder();
@@ -1720,17 +1720,17 @@ public:
   /** \return true if 'settings' are legal and consistent;
    *   otherwise, indicate bad settings via 'invalid'.
    */
-  bool validate(MYJson::Value* invalid) const;
+  bool validate(Json::Value* invalid) const;
   /** A simple way to update a specific setting.
    */
   Value& operator[](std::string key);
 
   /** Called by ctor, but you can use this to reset settings_.
-   * \pre 'settings' != NULL (but MYJson::null is fine)
+   * \pre 'settings' != NULL (but Json::null is fine)
    * \remark Defaults:
    * \snippet src/lib_json/json_writer.cpp StreamWriterBuilderDefaults
    */
-  static void setDefaults(MYJson::Value* settings);
+  static void setDefaults(Json::Value* settings);
 };
 
 /** \brief Abstract class for writers.
@@ -1906,10 +1906,10 @@ std::string JSON_API valueToString(bool value);
 std::string JSON_API valueToQuotedString(const char* value);
 
 /// \brief Output using the StyledStreamWriter.
-/// \see MYJson::operator>>()
+/// \see Json::operator>>()
 JSON_API std::ostream& operator<<(std::ostream&, const Value& root);
 
-} // namespace MYJson
+} // namespace Json
 
 #if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 #pragma warning(pop)
@@ -1953,12 +1953,12 @@ JSON_API std::ostream& operator<<(std::ostream&, const Value& root);
 
 // @todo <= add detail about condition in exception
 # define JSON_ASSERT(condition)                                                \
-  {if (!(condition)) {MYJson::throwLogicError( "assert json failed" );}}
+  {if (!(condition)) {Json::throwLogicError( "assert json failed" );}}
 
 # define JSON_FAIL_MESSAGE(message)                                            \
   {                                                                            \
     std::ostringstream oss; oss << message;                                    \
-    MYJson::throwLogicError(oss.str());                                          \
+    Json::throwLogicError(oss.str());                                          \
     abort();                                                                   \
   }
 

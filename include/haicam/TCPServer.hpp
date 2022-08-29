@@ -28,13 +28,13 @@ namespace haicam
 
         TCPServerPtr getPtr();
 
-        ~TCPServer();
+        virtual ~TCPServer();
 
-        bool listen();
+        virtual bool listen();
 
-        void onConnectionClosed(TCPConnectionPtr conntPtr);
+        virtual void onConnectionClosed(TCPConnectionPtr conntPtr);
 
-        void shutdown();
+        virtual void shutdown();
 
     private:
         Context *context;

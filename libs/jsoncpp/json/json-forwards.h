@@ -179,7 +179,7 @@ license you like.
 #define JSONCPP_DEPRECATED(message)
 #endif // if !defined(JSONCPP_DEPRECATED)
 
-namespace MYJson {
+namespace Json {
 typedef int Int;
 typedef unsigned int UInt;
 #if defined(JSON_NO_INT64)
@@ -199,7 +199,7 @@ typedef Int64 LargestInt;
 typedef UInt64 LargestUInt;
 #define JSON_HAS_INT64
 #endif // if defined(JSON_NO_INT64)
-} // end namespace MYJson
+} // end namespace Json
 
 #endif // JSON_CONFIG_H_INCLUDED
 
@@ -228,7 +228,7 @@ typedef UInt64 LargestUInt;
 #include "config.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 
-namespace MYJson {
+namespace Json {
 
 // writer.h
 class FastWriter;
@@ -250,7 +250,7 @@ class ValueIteratorBase;
 class ValueIterator;
 class ValueConstIterator;
 
-} // namespace MYJson
+} // namespace Json
 
 #endif // JSON_FORWARDS_H_INCLUDED
 

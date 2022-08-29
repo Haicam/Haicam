@@ -70,6 +70,13 @@ void TCPClient::connect()
     uv_tcp_connect(&connection, &client, (const struct sockaddr *)&addr, TCPClient::onConnected);
 }
 
+void TCPClient::sendData(ByteBufferPtr data)
+{
+    H_ASSERT(this->conntPtr.get() != NULL);
+    
+    this->conntPtr->sendData(data);
+}
+
 void TCPClient::close()
 {
     if (conntPtr.get() != NULL)

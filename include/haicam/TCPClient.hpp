@@ -16,17 +16,19 @@ namespace haicam
     class TCPClient
     {
     private:
-        TCPClient(Context *context, std::string serverIp, int serverPort);
-
         static void onConnected(uv_connect_t *conn, int status);
+
+    protected:
+        TCPClient(Context *context, std::string serverIp, int serverPort);
 
     public:
         static TCPClientPtr create(Context *context, std::string serverIp, int serverPort);
-        ~TCPClient();
+        virtual ~TCPClient();
 
-        void connect();
+        virtual void connect();
+        virtual void sendData(ByteBufferPtr data);
 
-        void close();
+        virtual void close();
 
     private:
         Context *context;
