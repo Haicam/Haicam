@@ -14,6 +14,7 @@ namespace haicam
         virtual void onSSLTCPRequest(uint8 cmd, uint32 fromAddr, uint32 frameNum, const std::string &payload) = 0;
         virtual void onSSLTCPResponse(uint8 cmd, uint32 fromAddr, uint32 frameNum, const std::string &payload) = 0;
         virtual void onSSLTCPRequestTimeout(uint32 frameNum) = 0;
+        virtual void onSSLTCPConnected() = 0;
     };
 
     typedef std::shared_ptr<SSLTCPClientListener> SSLTCPClientListenerPtr;
@@ -30,9 +31,15 @@ namespace haicam
         Context *context;
         std::string m_strlastBuffer;
 
+        uint8 clientRandom[16];
+        uint8 preMasterKey[16];
+        uint8 masterKey[32]; // AES 256
+
+        bool connected;
+
         std::list<SSLTCPClientListenerPtr> listeners;
 
-        bool sendFrame(uint32 frameNum, uint8 cmd, uint8 cmdType, std::string payload, int encryptType = FRAME_AES_2048, uint32 remoteAddr = FRAME_ADDR_SERVER);
+        bool sendFrame(uint32 frameNum, uint8 cmd, uint8 cmdType, std::string payload, uint8 encryptType = FRAME_AES_256, uint32 remoteAddr = FRAME_ADDR_SERVER);
         void onFrame();
         void sendData(ByteBufferPtr data);
 
@@ -44,8 +51,8 @@ namespace haicam
         void removeListener(SSLTCPClientListenerPtr listener);
 
         void connect();
-        bool sendRequest(uint8 cmd, std::string payload, int encryptType = FRAME_AES_2048, uint32 remoteAddr = FRAME_ADDR_SERVER);
-        bool sendResponse(uint32 frameNum, uint8 cmd, std::string payload, int encryptType = FRAME_AES_2048, uint32 remoteAddr = FRAME_ADDR_SERVER);
+        bool sendRequest(uint8 cmd, std::string payload, uint8 encryptType = FRAME_AES_256, uint32 remoteAddr = FRAME_ADDR_SERVER);
+        bool sendResponse(uint32 frameNum, uint8 cmd, std::string payload, uint8 encryptType = FRAME_AES_256, uint32 remoteAddr = FRAME_ADDR_SERVER);
 
         void onRequest(uint8 cmd, uint32 fromAddr, uint32 frameNum, const std::string &payload);
         void onResponse(uint8 cmd, uint32 fromAddr, uint32 frameNum, const std::string &payload);

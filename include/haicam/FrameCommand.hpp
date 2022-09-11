@@ -20,10 +20,11 @@ typedef unsigned long long   uint64;
 #define FRAME_SIGN_HEART_BEAT                    0xFE
 
 #define FRAME_RSA_1024                           0xFF
-#define FRAME_AES_1024                           0xFE
+#define FRAME_AES_128                           0xFE
 #define FRAME_PLAIN                              0xFD
 #define FRAME_RSA_2048                           0xFC
-#define FRAME_AES_2048                           0xFB
+#define FRAME_AES_256                           0xFB
+#define FRAME_SSL_256                            0xFA
 
 #define FRAME_CMD_REQ                            0x00
 #define FRAME_CMD_RES                            0x01
@@ -48,6 +49,7 @@ typedef unsigned long long   uint64;
 
 
 //APP Client Frame
+#define FRAME_CMD_RSA_HANDSHAKE                         0xFF
 #define FRAME_CMD_NET_ERROR                             0x00
 #define FRAME_CMD_HEART_BEAT                            0x01
 #define FRAME_CMD_GET_ADDR_ID                           0x02

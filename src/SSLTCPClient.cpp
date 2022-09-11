@@ -1,6 +1,9 @@
 #include "haicam/SSLTCPClient.hpp"
 #include "haicam/Utils.hpp"
 #include "haicam/Encryption.hpp"
+#include <openssl/rand.h>
+#include <openssl/evp.h>
+#include <openssl/hmac.h>
 
 using namespace std::placeholders;
 
@@ -8,7 +11,7 @@ using namespace haicam;
 using namespace haicam::Encryption;
 
 SSLTCPClient::SSLTCPClient(Context *context, std::string serverIp, int serverPort, std::string serverPublicKey)
-    : tcpClientPtr(TCPClient::create(context, serverIp, serverPort)), publicKey(serverPublicKey), frameNumber(1), context(context), m_strlastBuffer("")
+    : tcpClientPtr(TCPClient::create(context, serverIp, serverPort)), publicKey(serverPublicKey), frameNumber(1), context(context), m_strlastBuffer(""), connected(false), clientRandom(), preMasterKey(), masterKey()
 {
     tcpClientPtr->onConnectErrorCallback = std::bind(&SSLTCPClient::onConnectError, this);
     tcpClientPtr->onConnectedCallback = std::bind(&SSLTCPClient::onConnected, this, _1);
@@ -27,7 +30,7 @@ void SSLTCPClient::connect()
     tcpClientPtr->connect();
 }
 
-bool SSLTCPClient::sendFrame(uint32 frameNum, uint8 cmd, uint8 cmdType, std::string payload, int encryptType, uint32 remoteAddr)
+bool SSLTCPClient::sendFrame(uint32 frameNum, uint8 cmd, uint8 cmdType, std::string payload, uint8 encryptType, uint32 remoteAddr)
 {
     std::string data;
 
@@ -51,7 +54,7 @@ bool SSLTCPClient::sendFrame(uint32 frameNum, uint8 cmd, uint8 cmdType, std::str
     {
         strpayloadStr = EncodeRSAData(context->getServerRSAKey1024(), data2, 128);
     }
-    else if (encryptType == FRAME_AES_1024)
+    else if (encryptType == FRAME_AES_128)
     {
         strpayloadStr = EncodeAES(context->getAESKey1024(), data2);
     }
@@ -59,9 +62,13 @@ bool SSLTCPClient::sendFrame(uint32 frameNum, uint8 cmd, uint8 cmdType, std::str
     {
         strpayloadStr = EncodeRSAData(context->getServerRSAKey2048(), data2, 256);
     }
-    else if (encryptType == FRAME_AES_2048)
+    else if (encryptType == FRAME_AES_256)
     {
         strpayloadStr = EncodeAES(context->getAESKey2048(), data2);
+    }
+    else if (encryptType == FRAME_SSL_256)
+    {
+        strpayloadStr = EncodeAES(std::string((const char*)masterKey, 32), data2);
     }
     else if (encryptType == FRAME_PLAIN)
     {
@@ -94,7 +101,7 @@ void SSLTCPClient::onFrame()
 {
 }
 
-bool SSLTCPClient::sendRequest(uint8 cmd, std::string payload, int encryptType, uint32 remoteAddr)
+bool SSLTCPClient::sendRequest(uint8 cmd, std::string payload, uint8 encryptType, uint32 remoteAddr)
 {
     uint32 frameNum = frameNumber++;
 
@@ -107,7 +114,7 @@ bool SSLTCPClient::sendRequest(uint8 cmd, std::string payload, int encryptType, 
     return sendFrame(frameNum, cmd, FRAME_CMD_REQ, payload, encryptType, remoteAddr);
 }
 
-bool SSLTCPClient::sendResponse(uint32 frameNum, uint8 cmd, std::string payload, int encryptType, uint32 remoteAddr)
+bool SSLTCPClient::sendResponse(uint32 frameNum, uint8 cmd, std::string payload, uint8 encryptType, uint32 remoteAddr)
 {
     return sendFrame(frameNum, cmd, FRAME_CMD_RES, payload, encryptType, remoteAddr);
 }
@@ -115,6 +122,9 @@ bool SSLTCPClient::sendResponse(uint32 frameNum, uint8 cmd, std::string payload,
 void SSLTCPClient::addListener(SSLTCPClientListenerPtr listener)
 {
     listeners.push_back(listener);
+    if(connected) {
+        listener->onSSLTCPConnected();
+    }
 }
 
 void SSLTCPClient::removeListener(SSLTCPClientListenerPtr listener)
@@ -135,6 +145,27 @@ void SSLTCPClient::onResponse(uint8 cmd, uint32 fromAddr, uint32 frameNum, const
 {
     requestTimers[frameNum]->stop();
     requestTimers.erase(frameNum);
+
+    if (cmd == FRAME_CMD_RSA_HANDSHAKE) {
+        H_ASSERT(payload.length() == 16);
+
+        const char *key = "haicam.tech";
+        unsigned char *result = NULL;
+        unsigned int resultlen = -1;
+
+        std::string data;
+        data.append((const char*)clientRandom, sizeof(clientRandom));
+        data.append(payload); // serverRandom
+        data.append((const char*)preMasterKey, sizeof(preMasterKey));
+
+        result = HMAC(EVP_sha256(), key, strlen(key), (const unsigned char*)data.c_str(), data.length(), masterKey, &resultlen);
+
+        H_ASSERT(result != NULL && resultlen == 32);
+
+        onSSLConnected();
+
+        return;
+    }
 
     std::list<SSLTCPClientListenerPtr>::iterator l;
     for (l = listeners.begin(); l != listeners.end(); l++)
@@ -171,10 +202,30 @@ void SSLTCPClient::onConnectError()
 
 void SSLTCPClient::onConnected(TCPConnectionPtr conn)
 {
+    uint8 version = 1;
+    uint8 type = FRAME_AES_256;
+    RAND_priv_bytes(clientRandom, sizeof(clientRandom));
+    RAND_priv_bytes(preMasterKey, sizeof(preMasterKey));
+
+    std::string payload;
+    payload.append(1, version);
+    payload.append(1, type);
+    payload.append((const char*)clientRandom, sizeof(clientRandom));
+    payload.append((const char*)preMasterKey, sizeof(preMasterKey));
+    
+
+    sendRequest(FRAME_CMD_RSA_HANDSHAKE, payload, FRAME_RSA_2048);
 }
 
 void SSLTCPClient::onSSLConnected()
 {
+    connected = true;
+
+    std::list<SSLTCPClientListenerPtr>::iterator l;
+    for (l = listeners.begin(); l != listeners.end(); l++)
+    {
+        (*l)->onSSLTCPConnected();
+    }
 }
 
 void SSLTCPClient::onSentError(TCPConnectionPtr conn)
@@ -254,7 +305,7 @@ void SSLTCPClient::onData(TCPConnectionPtr conn, ByteBufferPtr data)
             strframe = DecodeRSAData(context->getServerRSAKey1024(), strframe, 128);
             ;
         }
-        else if ((uint8)buffer[1] == FRAME_AES_1024)
+        else if ((uint8)buffer[1] == FRAME_AES_128)
         {
             strframe = DecodeAES(context->getAESKey1024(), strframe);
         }
@@ -263,9 +314,13 @@ void SSLTCPClient::onData(TCPConnectionPtr conn, ByteBufferPtr data)
             strframe = DecodeRSAData(context->getServerRSAKey2048(), strframe, 256);
             ;
         }
-        else if ((uint8)buffer[1] == FRAME_AES_2048)
+        else if ((uint8)buffer[1] == FRAME_AES_256)
         {
             strframe = DecodeAES(context->getAESKey2048(), strframe);
+        }
+        else if ((uint8)buffer[1] == FRAME_SSL_256)
+        {
+            strframe = DecodeAES(std::string((const char*)masterKey, 32), strframe);
         }
         else if ((uint8)buffer[1] == FRAME_PLAIN)
         {
