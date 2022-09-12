@@ -1,5 +1,4 @@
 #include "haicam/Camera.hpp"
-#include "haicam/RSAKey.hpp"
 
 using namespace haicam;
 

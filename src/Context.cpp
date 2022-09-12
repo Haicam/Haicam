@@ -39,13 +39,19 @@ void Context::stop()
     uv_stop(uv_loop);
 }
 
-std::string getServerRSAKey1024()
+std::string getRSAKey1024()
 {
-    H_ASSERT_ERR_STR("Does not support getServerRSAKey1024 func");
+     H_ASSERT(false);
     return "";
 }
 
-std::string getAESKey1024()
+std::string getRSAKey2048()
+{
+     H_ASSERT(false);
+    return "";
+}
+
+std::string getAESKey128()
 {
     H_ASSERT(false);
     return "";
@@ -60,8 +66,9 @@ std::string getServerRSAKey2048()
 #endif
 }
 
-std::string getAESKey2048()
+std::string getAESKey256()
 {
+    H_ASSERT(false);
     return "";
 }
 

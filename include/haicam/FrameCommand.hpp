@@ -20,11 +20,12 @@ typedef unsigned long long   uint64;
 #define FRAME_SIGN_HEART_BEAT                    0xFE
 
 #define FRAME_RSA_1024                           0xFF
-#define FRAME_AES_128                           0xFE
+#define FRAME_AES_128                            0xFE
 #define FRAME_PLAIN                              0xFD
 #define FRAME_RSA_2048                           0xFC
-#define FRAME_AES_256                           0xFB
-#define FRAME_SSL_256                            0xFA
+#define FRAME_AES_256                            0xFB
+#define FRAME_SSL_RSA_2048                       0xFA
+#define FRAME_SSL_AES_256                        0xF9
 
 #define FRAME_CMD_REQ                            0x00
 #define FRAME_CMD_RES                            0x01
