@@ -51,12 +51,13 @@ namespace haicam
         int run();
         void stop();
 
-        std::string getServerRSAKey1024();
-        std::string getAESKey1024();
+        std::string getRSAKey1024();
+        std::string getRSAKey2048();
+        std::string getAESKey256();
+        std::string getAESKey128();
 
         std::string getServerRSAKey2048();
-        std::string getAESKey2048();
-
+        
     private:
         Context();
 

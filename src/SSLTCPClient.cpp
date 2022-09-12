@@ -52,21 +52,25 @@ bool SSLTCPClient::sendFrame(uint32 frameNum, uint8 cmd, uint8 cmdType, std::str
 
     if (encryptType == FRAME_RSA_1024)
     {
-        strpayloadStr = EncodeRSAData(context->getServerRSAKey1024(), data2, 128);
+        strpayloadStr = EncodeRSAData(context->getRSAKey1024(), data2, 128);
     }
     else if (encryptType == FRAME_AES_128)
     {
-        strpayloadStr = EncodeAES(context->getAESKey1024(), data2);
+        strpayloadStr = EncodeAES(context->getAESKey128(), data2);
     }
     else if (encryptType == FRAME_RSA_2048)
     {
-        strpayloadStr = EncodeRSAData(context->getServerRSAKey2048(), data2, 256);
+        strpayloadStr = EncodeRSAData(context->getRSAKey2048(), data2, 256);
     }
     else if (encryptType == FRAME_AES_256)
     {
-        strpayloadStr = EncodeAES(context->getAESKey2048(), data2);
+        strpayloadStr = EncodeAES(context->getAESKey256(), data2);
     }
-    else if (encryptType == FRAME_SSL_256)
+    else if (encryptType == FRAME_SSL_RSA_2048)
+    {
+        strpayloadStr = EncodeRSAData(context->getServerRSAKey2048(), data2, 256);
+    }
+    else if (encryptType == FRAME_SSL_AES_256)
     {
         strpayloadStr = EncodeAES(std::string((const char*)masterKey, 32), data2);
     }
@@ -214,7 +218,7 @@ void SSLTCPClient::onConnected(TCPConnectionPtr conn)
     payload.append((const char*)preMasterKey, sizeof(preMasterKey));
     
 
-    sendRequest(FRAME_CMD_RSA_HANDSHAKE, payload, FRAME_RSA_2048);
+    sendRequest(FRAME_CMD_RSA_HANDSHAKE, payload, FRAME_SSL_RSA_2048);
 }
 
 void SSLTCPClient::onSSLConnected()
@@ -302,23 +306,24 @@ void SSLTCPClient::onData(TCPConnectionPtr conn, ByteBufferPtr data)
 
         if ((uint8)buffer[1] == FRAME_RSA_1024)
         {
-            strframe = DecodeRSAData(context->getServerRSAKey1024(), strframe, 128);
-            ;
+            strframe = DecodeRSAData(context->getRSAKey1024(), strframe, 128);
         }
         else if ((uint8)buffer[1] == FRAME_AES_128)
         {
-            strframe = DecodeAES(context->getAESKey1024(), strframe);
+            strframe = DecodeAES(context->getAESKey128(), strframe);
         }
         else if ((uint8)buffer[1] == FRAME_RSA_2048)
         {
-            strframe = DecodeRSAData(context->getServerRSAKey2048(), strframe, 256);
-            ;
+            strframe = DecodeRSAData(context->getRSAKey2048(), strframe, 256);
         }
         else if ((uint8)buffer[1] == FRAME_AES_256)
         {
-            strframe = DecodeAES(context->getAESKey2048(), strframe);
+            strframe = DecodeAES(context->getAESKey256(), strframe);
+        }else if ((uint8)buffer[1] == FRAME_SSL_RSA_2048)
+        {
+            strframe = DecodeRSAData(context->getServerRSAKey2048(), strframe, 256);
         }
-        else if ((uint8)buffer[1] == FRAME_SSL_256)
+        else if ((uint8)buffer[1] == FRAME_SSL_AES_256)
         {
             strframe = DecodeAES(std::string((const char*)masterKey, 32), strframe);
         }
