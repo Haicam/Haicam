@@ -30,11 +30,17 @@ typedef unsigned long long   uint64;
 #define FRAME_CMD_REQ                            0x00
 #define FRAME_CMD_RES                            0x01
 
+#define FRAME_UDP_CMD_REQ                     0x01
+#define FRAME_UDP_CMD_RES                     0x02
+
+#define FRAME_UDP_CMD_ADD_DEVICE                                   0x01
+#define FRAME_UDP_CMD_DEVICE_INFO                                  0x02
+#define FRAME_UDP_CMD_SET_WIFI                                     0x03
+#define FRAME_UDP_CMD_SETTING_WIFI                                 0x04
 
 #define FRAME_ADDR_SERVER						        0xFFFFFFFF
 #define FRAME_ADDR_APP_BROADCAST				        0xFFFFFFFE
 #define FRAME_ADDR_CAMERA_BROADCAST			            0xFFFFFFFD
-
 
 #define NET_ERROR_WARNING                    0x00
 #define NET_DECRYPTO_FAIL                    0x01
