@@ -40,6 +40,19 @@ extern "C"
         }                                                      \
     } while (0)
 
+#define H_ASSERT_WARN_STR(warnStr)                     \
+    do                                                         \
+    {                                                          \
+        if (true)                                           \
+        {                                                      \
+            fprintf(stderr,                                    \
+                    "Assertion failed in %s on line %d: %s\n", \
+                    __FILE__,                                  \
+                    __LINE__,                                  \
+                    warnStr);                                    \
+        }                                                      \
+    } while (0)
+
 namespace haicam
 {
     class Context
@@ -57,6 +70,8 @@ namespace haicam
         std::string getAESKey128();
 
         std::string getServerRSAKey2048();
+
+        uint64_t getCurrentMillSecs();
         
     private:
         Context();

@@ -39,25 +39,25 @@ void Context::stop()
     uv_stop(uv_loop);
 }
 
-std::string getRSAKey1024()
+std::string Context::getRSAKey1024()
 {
      H_ASSERT(false);
     return "";
 }
 
-std::string getRSAKey2048()
+std::string Context::getRSAKey2048()
 {
      H_ASSERT(false);
     return "";
 }
 
-std::string getAESKey128()
+std::string Context::getAESKey128()
 {
     H_ASSERT(false);
     return "";
 }
 
-std::string getServerRSAKey2048()
+std::string Context::getServerRSAKey2048()
 {
 #if HAICAM_DEV
     return SERVER_DEV_RSA2048_PUBLIC_KEY;
@@ -66,10 +66,15 @@ std::string getServerRSAKey2048()
 #endif
 }
 
-std::string getAESKey256()
+std::string Context::getAESKey256()
 {
     H_ASSERT(false);
     return "";
+}
+
+uint64_t Context::getCurrentMillSecs()
+{
+    return uv_now(uv_loop);
 }
 
 Context::~Context()

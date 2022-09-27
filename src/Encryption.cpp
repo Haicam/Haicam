@@ -19,10 +19,43 @@ using namespace haicam;
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
-std::string Encryption::EncodeRSAData( const std::string& strPublicKey, const std::string& strData ,int keyBytes)
+std::string Encryption::EncodeRSAData( const std::string& strPublicKey, const std::string& strData ,int keyBytes, int paddingMode)
 {
     std::string strEncodeData = "";
-    std::string strResourData = strData;
+    std::string strResoureData = strData;
+    if (strData == "") {
+        return "";
+    }
+    int blockSize = keyBytes;
+    if (paddingMode == 1) {
+        blockSize -= RSA_PKCS1_PADDING_SIZE;
+    }
+    bool bIsBreak = false;
+    while (!bIsBreak) {
+        
+        char strSub[blockSize];
+        memset(strSub, 0, blockSize);
+        if (strResoureData.length() > blockSize)
+        {
+            memcpy(strSub, strResoureData.c_str(), blockSize);
+            strEncodeData += EncodeRSABlock(strPublicKey, strSub, blockSize, paddingMode);
+            strResoureData = strResoureData.substr(blockSize);
+        }
+        else
+        {
+            memcpy(strSub, strResoureData.c_str(), strResoureData.size());
+            strEncodeData += EncodeRSABlock(strPublicKey, strSub, strResoureData.size(), paddingMode);
+            bIsBreak = true;
+        }
+    }
+    
+    return strEncodeData;
+}
+
+std::string Encryption::DecodeRSAData( const std::string& strPrivateKey, const std::string& strData ,int keyBytes, int paddingMode)
+{
+    std::string strEncodeData = "";
+    std::string strResoureData = strData;
     if (strData == "") {
         return "";
     }
@@ -31,56 +64,29 @@ std::string Encryption::EncodeRSAData( const std::string& strPublicKey, const st
         
         char strSub[keyBytes];
         memset(strSub, 0, keyBytes);
-        if (strResourData.length() > keyBytes)
+        if (strResoureData.length() > keyBytes)
         {
-            memcpy(strSub, strResourData.substr(0,keyBytes).c_str(), keyBytes);
-            strResourData = strResourData.substr(keyBytes);
+            memcpy(strSub, strResoureData.c_str(), keyBytes);
+            strEncodeData += DecodeRSABlock(strPrivateKey, strSub, keyBytes, paddingMode);
+            strResoureData = strResoureData.substr(keyBytes);
         }
         else
         {
-            memcpy(strSub, strResourData.c_str(), strResourData.size());
+            memcpy(strSub, strResoureData.c_str(), strResoureData.size());
+            strEncodeData += DecodeRSABlock(strPrivateKey, strSub, strResoureData.size(), paddingMode);
             bIsBreak = true;
         }
-        strEncodeData += EncodeRSABlock(strPublicKey, strSub, keyBytes);
-    }
-    
-    return strEncodeData;
-}
-
-std::string Encryption::DecodeRSAData( const std::string& strPrivateKey, const std::string& strData ,int keyBytes)
-{
-    std::string strEncodeData = "";
-    std::string strResourData = strData;
-    if (strData == "") {
-        return "";
-    }
-    bool bIsBreak = false;
-    while (!bIsBreak) {
-        
-        char strSub[keyBytes];
-        memset(strSub, 0, keyBytes);
-        if (strResourData.length() > keyBytes)
-        {
-            memcpy(strSub, strResourData.substr(0,keyBytes).c_str(), keyBytes);
-            strResourData = strResourData.substr(keyBytes);
-        }
-        else
-        {
-            memcpy(strSub, strResourData.c_str(), strResourData.size());
-            bIsBreak = true;
-        }
-
-        strEncodeData += DecodeRSABlock(strPrivateKey, strSub, keyBytes);
     }
     
     return strEncodeData;
 
 }
 
-std::string Encryption::EncodeRSABlock( const std::string& strPublicKey, const char* strData ,int len)
+std::string Encryption::EncodeRSABlock( const std::string& strPublicKey, const char* strData ,int len, int paddingMode)
 {
     if (strPublicKey.empty() || !strData)
     {
+        fprintf(stderr, "Error EncodeRSABlock 1\n");
         return "";
     }
     
@@ -90,17 +96,20 @@ std::string Encryption::EncodeRSABlock( const std::string& strPublicKey, const c
     char *chPublicKey = const_cast<char *>(strPublicKey.c_str());
     if ((pRSAPublicKeyBio = BIO_new_mem_buf(chPublicKey, -1)) == NULL)
     {
+        fprintf(stderr, "Error EncodeRSABlock 2\n");
         return "";
     }
     pRSAPublicKey = PEM_read_bio_RSA_PUBKEY(pRSAPublicKeyBio, NULL, NULL, NULL);
     if(!pRSAPublicKey)
     {
+        fprintf(stderr, "Error EncodeRSABlock %s\n", strPublicKey.c_str());
+        fprintf(stderr, "Error EncodeRSABlock 3\n");
         return "";
     }
     
     int nLen = RSA_size(pRSAPublicKey);
     char* pEncode = new char[nLen + 1];
-    int ret = RSA_public_encrypt(len, (const unsigned char*)strData, (unsigned char*)pEncode, pRSAPublicKey, RSA_NO_PADDING);
+    int ret = RSA_public_encrypt(len, (const unsigned char*)strData, (unsigned char*)pEncode, pRSAPublicKey, paddingMode == 0 ? RSA_NO_PADDING : RSA_PKCS1_PADDING);
     if (ret >= 0)
     {
         strRet = std::string(pEncode, ret);
@@ -117,7 +126,7 @@ std::string Encryption::EncodeRSABlock( const std::string& strPublicKey, const c
     return strRet;
 }
 
-std::string Encryption::DecodeRSABlock( const std::string& strPrivateKey, const char* strData ,int len)
+std::string Encryption::DecodeRSABlock( const std::string& strPrivateKey, const char* strData ,int len, int paddingMode)
 {
     if (strPrivateKey.empty() || !strData)
     {
@@ -141,7 +150,7 @@ std::string Encryption::DecodeRSABlock( const std::string& strPrivateKey, const 
     int nLen = RSA_size(pRSAPrivateKey);
     char* pDecode = new char[nLen+1];
 
-    int ret = RSA_private_decrypt(len, (const unsigned char*)strData, (unsigned char*)pDecode, pRSAPrivateKey, RSA_NO_PADDING);
+    int ret = RSA_private_decrypt(len, (const unsigned char*)strData, (unsigned char*)pDecode, pRSAPrivateKey, paddingMode == 0 ? RSA_NO_PADDING : RSA_PKCS1_PADDING);
     if(ret >= 0)
     {
         strRet = std::string((char*)pDecode, ret);
@@ -199,7 +208,7 @@ std::string Encryption::EncodeAES( const std::string& strKey, const std::string&
         unsigned char out[AES_BLOCK_SIZE];
         memset(out, 0, AES_BLOCK_SIZE);
 
-        // can do mutiple AES_BLOCK_SIZE
+        // can do mutiple AES_BLOCK_SIZE, and default 0 padding
         AES_cbc_encrypt((const unsigned char*)str16.c_str(), out, str16.length(), &aes_key, civ, AES_ENCRYPT);
         strRet += std::string((const char*)out, AES_BLOCK_SIZE);
     }

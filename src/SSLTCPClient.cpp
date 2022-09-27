@@ -68,7 +68,7 @@ bool SSLTCPClient::sendFrame(uint32 frameNum, uint8 cmd, uint8 cmdType, std::str
     }
     else if (encryptType == FRAME_SSL_RSA_2048)
     {
-        strpayloadStr = EncodeRSAData(context->getServerRSAKey2048(), data2, 256);
+        strpayloadStr = EncodeRSAData(context->getServerRSAKey2048(), data2, 256, 1);
     }
     else if (encryptType == FRAME_SSL_AES_256)
     {
@@ -98,11 +98,9 @@ bool SSLTCPClient::sendFrame(uint32 frameNum, uint8 cmd, uint8 cmdType, std::str
     }
     data.append(1, checksum);
 
-    return true;
-}
+    this->tcpClientPtr->sendData(ByteBuffer::create(data));
 
-void SSLTCPClient::onFrame()
-{
+    return true;
 }
 
 bool SSLTCPClient::sendRequest(uint8 cmd, std::string payload, uint8 encryptType, uint32 remoteAddr)
@@ -147,11 +145,18 @@ void SSLTCPClient::onRequest(uint8 cmd, uint32 fromAddr, uint32 frameNum, const 
 
 void SSLTCPClient::onResponse(uint8 cmd, uint32 fromAddr, uint32 frameNum, const std::string &payload)
 {
-    requestTimers[frameNum]->stop();
-    requestTimers.erase(frameNum);
+    if (requestTimers.find(frameNum) != requestTimers.end()) {
+        requestTimers[frameNum]->stop();
+        requestTimers.erase(frameNum);
+    }
 
     if (cmd == FRAME_CMD_RSA_HANDSHAKE) {
-        H_ASSERT(payload.length() == 16);
+        H_ASSERT(payload.length() == 17);
+
+        uint8 status = payload[0];
+        H_ASSERT(status == 1);
+
+        std::string serverRandom = payload.substr(1);
 
         const char *key = "haicam.tech";
         unsigned char *result = NULL;
@@ -159,7 +164,7 @@ void SSLTCPClient::onResponse(uint8 cmd, uint32 fromAddr, uint32 frameNum, const
 
         std::string data;
         data.append((const char*)clientRandom, sizeof(clientRandom));
-        data.append(payload); // serverRandom
+        data.append(serverRandom);
         data.append((const char*)preMasterKey, sizeof(preMasterKey));
 
         result = HMAC(EVP_sha256(), key, strlen(key), (const unsigned char*)data.c_str(), data.length(), masterKey, &resultlen);
@@ -207,7 +212,7 @@ void SSLTCPClient::onConnectError()
 void SSLTCPClient::onConnected(TCPConnectionPtr conn)
 {
     uint8 version = 1;
-    uint8 type = FRAME_AES_256;
+    uint8 type = FRAME_SSL_AES_256;
     RAND_priv_bytes(clientRandom, sizeof(clientRandom));
     RAND_priv_bytes(preMasterKey, sizeof(preMasterKey));
 
@@ -321,7 +326,7 @@ void SSLTCPClient::onData(TCPConnectionPtr conn, ByteBufferPtr data)
             strframe = DecodeAES(context->getAESKey256(), strframe);
         }else if ((uint8)buffer[1] == FRAME_SSL_RSA_2048)
         {
-            strframe = DecodeRSAData(context->getServerRSAKey2048(), strframe, 256);
+            strframe = DecodeRSAData(context->getServerRSAKey2048(), strframe, 256, 1);
         }
         else if ((uint8)buffer[1] == FRAME_SSL_AES_256)
         {
@@ -333,7 +338,7 @@ void SSLTCPClient::onData(TCPConnectionPtr conn, ByteBufferPtr data)
         }
         else
         {
-            H_ASSERT_ERR_STR("Not supported encryption type");
+            H_ASSERT_WARN_STR("Not supported encryption type");
         }
 
         if (strframe.size() > heardSize2)
@@ -354,7 +359,7 @@ void SSLTCPClient::onData(TCPConnectionPtr conn, ByteBufferPtr data)
             }
             else
             {
-                H_ASSERT_ERR_STR("Not supported type");
+                H_ASSERT_WARN_STR("Not supported type");
             }
         }
 
