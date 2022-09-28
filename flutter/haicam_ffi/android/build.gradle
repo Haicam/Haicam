@@ -55,5 +55,9 @@ android {
 
     defaultConfig {
         minSdkVersion 16
+        ndk {
+            moduleName 'Haicam_ffi'
+            abiFilters 'armeabi-v7a', 'arm64-v8a'//, 'x86', 'x86_64'
+        }
     }
 }

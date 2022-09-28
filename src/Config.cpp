@@ -2,4 +2,4 @@
 
 using namespace haicam;
 
-int Config::foo = 4;
+std::string Config::userWritablePath = "";

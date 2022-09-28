@@ -30,6 +30,6 @@ FFI_PLUGIN_EXPORT intptr_t sum(intptr_t a, intptr_t b);
 FFI_PLUGIN_EXPORT intptr_t sum_long_running(intptr_t a, intptr_t b);
 
 
-FFI_PLUGIN_EXPORT int8_t varInt8 = 108;
+FFI_PLUGIN_EXPORT int8_t varInt8 = 109;
 
 FFI_PLUGIN_EXPORT void hello_world();

@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     haicam_ffi.hello_world();
-    sumResult = haicam_ffi.varInt8; //haicam_ffi.sum(1, 2);
+    sumResult = haicam_ffi.sum(1, 2);
     sumAsyncResult = haicam_ffi.sumAsync(3, 4);
   }
 

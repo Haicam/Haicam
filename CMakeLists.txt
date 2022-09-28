@@ -22,6 +22,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/openssl/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/jsoncpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/sqlite3
 )
 
 link_directories(
@@ -40,6 +41,7 @@ file(GLOB HAICAM_CORE_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/${HAICAM_PLATFORM}/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/${HAICAM_PLATFORM}/${HAICAM_TARGET}/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/jsoncpp/jsoncpp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/sqlite3/sqlite3.c
 )
 
 file(GLOB HAICAM_APP_SRCS
