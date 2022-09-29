@@ -45,7 +45,7 @@ file(GLOB HAICAM_CORE_SRCS
 )
 
 file(GLOB HAICAM_APP_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/example/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/camera/main.cpp
 )
 
 file(GLOB HAICAM_TEST_SRCS
@@ -62,7 +62,7 @@ add_library(haicam-core SHARED
     ${HAICAM_CORE_SRCS}
 )
 
-add_executable(haicam-app 
+add_executable(haicam-camera-app 
     ${HAICAM_APP_SRCS} 
 )
 
