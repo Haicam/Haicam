@@ -74,7 +74,7 @@ if (HAICAM_PLATFORM MATCHES "android")
         crypto.a
     )
 
-    target_link_libraries (haicam-app
+    target_link_libraries (haicam-camera-app
         haicam-core_a
         uv_a.a
         ssl.a
@@ -90,7 +90,7 @@ elseif (HAICAM_PLATFORM MATCHES "windows")
         wsock32.a ws2_32.a wldap32.a iphlpapi.a secur32.a userenv.a
     )
 
-    target_link_libraries (haicam-app
+    target_link_libraries (haicam-camera-app
         haicam-core_a
         uv_a.a
         ssl.a
@@ -106,7 +106,7 @@ elseif (HAICAM_PLATFORM MATCHES "mac" OR HAICAM_PLATFORM MATCHES "ios")
         crypto.a
     )
 
-    target_link_libraries (haicam-app
+    target_link_libraries (haicam-camera-app
         haicam-core_a
         uv_a.a
         ssl.a
@@ -117,7 +117,7 @@ elseif (HAICAM_PLATFORM MATCHES "mac" OR HAICAM_PLATFORM MATCHES "ios")
 
 else()
 
-    target_link_libraries (haicam-app
+    target_link_libraries (haicam-camera-app
         haicam-core_a
         uv_a.a
         ssl.a
@@ -191,7 +191,7 @@ else()
 
 endif()
 
-install(TARGETS haicam-app haicam-test haicam-core haicam-core_a
+install(TARGETS haicam-camera-app haicam-test haicam-core haicam-core_a
     RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/${HAICAM_PLATFORM}/${HAICAM_ARCH}/${HAICAM_TARGET}
     LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/${HAICAM_PLATFORM}/${HAICAM_ARCH}/${HAICAM_TARGET}/libs
     ARCHIVE DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/${HAICAM_PLATFORM}/${HAICAM_ARCH}/${HAICAM_TARGET}/libs
