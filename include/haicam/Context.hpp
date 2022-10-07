@@ -30,7 +30,7 @@ namespace haicam
         std::string getServerRSAKey2048();
 
         uint64_t getCurrentMillSecs();
-        
+
     private:
         Context();
 
@@ -41,6 +41,7 @@ namespace haicam
     private:
         static std::mutex mtx;
         static Context *instance;
+        
     };
 }
 

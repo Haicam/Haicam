@@ -11,9 +11,7 @@ UserDefault::UserDefault() : db(NULL)
 {
     char *zErrMsg = 0;
 
-    H_ASSERT(Config::userWritablePath != "");
-
-    std::string dbPath = Config::userWritablePath + "/config";
+    std::string dbPath = Config::getInstance()->getUserWritablePath() + "/config";
     Utils::makeDir(dbPath);
 
 #ifdef _WIN32

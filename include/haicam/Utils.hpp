@@ -2,6 +2,7 @@
 #include "json/json.h"
 #include <string>
 #include "haicam/FrameCommand.hpp"
+#include <sstream>
 
 namespace haicam
 {
@@ -20,11 +21,34 @@ namespace haicam
 
         static void log(const char *format, ...);
 
-        template<typename NONSTR>
-        static std::string toStr(NONSTR v);
+        template<typename T>
+        static std::string toStr(T v);
 
-        template<typename NONSTR>
-        static NONSTR fromStrTo(std::string str);
+        template<typename T>
+        static T fromStrTo(std::string str);
+
+        static std::string uuidV4();
     };
+
+
+    /*
+    templated classes/functions cannot be separated as a header + implementation file 
+    */
+    template <typename T>
+    std::string Utils::toStr(T v)
+    {
+        std::stringstream ss;
+        ss << v;
+        return ss.str();
+    }
+
+    template <typename T>
+    T Utils::fromStrTo(std::string str)
+    {
+        T value(0);
+        std::istringstream iss(str);
+        iss >> value;
+        return value;
+    }
 
 }

@@ -1,6 +1,15 @@
-#include "haicam/gm8136/Led.hpp"
+#include "haicam/Led.hpp"
 
-using namespace haicam::gm8136;
+using namespace haicam;
+
+Led::Led(LedType type)
+{
+    this->type = type;
+}
+
+Led::~Led(){
+
+}
 
 void Led::on()
 {

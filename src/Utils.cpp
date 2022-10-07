@@ -1,22 +1,25 @@
 #include "haicam/Utils.hpp"
+#include "haicam/Config.hpp"
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <sys/stat.h> //S_IRWXU
 #include <unistd.h>   //access
 #include <stdio.h>
 #include <pthread.h>
-#include <stdarg.h> 
+#include <stdarg.h>
 #include <time.h>
 #include <sys/time.h>
 #include <sstream>
 #ifdef _WIN32
-#define localtime_r(T,Tm) (localtime_s(Tm,T) ? NULL : Tm)
+#define localtime_r(T, Tm) (localtime_s(Tm, T) ? NULL : Tm)
 #endif
 
 #ifdef __ANDROID__
 #include <android/log.h>
 #define printf(...) __android_log_print(ANDROID_LOG_DEBUG, "haicam_log", __VA_ARGS__);
 #endif
+
+#include <openssl/rand.h>
 
 using namespace haicam;
 
@@ -91,9 +94,9 @@ void Utils::makeDir(std::string dir)
 
 static void _log(const char *format, va_list args)
 {
-    int bufferSize = 1024*32;
-    char* buf = NULL;
-    
+    int bufferSize = 1024 * 32;
+    char *buf = NULL;
+
     do
     {
         buf = new (std::nothrow) char[bufferSize];
@@ -104,53 +107,59 @@ static void _log(const char *format, va_list args)
         if (ret < 0)
         {
             bufferSize *= 2;
-            
-            delete [] buf;
+
+            delete[] buf;
         }
         else
             break;
-        
+
     } while (true);
-    
+
     strcat(buf, "\n");
     char dtime[100];
     struct timeval curTime;
     gettimeofday(&curTime, NULL);
-    time_t now = time (0);
+    time_t now = time(0);
     int milli = curTime.tv_usec / 1000;
     struct tm timeInfo;
-    localtime_r(&now,&timeInfo);
-    strftime (dtime, 100, "%Y-%m-%d %H:%M:%S", &timeInfo);
-    //printf("%s.%d:[%zu] %s",dtime,milli, pthread_self(), buf);
-    
-    char out[500];// < android logcat max line length
-    
+    localtime_r(&now, &timeInfo);
+    strftime(dtime, 100, "%Y-%m-%d %H:%M:%S", &timeInfo);
+    // printf("%s.%d:[%zu] %s",dtime,milli, pthread_self(), buf);
+
+    char out[500]; // < android logcat max line length
+
 #ifdef __ANDROID__
     size_t len = strlen(buf);
     bool firstTime = true;
-    for(int i = 0; i < len;)
+    for (int i = 0; i < len;)
     {
         memset(out, 0, 500);
-        if(len - i < 500) {
+        if (len - i < 500)
+        {
             memcpy(out, buf + i, len - i);
             i += len - i;
-        } else {
+        }
+        else
+        {
             memcpy(out, buf + i, 499);
             i += 499;
         }
-        
-        if(firstTime) {
-            printf("[%zu] %s",pthread_self(), out);
+
+        if (firstTime)
+        {
+            printf("[%zu] %s", pthread_self(), out);
             firstTime = false;
-        } else {
-            printf("<<%s",out);
+        }
+        else
+        {
+            printf("<<%s", out);
         }
     }
 #else
-    printf("%s.%d:[%zu] %s",dtime,milli, pthread_self(), buf);
+    printf("%s.%d:[%zu] %s", dtime, milli, pthread_self(), buf);
 #endif
-    
-    delete [] buf;
+
+    delete[] buf;
 }
 
 void Utils::log(const char *format, ...)
@@ -161,19 +170,42 @@ void Utils::log(const char *format, ...)
     va_end(args);
 }
 
-template<typename NONSTR>
-std::string Utils::toStr(NONSTR v) 
+/*
+* Credit: https://gist.github.com/kvelakur/9069c9896577c3040030
+* Generate a Version 4 UUID according to RFC-4122
+*/
+std::string Utils::uuidV4()
 {
-    std::stringstream ss;
-    ss << v;
-    return ss.str();
-}
+    char uuidv4[36+1];
 
-template<typename NONSTR>
-NONSTR Utils::fromStrTo(std::string str)
-{
-    NONSTR value(0);
-    std::istringstream iss(str);
-    iss >> value;
-    return value;
+    union
+    {
+        struct
+        {
+            uint32_t time_low;
+            uint16_t time_mid;
+            uint16_t time_hi_and_version;
+            uint8_t clk_seq_hi_res;
+            uint8_t clk_seq_low;
+            uint8_t node[6];
+        };
+        uint8_t __rnd[16];
+    } uuid;
+
+    int rc = RAND_bytes(uuid.__rnd, sizeof(uuid));
+
+    H_ASSERT(rc == 1);
+
+    // Refer Section 4.2 of RFC-4122
+    // https://tools.ietf.org/html/rfc4122#section-4.2
+    uuid.clk_seq_hi_res = (uint8_t)((uuid.clk_seq_hi_res & 0x3F) | 0x80);
+    uuid.time_hi_and_version = (uint16_t)((uuid.time_hi_and_version & 0x0FFF) | 0x4000);
+
+    snprintf(uuidv4, sizeof(uuidv4), "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+             uuid.time_low, uuid.time_mid, uuid.time_hi_and_version,
+             uuid.clk_seq_hi_res, uuid.clk_seq_low,
+             uuid.node[0], uuid.node[1], uuid.node[2],
+             uuid.node[3], uuid.node[4], uuid.node[5]);
+
+    return (const char*)uuidv4;
 }

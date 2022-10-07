@@ -26,16 +26,13 @@ namespace haicam
         LedStatus status;
 
     public:
-        Led(LedType type)
-        {
-            this->type = type;
-        };
-        ~Led(){};
+        Led(LedType type);
+        virtual ~Led();
 
-        virtual void on() = 0;
-        virtual void off() = 0;
-        virtual void setStatus(LedStatus status) = 0;
-        virtual LedStatus getStatus() = 0;
+        virtual void on();
+        virtual void off();
+        virtual void setStatus(LedStatus status);
+        virtual LedStatus getStatus();
     };
 }
 #endif
