@@ -3,7 +3,7 @@
 
 using namespace haicam;
 
-Context* Context::instance = NULL;
+Context *Context::instance = NULL;
 std::mutex Context::mtx;
 
 Context::Context() : uv_loop(NULL), localAddr(0)
@@ -41,13 +41,13 @@ void Context::stop()
 
 std::string Context::getRSAKey1024()
 {
-     H_ASSERT(false);
+    H_ASSERT(false);
     return "";
 }
 
 std::string Context::getRSAKey2048()
 {
-     H_ASSERT(false);
+    H_ASSERT(false);
     return "";
 }
 
@@ -59,11 +59,10 @@ std::string Context::getAESKey128()
 
 std::string Context::getServerRSAKey2048()
 {
-#if HAICAM_DEV
-    return SERVER_DEV_RSA2048_PUBLIC_KEY;
-#else
-    return SERVER_RSA2048_PUBLIC_KEY;
-#endif
+    if (Config::getInstance()->isDevelopment())
+        return SERVER_DEV_RSA2048_PUBLIC_KEY;
+    else
+        return SERVER_RSA2048_PUBLIC_KEY;
 }
 
 std::string Context::getAESKey256()
@@ -81,7 +80,7 @@ Context::~Context()
 {
     if (uv_loop != NULL)
     {
-        if(!uv_is_closing((uv_handle_t *)uv_loop))
+        if (!uv_is_closing((uv_handle_t *)uv_loop))
         {
             uv_loop_close(uv_loop);
         }

@@ -1,4 +1,8 @@
 #include "haicam_ffi.h"
+#include <openssl/rsa.h>
+#include <openssl/pem.h>
+#include <openssl/err.h>
+#include <openssl/aes.h>
 
 // A very short-lived native function.
 //
@@ -25,4 +29,14 @@ FFI_PLUGIN_EXPORT intptr_t sum_long_running(intptr_t a, intptr_t b) {
 FFI_PLUGIN_EXPORT void hello_world()
 {
     printf("Hello World\n");
+
+    AES_KEY aes_key;
+    unsigned char key[AES_BLOCK_SIZE];
+    memset(key, 0x00, AES_BLOCK_SIZE);
+
+    if(AES_set_encrypt_key((const unsigned char*)key, AES_BLOCK_SIZE * 8, &aes_key) < 0)
+    {
+        printf("AES key error 1");
+    }
+
 }

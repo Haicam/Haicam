@@ -73,13 +73,6 @@ class HaicamFfiBindings {
 
   set varInt8(int value) => _varInt8.value = value;
 
-  late final ffi.Pointer<ffi.Pointer<ffi.Int8>> _str1 =
-      _lookup<ffi.Pointer<ffi.Int8>>('str1');
-
-  ffi.Pointer<ffi.Int8> get str1 => _str1.value;
-
-  set str1(ffi.Pointer<ffi.Int8> value) => _str1.value = value;
-
   void hello_world() {
     return _hello_world();
   }

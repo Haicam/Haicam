@@ -22,6 +22,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/openssl/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/jsoncpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/sqlite3
 )
 
 link_directories(
@@ -40,10 +41,11 @@ file(GLOB HAICAM_CORE_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/${HAICAM_PLATFORM}/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/${HAICAM_PLATFORM}/${HAICAM_TARGET}/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/jsoncpp/jsoncpp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/sqlite3/sqlite3.c
 )
 
 file(GLOB HAICAM_APP_SRCS
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/example/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/camera/main.cpp
 )
 
 file(GLOB HAICAM_TEST_SRCS
@@ -60,7 +62,7 @@ add_library(haicam-core SHARED
     ${HAICAM_CORE_SRCS}
 )
 
-add_executable(haicam-app 
+add_executable(haicam-camera-app 
     ${HAICAM_APP_SRCS} 
 )
 
@@ -72,7 +74,7 @@ if (HAICAM_PLATFORM MATCHES "android")
         crypto.a
     )
 
-    target_link_libraries (haicam-app
+    target_link_libraries (haicam-camera-app
         haicam-core_a
         uv_a.a
         ssl.a
@@ -88,7 +90,7 @@ elseif (HAICAM_PLATFORM MATCHES "windows")
         wsock32.a ws2_32.a wldap32.a iphlpapi.a secur32.a userenv.a
     )
 
-    target_link_libraries (haicam-app
+    target_link_libraries (haicam-camera-app
         haicam-core_a
         uv_a.a
         ssl.a
@@ -104,7 +106,7 @@ elseif (HAICAM_PLATFORM MATCHES "mac" OR HAICAM_PLATFORM MATCHES "ios")
         crypto.a
     )
 
-    target_link_libraries (haicam-app
+    target_link_libraries (haicam-camera-app
         haicam-core_a
         uv_a.a
         ssl.a
@@ -115,7 +117,7 @@ elseif (HAICAM_PLATFORM MATCHES "mac" OR HAICAM_PLATFORM MATCHES "ios")
 
 else()
 
-    target_link_libraries (haicam-app
+    target_link_libraries (haicam-camera-app
         haicam-core_a
         uv_a.a
         ssl.a
@@ -189,7 +191,7 @@ else()
 
 endif()
 
-install(TARGETS haicam-app haicam-test haicam-core haicam-core_a
+install(TARGETS haicam-camera-app haicam-test haicam-core haicam-core_a
     RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/${HAICAM_PLATFORM}/${HAICAM_ARCH}/${HAICAM_TARGET}
     LIBRARY DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/${HAICAM_PLATFORM}/${HAICAM_ARCH}/${HAICAM_TARGET}/libs
     ARCHIVE DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/bin/${HAICAM_PLATFORM}/${HAICAM_ARCH}/${HAICAM_TARGET}/libs

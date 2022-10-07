@@ -2,4 +2,4 @@
 
 using namespace haicam;
 
-int Config::foo = 4;
+Config* Config::instance = NULL;
