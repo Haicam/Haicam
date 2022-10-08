@@ -26,6 +26,9 @@ namespace haicam
         static void processSignal(int sig);
         virtual void registerSignal();
         virtual void upgradeFirmware();
+        virtual void factoryDefault();
+
+        virtual void startWatchdog();
     };
         
 }

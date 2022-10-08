@@ -15,6 +15,9 @@ namespace haicam
             void telnetOn();
             void telnetOff();
             void upgradeFirmware();
+            void factoryDefault();
+
+            void startWatchdog();
         };
     }
 }

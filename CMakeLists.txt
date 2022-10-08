@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.4.1)
 
-project(haicam-core)
+project(haicam-core VERSION 0.0.2 LANGUAGES C CXX)
 
 set(CMAKE_BUILD_TYPE "Debug")
 
@@ -23,6 +23,9 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/openssl/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/jsoncpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/sqlite3
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/${HAICAM_PLATFORM}
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/${HAICAM_PLATFORM}/${HAICAM_TARGET}
 )
 
 link_directories(
@@ -40,6 +43,9 @@ file(GLOB HAICAM_CORE_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/${HAICAM_PLATFORM}/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/${HAICAM_PLATFORM}/${HAICAM_TARGET}/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/${HAICAM_PLATFORM}/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/${HAICAM_PLATFORM}/${HAICAM_TARGET}/*.c
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/jsoncpp/jsoncpp.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/sqlite3/sqlite3.c
 )
