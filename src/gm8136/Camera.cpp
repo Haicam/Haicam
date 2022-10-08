@@ -18,21 +18,33 @@ void Camera::init(Context* context)
 
 void Camera::telnetOn()
 {
-    FILE* fp;
-	fp = popen("/usr/sbin/telnetd &", "r");
-	pclose(fp);
+    Utils::executeSystemCommand(Config::getInstance()->getShellTelnetOn());
     Utils::log("Haicam telnet on");
 }
 
 void Camera::telnetOff()
 {
-    FILE* fp;
-	fp = popen("killall telnetd", "r");
-	pclose(fp);
+    Utils::executeSystemCommand(Config::getInstance()->getShellTelnetOff());
     Utils::log("Haicam telnet off");
 }
 
 void Camera::upgradeFirmware()
 {
-    
+    if (Utils::checkIsFileExsit(Config::getInstance()->getShellUpgradeFirmware()))
+        Utils::executeSystemCommand(Config::getInstance()->getShellUpgradeFirmware());
+    else
+        Utils::executeSystemCommand("/app/upgrate.sh");
+    Utils::log("Haicam upgradeFirmware");
+}
+
+void Camera::factoryDefault()
+{
+    // TODO resetAccount();
+    Utils::executeSystemCommand(Config::getInstance()->getShellFactoryDefault());
+    Utils::log("Haicam Camera::factoryDefault");
+}
+
+void Camera::startWatchdog()
+{
+
 }

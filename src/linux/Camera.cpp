@@ -31,3 +31,13 @@ void Camera::upgradeFirmware()
 {
     Utils::log("linux upgradeFirmware: not support");
 }
+
+void Camera::factoryDefault()
+{
+    Utils::log("linux factoryDefault: not support");
+}
+
+void Camera::startWatchdog()
+{
+    Utils::log("linux startWatchdog: not support");
+}

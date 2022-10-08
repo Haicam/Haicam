@@ -72,3 +72,13 @@ void Camera::upgradeFirmware()
 {
     Utils::log("Do not support Camera::upgradeFirmware");
 }
+
+void Camera::factoryDefault()
+{
+    Utils::log("Do not support Camera::factoryDefault");
+}
+
+void Camera::startWatchdog()
+{
+    Utils::log("Do not support Camera::startWatchdog");
+}

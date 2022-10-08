@@ -4,6 +4,7 @@
 #include "haicam/platform/model/Camera.hpp"
 #include "haicam/platform/model/Config.hpp"
 #include "haicam/platform/model/Led.hpp"
+#include "haicam/platform/model/Watchdog.hpp"
 #include "haicam/UserDefault.hpp"
 #include "haicam/Utils.hpp"
 
@@ -18,12 +19,17 @@ int main()
 
    Config* config = new platform::model::Config();
    config->init();
+   
+   Watchdog* watchdog = new platform::model::Watchdog(context);
 
    Camera *camera = new platform::model::Camera();
    camera->init(context);
 
    if (Config::getInstance()->isDevelopment()) {
       camera->telnetOn();
+   } else {
+      camera->startWatchdog();
+      watchdog->start();
    }
 
    camera->registerSignal();
@@ -40,6 +46,7 @@ int main()
    delete config;
    delete camera;
    delete UserDefault::getInstance();
+   delete watchdog;
 
    return 0;
 }

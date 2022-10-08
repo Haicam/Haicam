@@ -28,6 +28,8 @@ namespace haicam
         static T fromStrTo(std::string str);
 
         static std::string uuidV4();
+
+        static std::string executeSystemCommand(std::string command);
     };
 
 

@@ -164,6 +164,10 @@ static void _log(const char *format, va_list args)
 
 void Utils::log(const char *format, ...)
 {
+    if (!Config::getInstance()->isDevelopment()) 
+    {   
+        return;
+    }
     va_list args;
     va_start(args, format);
     _log(format, args);
@@ -208,4 +212,19 @@ std::string Utils::uuidV4()
              uuid.node[3], uuid.node[4], uuid.node[5]);
 
     return (const char*)uuidv4;
+}
+
+std::string Utils::executeSystemCommand(std::string command)
+{
+    std::string strData = "";
+    FILE * fp = NULL;
+    char buffer[128];
+    fp=popen(command.c_str(),"r");
+    if (fp) {
+        while(fgets(buffer,sizeof(buffer),fp)){
+            strData.append(buffer);
+        }
+        pclose(fp);
+    }
+    return strData;
 }

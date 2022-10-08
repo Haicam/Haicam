@@ -10,6 +10,15 @@ namespace haicam
     public:
         H_CFG_VAR(bool, isDevelopment, true);
         H_CFG_VAR(std::string, getUserWritablePath, "");
+        H_CFG_VAR(std::string, getSecurityDevice, "/dev/security");
+        H_CFG_VAR(std::string, getWatchdogDevice, "/dev/watchdog");
+        H_CFG_VAR(int, getWatchdogTimeout, 20);// 20 seconds
+        H_CFG_VAR(int, getWatchdogTick, 3000);// 3 seconds
+
+        H_CFG_VAR(std::string, getShellTelnetOn, "/usr/sbin/telnetd &");
+        H_CFG_VAR(std::string, getShellTelnetOff, "killall telnetd");
+        H_CFG_VAR(std::string, getShellUpgradeFirmware, "/app/upgrade.sh");
+        H_CFG_VAR(std::string, getShellFactoryDefault, "/mnt/mtd/DevManager/factory_default.sh");
 
         void init()
         {
