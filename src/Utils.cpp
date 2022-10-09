@@ -162,6 +162,15 @@ static void _log(const char *format, va_list args)
     delete[] buf;
 }
 
+void Utils::log_va(const char *format, va_list args)
+{
+    if (!Config::getInstance()->isDevelopment()) 
+    {   
+        return;
+    }
+    _log(format, args);
+}
+
 void Utils::log(const char *format, ...)
 {
     if (!Config::getInstance()->isDevelopment()) 

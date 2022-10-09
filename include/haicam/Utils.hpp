@@ -19,6 +19,7 @@ namespace haicam
         static bool checkIsFileExsit(std::string fullPath);
         static void makeDir(std::string dir);
 
+        static void log_va(const char *format, va_list args);
         static void log(const char *format, ...);
 
         template<typename T>

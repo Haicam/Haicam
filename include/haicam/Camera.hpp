@@ -1,6 +1,8 @@
 #pragma once
 #include <mutex>
 #include "haicam/Context.hpp"
+#include "haicam/Watchdog.hpp"
+#include <memory>
 
 namespace haicam
 {
@@ -9,6 +11,10 @@ namespace haicam
     protected:
         static Camera* instance;
         Context* context;
+
+        std::shared_ptr<Watchdog> watchdogPtr;
+
+
 
     public:
         Camera();

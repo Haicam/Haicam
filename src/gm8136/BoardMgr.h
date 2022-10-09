@@ -4,6 +4,7 @@
 
 //static char IRCUT_EN_flag;
 extern unsigned int get_flag_WTD_reboot(void);
+extern void Factory_Default(void);
 
 extern void Board_Init(void); 
          
@@ -64,5 +65,25 @@ extern void Tilt_turn(unsigned int dir);
 extern void Pan_turn(unsigned int dir);
 #endif
 #endif
+
+#if !EZHOMELABS_CAMERA
+extern void set_motion_x(int x);
+extern void set_motion_y(int y);
+extern int get_motion_x(void);
+extern int get_motion_y(void);
+extern void set_motion_x_en(int x);
+extern void set_motion_y_en(int y);
+extern int get_motion_x_en(void);
+extern int get_motion_y_en(void);
+extern void set_turn_x_en(int en);
+extern void set_turn_y_en(int en);
+extern int get_turn_x_en(void);
+extern int get_turn_y_en(void);
+extern void set_motion_turn(int en);
+extern int get_motion_turn(void);
+#endif
+
+extern void initAdvance();
+extern void updateAdvance(int iAdvance);
 
 #endif //_BoardMgr_H

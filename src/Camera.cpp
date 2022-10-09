@@ -2,10 +2,12 @@
 #include "haicam/Config.hpp"
 #include "haicam/Utils.hpp"
 #include <signal.h>
+#include "haicam/platform/model/Watchdog.hpp"
+#include "haicam/UserDefault.hpp"
 
 using namespace haicam;
 
-Camera* Camera::instance = NULL;
+Camera *Camera::instance = NULL;
 
 Camera::Camera()
 {
@@ -16,16 +18,19 @@ Camera::~Camera()
     instance = NULL;
 }
 
-void Camera::init(Context* context)
+void Camera::init(Context *context)
 {
-    if(this->context != NULL) return;
-    
+    if (this->context != NULL)
+        return;
+
     this->context = context;
 
     instance = this;
+
+    watchdogPtr = std::make_shared<platform::model::Watchdog>(context);
 }
 
-Camera* Camera::getInstance()
+Camera *Camera::getInstance()
 {
     H_ASSERT(instance != NULL);
     return instance;
@@ -34,11 +39,26 @@ Camera* Camera::getInstance()
 void Camera::start()
 {
     H_ASSERT(context != NULL);
+
+    if (Config::getInstance()->isDevelopment())
+    {
+        this->telnetOn();
+    }
+    else
+    {
+        this->startWatchdog();
+    }
+
+    this->registerSignal();
+
+    if (UserDefault::getInstance()->getBoolForKey("update_firmware"))
+    {
+        this->upgradeFirmware();
+    }
 }
 
 void Camera::stop()
 {
-
 }
 
 void Camera::telnetOn()
@@ -48,12 +68,13 @@ void Camera::telnetOn()
 
 void Camera::telnetOff()
 {
-     Utils::log("Do not support Camera::telnetOfflnetOff");
+    Utils::log("Do not support Camera::telnetOfflnetOff");
 }
 
 void Camera::processSignal(int sig)
 {
-    if ((SIGTERM == sig) || (SIGINT == sig) || (SIGSEGV == sig)) {
+    if ((SIGTERM == sig) || (SIGINT == sig) || (SIGSEGV == sig))
+    {
         exit(EXIT_FAILURE);
     }
 }
@@ -80,5 +101,8 @@ void Camera::factoryDefault()
 
 void Camera::startWatchdog()
 {
+    if (watchdogPtr.get() == NULL)
+        return;
     Utils::log("Do not support Camera::startWatchdog");
+    watchdogPtr->start();
 }

@@ -1,5 +1,8 @@
 #include "haicam/platform/Camera.hpp"
 #include "haicam/Utils.hpp"
+extern "C" {
+    #include "BoardMgr.h"
+}
 
 using namespace haicam::platform;
 
@@ -14,6 +17,7 @@ Camera::~Camera()
 void Camera::init(Context* context)
 {
     haicam::Camera::init(context);
+    Board_Init();
 }
 
 void Camera::telnetOn()
@@ -39,9 +43,8 @@ void Camera::upgradeFirmware()
 
 void Camera::factoryDefault()
 {
-    // TODO resetAccount();
-    Utils::executeSystemCommand(Config::getInstance()->getShellFactoryDefault());
     Utils::log("Haicam Camera::factoryDefault");
+    Factory_Default();
 }
 
 void Camera::startWatchdog()
