@@ -6,7 +6,7 @@ set(CMAKE_BUILD_TYPE "Debug")
 
 if (HAICAM_PLATFORM MATCHES "gm8136")
     add_definitions(-DHAICAM_GM8136_GCC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -O0 -ggdb3")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wno-psabi -O0 -ggdb3")
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O0 -ggdb3")
 endif()

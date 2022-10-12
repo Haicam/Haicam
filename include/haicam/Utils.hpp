@@ -1,8 +1,9 @@
 #pragma once
-#include "json/json.h"
 #include <string>
-#include "haicam/FrameCommand.hpp"
+#include <stdarg.h>
 #include <sstream>
+#include "json/json.h"
+#include "haicam/FrameCommand.hpp"
 
 namespace haicam
 {

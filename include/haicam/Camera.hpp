@@ -14,6 +14,8 @@ namespace haicam
 
         std::shared_ptr<Watchdog> watchdogPtr;
 
+        bool isStartedByUser;
+
 
 
     public:

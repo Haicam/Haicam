@@ -9,7 +9,7 @@ using namespace haicam;
 
 Camera *Camera::instance = NULL;
 
-Camera::Camera()
+Camera::Camera():isStartedByUser(true)
 {
 }
 

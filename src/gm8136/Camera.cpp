@@ -2,6 +2,7 @@
 #include "haicam/Utils.hpp"
 extern "C" {
     #include "BoardMgr.h"
+    #include "HardwareEncryption.h"
 }
 
 using namespace haicam::platform;
@@ -18,6 +19,29 @@ void Camera::init(Context* context)
 {
     haicam::Camera::init(context);
     Board_Init();
+    //TODO
+    //initGMSystem()
+
+    // init isp328
+    initAdvance();
+
+    // init hardware AES128
+    CInitEncodeCBCAES();
+
+    //TODO
+    //get mac address
+
+    if(!Config::getInstance()->isDevelopment()) {
+        if(get_flag_WTD_reboot()) {
+            isStartedByUser = false;
+        }
+        if (UserDefault::getInstance()->getBoolForKey("update_firmware")) {
+            isStartedByUser = true;
+        }
+        if (UserDefault::getInstance()->getBoolForKey("rebootNoSound")) {
+            isStartedByUser = false;
+        }
+    }
 }
 
 void Camera::telnetOn()

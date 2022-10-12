@@ -130,7 +130,6 @@ int CEncodeCBCAES( const char* strKey,int KeyLength, const char* indata,int inda
     if (static_handler <= 0) {
         static_handler = -1;
         usleep(200000);
-        handlerCreateFailed();
         return -1;
     }
     if (MAP_FAILED == (void*)(wrq.DataIn_addr)) {

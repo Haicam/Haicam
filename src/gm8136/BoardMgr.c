@@ -135,7 +135,7 @@ void delayms(int ms)
 static void GPIO_READ(void)
 {
     int m_mfd;
-    if ((m_mfd = open("/dev/mem", O_RDWR)) < 0)
+    if ((m_mfd = open(haicam_cfgGetMemDevice(), O_RDWR)) < 0)
     {
         //        printf("cannot open file: /dev/mem \n");
         //		return -1;
@@ -478,7 +478,7 @@ void IRCUT_Ctrl(void)
     unsigned int day = 1;
     unsigned int night = 1;
 
-    if ((key_fd = open("/dev/sar_adc_drv", O_RDONLY | O_NONBLOCK)) > 0)
+    if ((key_fd = open(haicam_cfgGetIRCtrlDevice(), O_RDONLY | O_NONBLOCK)) > 0)
     {
         // printf("key_fd = %d\n", key_fd);
         while (key_fd)
@@ -1664,7 +1664,7 @@ void IRCUT_Ctrl(void)
             night_thr = 162;
         }
     }
-    if ((key_fd = open("/dev/sar_adc_drv", O_RDONLY | O_NONBLOCK)) > 0)
+    if ((key_fd = open(haicam_cfgGetIRCtrlDevice(), O_RDONLY | O_NONBLOCK)) > 0)
     {
         // printf("key_fd = %d\n", key_fd);
         while (key_fd)
@@ -1934,9 +1934,9 @@ void initAdvance(){
     int awb_en, sensor_awb_en, ae_en, sensor_ae_en, mrnr_en, tmnr_en, sp_en;   
     int scene_mode, denoise, contrast, brightness, shapness;
     if (isp_fd == 0){
-        isp_fd = open("/dev/isp328", O_RDWR);
+        isp_fd = open(haicam_cfgGetISPDevice(), O_RDWR);
         if (isp_fd < 0) {
-            haicam_utils_log("Open ISP328 fail\n");
+            haicam_utils_log("Open ISP dev fail\n");
             return;
         }
     }
