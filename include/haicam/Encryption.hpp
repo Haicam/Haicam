@@ -6,7 +6,7 @@ namespace haicam{
     namespace Encryption
     {
 
-        bool generateKey(std::string PriKeyPath, std::string PubKeyPath, int keyBits);
+        bool generateRSAKeyPair(std::string& strPublicKey, std::string& strPrivateKey, int keyBits);
 
         std::string EncodeRSAData( const std::string& strPublicKey, const std::string& strData, int keyBytes, int paddingMode = 0);
 

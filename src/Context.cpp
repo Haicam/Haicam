@@ -1,5 +1,6 @@
 #include "haicam/Context.hpp"
 #include "haicam/RSAKey.hpp"
+#include "haicam/UserDefault.hpp"
 
 using namespace haicam;
 
@@ -48,7 +49,7 @@ std::string Context::getRSAKey1024()
 std::string Context::getRSAKey2048()
 {
     H_ASSERT(false);
-    return "";
+    return UserDefault::getInstance()->getStringForKey("cameraRSA2048PrivateKey");
 }
 
 std::string Context::getAESKey128()

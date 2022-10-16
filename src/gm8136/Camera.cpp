@@ -1,5 +1,6 @@
 #include "haicam/platform/Camera.hpp"
 #include "haicam/Utils.hpp"
+#include "haicam/UserDefault.hpp"
 extern "C" {
     #include "BoardMgr.h"
     #include "HardwareEncryption.h"

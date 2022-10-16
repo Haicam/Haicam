@@ -1,8 +1,10 @@
 #include "haicam/Encryption.hpp"
+#include "haicam/MacroDefs.hpp"
 #include <openssl/rsa.h>
 #include <openssl/pem.h>
 #include <openssl/err.h>
 #include <openssl/aes.h>
+#include <memory>
 
 using namespace haicam;
 
@@ -317,7 +319,7 @@ std::string Encryption::DecodeCBCAES( const std::string& strKey, const std::stri
 }
 
 
-bool Encryption::generateKey(std::string PriKeyPath,std::string PubKeyPath, int keyBits)
+bool Encryption::generateRSAKeyPair(std::string& strPublicKey, std::string& strPrivateKey, int keyBits)
 {
     int             ret = 0;
     RSA             *r = NULL;
@@ -341,8 +343,13 @@ bool Encryption::generateKey(std::string PriKeyPath,std::string PubKeyPath, int 
         return false;
     }
     
-    bp_private = BIO_new_file(PriKeyPath.c_str(), "wb+");
+    bp_private =  BIO_new(BIO_s_mem());
     ret = PEM_write_bio_RSAPrivateKey(bp_private, r, NULL, NULL, 0, NULL, NULL);
+    size_t pri_len = BIO_pending(bp_private);
+    H_MEM_PTR(char, privateKeyBuffer, pri_len);
+    BIO_read(bp_private, privateKeyBuffer.get(), pri_len);
+    strPrivateKey = std::string(privateKeyBuffer.get(), pri_len);
+
     if(ret != 1){
         BIO_free_all(bp_private);
         RSA_free(r);
@@ -350,8 +357,13 @@ bool Encryption::generateKey(std::string PriKeyPath,std::string PubKeyPath, int 
         return false;
     }
     
-    bp_public = BIO_new_file(PubKeyPath.c_str(), "wb+");
+    bp_public =  BIO_new(BIO_s_mem());
     ret = PEM_write_bio_RSA_PUBKEY(bp_public, r);
+    size_t pub_len = BIO_pending(bp_public);
+    H_MEM_PTR(char, publicKeyBuffer, pub_len);
+    BIO_read(bp_public, publicKeyBuffer.get(), pub_len);
+    strPublicKey = std::string(publicKeyBuffer.get(), pub_len);
+
     if(ret != 1){
         BIO_free_all(bp_public);
         BIO_free_all(bp_private);
@@ -359,7 +371,7 @@ bool Encryption::generateKey(std::string PriKeyPath,std::string PubKeyPath, int 
         BN_free(bne);
         return false;
     }
-    
+
     BIO_free_all(bp_public);
     BIO_free_all(bp_private);
     RSA_free(r);

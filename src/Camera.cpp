@@ -4,12 +4,13 @@
 #include <signal.h>
 #include "haicam/platform/model/Watchdog.hpp"
 #include "haicam/UserDefault.hpp"
+#include "haicam/Encryption.hpp"
 
 using namespace haicam;
 
 Camera *Camera::instance = NULL;
 
-Camera::Camera():isStartedByUser(true)
+Camera::Camera() : isStartedByUser(true)
 {
 }
 
@@ -26,6 +27,16 @@ void Camera::init(Context *context)
     this->context = context;
 
     instance = this;
+
+    if (UserDefault::getInstance()->getStringForKey("cameraRSA2048PublicKey") == "" || UserDefault::getInstance()->getStringForKey("cameraRSA2048PrivateKey") == "")
+    {
+        std::string cameraRSA2048PublicKey;
+        std::string cameraRSA2048PrivateKey;
+        if (Encryption::generateRSAKeyPair(cameraRSA2048PublicKey, cameraRSA2048PrivateKey, 2048) ) {
+            UserDefault::getInstance()->setStringForKey("cameraRSA2048PublicKey", cameraRSA2048PublicKey);
+            UserDefault::getInstance()->setStringForKey("cameraRSA2048PrivateKey", cameraRSA2048PrivateKey);
+        }
+    }
 
     watchdogPtr = std::make_shared<platform::model::Watchdog>(context);
 }
