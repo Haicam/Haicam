@@ -10,12 +10,12 @@ mkdir build
 cd build
 
 #linux x86_64
-cmake -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/linux64.toolchain.cmake -DCMAKE_INSTALL_PREFIX=/home/haicam/workspace/libs/googletest/linux/x86_64 ..
+cmake -DCMAKE_C_FLAGS='-fPIE' -DCMAKE_CXX_FLAGS='-fPIE' -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/linux64.toolchain.cmake -DCMAKE_INSTALL_PREFIX=/home/haicam/workspace/libs/googletest/linux/x86_64 ..
 make -j`nproc` && make install
 rm -rf *
 
 #linux i386
-cmake -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/linux32.toolchain.cmake -DCMAKE_INSTALL_PREFIX=/home/haicam/workspace/libs/googletest/linux/i386 ..
+cmake -DCMAKE_C_FLAGS='-fPIE' -DCMAKE_CXX_FLAGS='-fPIE' -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/linux32.toolchain.cmake -DCMAKE_INSTALL_PREFIX=/home/haicam/workspace/libs/googletest/linux/i386 ..
 make -j`nproc` && make install
 rm -rf *
 
@@ -56,9 +56,8 @@ rm -rf *
 #gm8136 armv5
 # only support release-1.8.0
 git checkout gm8136
-cmake -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/arm-gm8136.toolchain.cmake -DCMAKE_INSTALL_PREFIX=/home/haicam/workspace/libs/googletest/gm8136/armv5 ..
+cmake -DCMAKE_C_FLAGS='-fPIE' -DCMAKE_CXX_FLAGS='-fPIE' -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/arm-gm8136.toolchain.cmake -DCMAKE_INSTALL_PREFIX=/home/haicam/workspace/libs/googletest/gm8136/armv5 ..
 make -j`nproc` && make install
-git checkout 9e59aa1bc8c4d215ea3e05eafec7181747206f67
 rm -rf *
 
 #rpi armv7

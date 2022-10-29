@@ -1,18 +1,17 @@
 #pragma once
 
-class AudioInput
+namespace haicam
 {
-private:
 
-public:
-    AudioInput();
-    ~AudioInput();
-};
+    class AudioInput
+    {
+    private:
+    public:
+        AudioInput(){};
+        virtual ~AudioInput(){};
+        virtual void open(){};
+        virtual void onData(void *data, int len){};
+        virtual void close(){};
+    };
 
-AudioInput::AudioInput()
-{
-}
-
-AudioInput::~AudioInput()
-{
 }

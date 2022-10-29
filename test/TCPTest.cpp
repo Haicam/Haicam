@@ -22,7 +22,7 @@ void haicam_TCPTest_server_onDataCallback(TCPServer* server, TCPConnectionPtr co
 {
     std::string str = data->toString();
     ASSERT_EQ(str, "hello");
-    conn->sendData(ByteBuffer::create("world"));
+    conn->sendData(ByteBuffer::create("world!"));
 
     haicam_TCPTest_callback_times ++;
 }

@@ -25,7 +25,6 @@ void Camera::init(Context *context)
         return;
 
     this->context = context;
-
     instance = this;
 
     if (UserDefault::getInstance()->getStringForKey("cameraRSA2048PublicKey") == "" || UserDefault::getInstance()->getStringForKey("cameraRSA2048PrivateKey") == "")
