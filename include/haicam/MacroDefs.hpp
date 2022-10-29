@@ -1,6 +1,7 @@
 #pragma once
 #include <stdlib.h>
 #include <memory>
+#include <functional>
 
 #define H_ASSERT(expr)                                         \
     do                                                         \
@@ -56,6 +57,28 @@
                     warnStr);                                    \
         }                                                      \
     } while (0)
+
+#define FUNC(name, body) \
+        typedef struct \
+        { \
+            static void func() \
+            body \
+            static std::function<void()> bind() \
+            {\
+                return std::bind(func);\
+            }\
+        } name
+
+#define FUNC_V(name, params_and_body, values ...) \
+        typedef struct \
+        { \
+            static void func \
+            params_and_body \
+            static std::function<void()> bind() \
+            {\
+                return std::bind(func, values);\
+            }\
+        } name
 
 #define H_CFG_VAR(type, name, value) inline virtual type name () { return value; }
 // ex: H_OBJ_PTR(std::string, str, ("hello"));

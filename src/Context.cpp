@@ -9,6 +9,7 @@ std::mutex Context::mtx;
 
 Context::Context() : uv_loop(NULL), localAddr(0)
 {
+    setenv("UV_THREADPOOL_SIZE","64",1); // for max uv_queue_work
     uv_loop = (uv_loop_t *)malloc(sizeof(uv_loop_t));
     uv_loop_init(uv_loop);
 }
