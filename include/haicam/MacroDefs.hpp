@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <memory>
 #include <functional>
+#include <stdarg.h>
 
 #define H_ASSERT(expr)                                         \
     do                                                         \
@@ -58,27 +59,26 @@
         }                                                      \
     } while (0)
 
-#define FUNC(name, body) \
-        typedef struct \
-        { \
-            static void func() \
-            body \
-            static std::function<void()> bind() \
-            {\
-                return std::bind(func);\
-            }\
-        } name
-
-#define FUNC_V(name, params_and_body, values ...) \
+#define H_FUNC(name, params_and_body) \
         typedef struct \
         { \
             static void func \
             params_and_body \
-            static std::function<void()> bind() \
-            {\
-                return std::bind(func, values);\
-            }\
         } name
+
+#define H_TFUNC(type, name, params_and_body) \
+        typedef struct \
+        { \
+            static type func \
+            params_and_body \
+        } name
+        
+#define H_BIND(name) \
+        std::bind(name::func)
+        
+#define H_BINDV(name, ...) \
+        std::bind(name::func, __VA_ARGS__)
+
 
 #define H_CFG_VAR(type, name, value) inline virtual type name () { return value; }
 // ex: H_OBJ_PTR(std::string, str, ("hello"));

@@ -4,6 +4,7 @@
 #include "haicam/ThreadWorker.hpp"
 
 using namespace haicam;
+using namespace std::placeholders;
 
 Chan<int> chan(2);
 Chan<int> chan2(0);
@@ -14,27 +15,41 @@ TEST(haicam_ChanTest, chan_test)
 {
     Context *context = Context::getInstance();
 
-    printf("this is after work1 \n");
+    printf("start \n");
 
-    ThreadWorker worker(context);
+    H_OBJ_PTR(ThreadWorker<int>, worker, (context));
 
-    static const char* s = "xxxxxxxx";
+    const char* s = "xxxxxxxx";
 
-    FUNC(work, {
-        printf("this is after work %s\n", s);
+    H_TFUNC(int, work, (const char* str, ThreadWorker<int>* thiz){
+        printf("work %s\n", str);
         sleep(2);
-        printf("this is after work3 closed %i\n", chan.size());
+        printf("closed %i\n", chan.size());
         chan.closeAndClean();
         chan2.closeAndClean();
+
+        if(thiz->running) {
+
+        }
+
+        //std::exception e;
+        //throw e;
+
+        return 1000;
     });
 
-    FUNC(after_work, {
-        printf("this is after work4\n");
+    H_FUNC(after_work, (int data){
+        printf("after work %i\n", data);
     });
 
-    worker.run(work::bind())
-        ->then(after_work::bind())
-        ->start();
+    H_FUNC(error, (int code){
+        printf("after error %i\n", code);
+    });
+
+    worker->run(H_BINDV(work, s, worker.get()))
+        ->then(H_BINDV(after_work, _1))
+        ->error(H_BINDV(error, _1))
+        ->start(100);
 
     chan << 1;
     chan << 1;
@@ -44,5 +59,6 @@ TEST(haicam_ChanTest, chan_test)
     chan2 << 1;
 
     context->run();
+
     delete context;
 }
