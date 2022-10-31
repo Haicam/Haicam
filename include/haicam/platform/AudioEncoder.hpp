@@ -1,5 +1,5 @@
 #pragma once
-#include "haicam/VideoEncoder.hpp"
+#include "haicam/AudioEncoder.hpp"
 
 #if defined(HAICAM_PLATFORM_LINUX)
 #include <libavcodec/avcodec.h>
@@ -10,7 +10,7 @@ namespace haicam
     namespace platform
     {
 
-        class VideoEncoder : public haicam::VideoEncoder
+        class AudioEncoder : public haicam::AudioEncoder
         {
         private:
 #if defined(HAICAM_PLATFORM_LINUX)
@@ -22,9 +22,9 @@ namespace haicam
 #endif
 
         public:
-            VideoEncoder();
-            ~VideoEncoder();
-            bool open(VideoCodec vCodec, int width, int height, PIX_FMT pix_fmt);
+            AudioEncoder();
+            ~AudioEncoder();
+            bool open(AudioCodec aCodec, int frequency, int channels, PCM_FMT pcm_fmt);
             void onDataInput(void *data, int len);
             void onDataOutput(void *data, int len);
             void close();

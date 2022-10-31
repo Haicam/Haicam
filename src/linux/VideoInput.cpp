@@ -13,18 +13,19 @@ VideoInput::~VideoInput()
 
 }
 
-void VideoInput::open()
+bool VideoInput::open()
 {
-    if(isRunning) return;
+    if(isRunning) return true;
 
     isRunning = true;
 
-    capture = H_MK_PTR(cv::VideoCapture, (1));
+    capture = H_MK_SP(cv::VideoCapture, (1));
     capture->set(cv::CAP_PROP_CONVERT_RGB, false); 
 
     
     uv_thread_create(&this->thread, VideoInput::process, this);
 
+    return true;
 }
 
 void VideoInput::process(void *arg)
@@ -51,7 +52,7 @@ void VideoInput::run()
             continue;
         }
 
-        H_MEM_PTR(uint8_t, new_data, frame.rows*frame.cols*2); // for YUYV
+        H_MEM_SP(uint8_t, new_data, frame.rows*frame.cols*2); // for YUYV
 
         if(frame.isContinuous()) {
             memcpy(new_data.get(), frame.ptr(0), frame.rows*frame.cols*2); 

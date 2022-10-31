@@ -9,6 +9,11 @@ namespace haicam
     {
     public:
         H_CFG_VAR(bool, isDevelopment, true);
+#ifdef HAICAM_PLATFORM_GM8136
+    H_CFG_VAR(const char*, getThreadPoolSize, "6");
+#else
+    H_CFG_VAR(const char*, getThreadPoolSize, "64");
+#endif
         H_CFG_VAR(std::string, getUserWritablePath, "");
         H_CFG_VAR(std::string, getSecurityDevice, "/dev/security");
         H_CFG_VAR(std::string, getWatchdogDevice, "/dev/watchdog");

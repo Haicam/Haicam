@@ -17,7 +17,7 @@ TEST(haicam_ChanTest, chan_test)
 
     printf("start \n");
 
-    H_OBJ_PTR(ThreadWorker<int>, worker, (context));
+    H_NEW_SP(ThreadWorker<int>, worker, (context));
 
     const char* s = "xxxxxxxx";
 

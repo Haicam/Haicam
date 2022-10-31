@@ -81,11 +81,13 @@
 
 
 #define H_CFG_VAR(type, name, value) inline virtual type name () { return value; }
-// ex: H_OBJ_PTR(std::string, str, ("hello"));
-#define H_OBJ_PTR(type, name, init) std::shared_ptr< type > name (new type init)
-// H_TP_PTR(std:string, str)
-#define H_TP_PTR(type, name) std::shared_ptr< type > name 
-// H_MK_PTR(std:string, str)
-#define H_MK_PTR(type, init) std::make_shared<type> init
+// ex: H_NEW_SP(std::string, str, ("hello"));
+#define H_NEW_SP(type, name, init) std::shared_ptr< type > name (new type init)
+#define H_NEWN_SP(type, name, NS_init) std::shared_ptr< type > name (new NS_init)
+// H_DEF_SP(std:string, str)
+#define H_DEF_SP(type, name) std::shared_ptr< type > name 
+// H_MK_SP(std:string, ("hello"))
+#define H_MK_SP(type, init) std::make_shared<type> init
 
-#define H_MEM_PTR(type, name, size) std::shared_ptr< type > name (new type [ size ], std::default_delete< type []>())
+#define H_MEM_SP(type, name, size) std::shared_ptr< type > name (new type [ size ], std::default_delete< type []>())
+#define H_MK_MEM_SP(type, size) std::shared_ptr< type > (new type [ size ], std::default_delete< type []>())

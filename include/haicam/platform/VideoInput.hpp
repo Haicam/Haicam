@@ -27,7 +27,7 @@ namespace haicam
             std::atomic<bool> isRunning;
 
 #ifdef HAICAM_PLATFORM_LINUX
-            H_TP_PTR(cv::VideoCapture, capture);
+            H_DEF_SP(cv::VideoCapture, capture);
 #endif
 
             static void process(void *arg);
@@ -35,7 +35,7 @@ namespace haicam
         public:
             VideoInput();
             ~VideoInput();
-            void open();
+            bool open();
             void onData(std::shared_ptr<uint8_t> data, int len);
             void close();
         };

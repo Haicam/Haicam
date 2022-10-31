@@ -346,7 +346,7 @@ bool Encryption::generateRSAKeyPair(std::string& strPublicKey, std::string& strP
     bp_private =  BIO_new(BIO_s_mem());
     ret = PEM_write_bio_RSAPrivateKey(bp_private, r, NULL, NULL, 0, NULL, NULL);
     size_t pri_len = BIO_pending(bp_private);
-    H_MEM_PTR(char, privateKeyBuffer, pri_len);
+    H_MEM_SP(char, privateKeyBuffer, pri_len);
     BIO_read(bp_private, privateKeyBuffer.get(), pri_len);
     strPrivateKey = std::string(privateKeyBuffer.get(), pri_len);
 
@@ -360,7 +360,7 @@ bool Encryption::generateRSAKeyPair(std::string& strPublicKey, std::string& strP
     bp_public =  BIO_new(BIO_s_mem());
     ret = PEM_write_bio_RSA_PUBKEY(bp_public, r);
     size_t pub_len = BIO_pending(bp_public);
-    H_MEM_PTR(char, publicKeyBuffer, pub_len);
+    H_MEM_SP(char, publicKeyBuffer, pub_len);
     BIO_read(bp_public, publicKeyBuffer.get(), pub_len);
     strPublicKey = std::string(publicKeyBuffer.get(), pub_len);
 

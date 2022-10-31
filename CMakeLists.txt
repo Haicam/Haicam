@@ -26,6 +26,7 @@ endif()
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/cameras/${HAICAM_PLATFORM}/${CAMERA_SDK}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/googletest/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/libuv/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/zbar/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
@@ -44,6 +45,7 @@ include_directories(
 )
 
 link_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/cameras/${HAICAM_PLATFORM}/${CAMERA_SDK}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/googletest/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/libuv/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/zbar/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
@@ -260,6 +262,7 @@ else()
         gmock_main.a
         ssl.a
         crypto.a
+        gm
         pthread
         dl
     )

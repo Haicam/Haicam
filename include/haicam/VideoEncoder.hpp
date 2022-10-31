@@ -22,7 +22,7 @@ namespace haicam
     public:
         VideoEncoder(){};
         virtual ~VideoEncoder(){};
-        virtual void open(VideoCodec vCodec, int width, int height, PIX_FMT pix_fmt){};
+        virtual bool open(VideoCodec vCodec, int width, int height, PIX_FMT pix_fmt){};
         virtual void onDataInput(void *data, int len){};
         virtual void onDataOutput(void *data, int len){};
         virtual void close(){};

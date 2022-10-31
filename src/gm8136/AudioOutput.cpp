@@ -10,8 +10,9 @@ AudioOutput::~AudioOutput()
 {
 }
 
-void AudioOutput::open()
+bool AudioOutput::open()
 {
+    return true;
 }
 
 void AudioOutput::onData(void *data, int len)

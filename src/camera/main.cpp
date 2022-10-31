@@ -9,8 +9,20 @@
 
 using namespace haicam;
 
+void bye(void)
+{
+   printf("That was all, folks\n");
+}
+
 int main()
 {
+   /*
+   The atexit() function registers the given function to be called
+   at normal process termination, either via exit(3) or via return
+   from the program's main().  Functions so registered are called in
+   the reverse order of their registration;
+   */
+   atexit(bye);
 
    Context *context = Context::getInstance();
 

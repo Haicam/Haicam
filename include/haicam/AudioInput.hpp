@@ -9,7 +9,7 @@ namespace haicam
     public:
         AudioInput(){};
         virtual ~AudioInput(){};
-        virtual void open(){};
+        virtual bool open(){};
         virtual void onData(void *data, int len){};
         virtual void close(){};
     };

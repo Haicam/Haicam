@@ -19,7 +19,7 @@ namespace haicam
         public:
             AudioInput();
             ~AudioInput();
-            void open();
+            bool open();
             void onData(void *data, int len);
             void close();
         };

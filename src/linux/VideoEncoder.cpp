@@ -1,6 +1,5 @@
 #include "haicam/platform/VideoEncoder.hpp"
 #include "haicam/MacroDefs.hpp"
-
 #include "libavutil/time.h"
 
 #define STD_TIMEBASE 1000
@@ -19,7 +18,7 @@ VideoEncoder::~VideoEncoder()
 {
 }
 
-void VideoEncoder::open(VideoCodec vCodec, int width, int height, PIX_FMT pix_fmt)
+bool VideoEncoder::open(VideoCodec vCodec, int width, int height, PIX_FMT pix_fmt)
 {
     if (vCodec == LIBOPENH264)
     {
@@ -65,12 +64,16 @@ void VideoEncoder::open(VideoCodec vCodec, int width, int height, PIX_FMT pix_fm
     ret = av_frame_get_buffer(frame, 0);
     H_ASSERT_NOT(ret < 0);
 
-    ret = av_frame_make_writable(frame);
-    H_ASSERT_NOT(ret < 0);
+    return true;
 }
 
 void VideoEncoder::onDataInput(void *data, int len)
 {
+    int ret = av_frame_make_writable(frame);
+    H_ASSERT_NOT(ret < 0);
+
+    H_ASSERT(1.5 * frame->height * frame->width == len);
+
     if (codecCtx->pix_fmt == AV_PIX_FMT_YUV420P || codecCtx->pix_fmt == AV_PIX_FMT_YUVJ420P)
     {
         int nYUVBufsize = 0;
@@ -106,6 +109,23 @@ void VideoEncoder::onDataInput(void *data, int len)
     }
 
     frame->pts = av_gettime() / STD_TIMEBASE;
+
+    ret = avcodec_send_frame(codecCtx, frame);
+    H_ASSERT_NOT (ret < 0);
+
+     while (ret >= 0) {
+        ret = avcodec_receive_packet(codecCtx, pkt);
+        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
+            return;
+        else if (ret < 0) {
+            H_ASSERT_ERR_STR("Error during encoding");
+        }
+
+        //printf("Write packet %3"PRId64" (size=%5d)\n", pkt->pts, pkt->size);
+        onDataOutput(pkt->data, pkt->size);
+        av_packet_unref(pkt);
+    }
+
 }
 
 
@@ -115,6 +135,23 @@ void VideoEncoder::onDataOutput(void *data, int len)
 
 void VideoEncoder::close()
 {
+    // NULL flush packet. This signals the end of the stream
+    int ret = avcodec_send_frame(codecCtx, NULL);
+    H_ASSERT_NOT (ret < 0);
+
+     while (ret >= 0) {
+        ret = avcodec_receive_packet(codecCtx, pkt);
+        if (ret == AVERROR(EAGAIN) || ret == AVERROR_EOF)
+            return;
+        else if (ret < 0) {
+            H_ASSERT_ERR_STR("Error during encoding");
+        }
+
+        //printf("Write packet %3"PRId64" (size=%5d)\n", pkt->pts, pkt->size);
+        onDataOutput(pkt->data, pkt->size);
+        av_packet_unref(pkt);
+    }
+
     avcodec_free_context(&codecCtx);
     av_frame_free(&frame);
     av_packet_free(&pkt);

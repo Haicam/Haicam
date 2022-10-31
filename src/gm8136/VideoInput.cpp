@@ -10,8 +10,9 @@ VideoInput::~VideoInput()
 {
 }
 
-void VideoInput::open()
+bool VideoInput::open()
 {
+    return true;
 }
 
 void VideoInput::onData(std::shared_ptr<uint8_t> data, int len)
