@@ -19,7 +19,7 @@ AudioOutput::~AudioOutput()
 static void audioPlayCallback(void* userdata, Uint8* data, int len) 
 {
     AudioOutput* thiz = (AudioOutput*) userdata;
-    thiz->onData((void*)data, len);
+    thiz->onData((void*)data, &len);
 }
 
 bool AudioOutput::open()
@@ -56,7 +56,7 @@ bool AudioOutput::open()
     return true;
 }
 
-void AudioOutput::onData(void *data, int len)
+void AudioOutput::onData(void *data, int* len)
 {
     
 }

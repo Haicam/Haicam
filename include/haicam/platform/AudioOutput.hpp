@@ -20,7 +20,7 @@ namespace haicam
             AudioOutput();
             ~AudioOutput();
             bool open();
-            void onData(void *data, int len);
+            void onData(void *data, int* len);
             void close();
         };
     }

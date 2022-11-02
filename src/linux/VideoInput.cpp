@@ -35,7 +35,12 @@ void VideoInput::process(void *arg)
 
 }
 
-void VideoInput::onData(std::shared_ptr<uint8_t> data, int len)
+void VideoInput::onData(std::shared_ptr<uint8_t>& data, int& len)
+{
+
+}
+
+void VideoInput::getSnapshot(std::shared_ptr<uint8_t>& data, int& len, int& width, int& height)
 {
 
 }
@@ -65,7 +70,8 @@ void VideoInput::run()
         }
 
         mtx.lock();
-        onData(new_data, frame.rows*frame.cols*2);
+        int len = frame.rows*frame.cols*2;
+        onData(new_data, len);
         mtx.unlock();
 
         uv_sleep(10);

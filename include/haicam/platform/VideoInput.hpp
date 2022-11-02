@@ -36,7 +36,8 @@ namespace haicam
             VideoInput();
             ~VideoInput();
             bool open();
-            void onData(std::shared_ptr<uint8_t> data, int len);
+            void onData(std::shared_ptr<uint8_t>& data, int& len);
+            void getSnapshot(std::shared_ptr<uint8_t>& data, int& len, int& width, int& height);
             void close();
         };
     }
