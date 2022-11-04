@@ -14,6 +14,11 @@
 #define localtime_r(T, Tm) (localtime_s(Tm, T) ? NULL : Tm)
 #endif
 
+extern "C"
+{
+#include <uv.h>
+}
+
 #ifdef __ANDROID__
 #include <android/log.h>
 #define printf(...) __android_log_print(ANDROID_LOG_DEBUG, "haicam_log", __VA_ARGS__);
@@ -90,6 +95,13 @@ void Utils::makeDir(std::string dir)
         mkdir(dir.c_str(), S_IRWXU);
 #endif
     }
+}
+
+uint64_t Utils::getMillTimestmap()
+{
+    uv_timeval64_t now;
+    uv_gettimeofday(&now);
+    return now.tv_sec*1000 + now.tv_usec/1000;
 }
 
 static void _log(const char *format, va_list args)

@@ -19,6 +19,8 @@ namespace haicam
         static bool checkIsFileExsit(std::string fullPath);
         static void makeDir(std::string dir);
 
+        static uint64_t getMillTimestmap();
+
         static void log_va(const char *format, va_list args);
         static void log(const char *format, ...);
 

@@ -35,12 +35,12 @@ void VideoInput::process(void *arg)
 
 }
 
-void VideoInput::onData(std::shared_ptr<uint8_t>& data, int& len)
+void VideoInput::onData(std::shared_ptr<uint8_t> pData, int len, uint8_t isKeyFrame)
 {
 
 }
 
-void VideoInput::getSnapshot(std::shared_ptr<uint8_t>& data, int& len, int& width, int& height)
+void VideoInput::getSnapshot(std::shared_ptr<uint8_t>& pData, int& len, int& width, int& height)
 {
 
 }

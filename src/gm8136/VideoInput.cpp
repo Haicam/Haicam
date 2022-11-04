@@ -2,6 +2,7 @@
 #include "haicam/platform/VideoInput.hpp"
 #include "haicam/Utils.hpp"
 #include "haicam/MacroDefs.hpp"
+#include "haicam/PacketHeader.hpp"
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -13,9 +14,12 @@
 
 using namespace haicam::platform;
 
-int BITSTREAM_LEN = (720 * 1280);
-int BITSTREAM_LEN2 = (720 * 1280);
+static int BITSTREAM_LEN = (720 * 1280);
+static int BITSTREAM_LEN2 = (720 * 1280);
+
 #define MD_DATA_LEN (720 * 576 / 4)
+
+static char NAL_START[] = {0, 0, 0, 1, 1};
 
 static gm_system_t *gm_system = NULL;
 static void *groupfd = NULL;  // return of gm_new_groupfd()
@@ -158,13 +162,50 @@ static void *encode_thread(void *arg)
                     }
                     _frameCount++;
 
-                    if (i == 0)
+                    if (i == 0) // stream 0
                     {
-                        // pushVideoData(multi_bs[i].bs.bs_buf, multi_bs[i].bs.bs_len, multi_bs[i].bs.keyframe, 0);
+                        if (multi_bs[i].bs.bs_len > 4 && memcmp(multi_bs[i].bs.bs_buf, NAL_START, 4) == 0)
+                        {
+                            // split frame by 00 00 00 01
+                            int len = multi_bs[i].bs.bs_len;
+                            int offset = 0;
+                            int last = 0;
+                            char *data = multi_bs[i].bs.bs_buf;
+                            char *buf = NULL;
+                            bool done = false;
+
+                            for (int i = 0; i < 10; i++) // max 10, in case dead loop
+                            {
+                                buf = data + offset;
+                                while (memcmp(buf, NAL_START, 4) != 0)
+                                {
+                                    offset++;
+                                    if (offset > len - 4)
+                                    {
+                                        offset = len;
+                                        done = true;
+                                        break;
+                                    }
+                                    buf = data + offset;
+                                }
+
+                                if (offset > 0)
+                                {
+                                    H_MEM_SP(uint8_t, pData, offset - last);
+                                    memcpy(pData.get(), data + last, offset - last);
+                                    thiz->onData(pData, offset - last, multi_bs[i].bs.keyframe);
+                                }
+
+                                if (done)
+                                    break;
+                                last = offset;
+                                offset++;
+                            }
+                        }
                     }
-                    else if (i == 1)
+                    else if (i == 1) // stream 1
                     {
-                        // pushVideoData(multi_bs[i].bs.bs_buf, multi_bs[i].bs.bs_len, multi_bs[i].bs.keyframe, 1);
+                        // Only one steam now
                     }
                 }
             }
@@ -263,37 +304,18 @@ bool VideoInput::open()
     gm_set_attr(capture_object, &dnr_attr);
 #endif
 
+    is_single_stream = true;
+
     h264e_attr.dim.width = gm_system->cap[0].dim.width;
     h264e_attr.dim.height = gm_system->cap[0].dim.height;
 
-    if ((gm_system->cap[0].dim.width == width && gm_system->cap[0].dim.height == height) || (1280 == width && 720 == height))
-    {
-        is_single_stream = true;
-        h264e_attr.dim.width = width;
-        h264e_attr.dim.height = height;
-        h264e_attr.frame_info.framerate = frameRate;
-        h264e_attr.ratectl.mode = GM_EVBR;
-        h264e_attr.ratectl.gop = frameRate * 2;
-        h264e_attr.ratectl.bitrate = bitRate; // 2Mbps
-        h264e_attr.ratectl.bitrate_max = bitRate;
-    }
-    else
-    {
-        is_single_stream = false;
-        h264e_attr.frame_info.framerate = 15;
-        h264e_attr.ratectl.mode = GM_EVBR;
-        h264e_attr.ratectl.gop = 60;
-        if (gm_system->cap[0].dim.height == 1080)
-        {
-            h264e_attr.ratectl.bitrate = 2048; // 2Mbps
-            h264e_attr.ratectl.bitrate_max = 2048;
-        }
-        else
-        {
-            h264e_attr.ratectl.bitrate = 2048; // 2Mbps
-            h264e_attr.ratectl.bitrate_max = 2048;
-        }
-    }
+    h264e_attr.dim.width = width;
+    h264e_attr.dim.height = height;
+    h264e_attr.frame_info.framerate = frameRate;
+    h264e_attr.ratectl.mode = GM_EVBR;
+    h264e_attr.ratectl.gop = frameRate * 2;
+    h264e_attr.ratectl.bitrate = bitRate; // 2Mbps
+    h264e_attr.ratectl.bitrate_max = bitRate;
 
 #if (GM_VERSION_CODE == 0x0034)
     h264e_attr.b_frame_num = 0;    // B-frames per GOP (H.264 high profile)
@@ -303,47 +325,6 @@ bool VideoInput::open()
     gm_set_attr(encode_object, &h264e_attr);
 
     bindfd = gm_bind(groupfd, capture_object, encode_object);
-
-    // for second stream
-    if (!is_single_stream)
-    {
-
-        capture_object_2 = gm_new_obj(GM_CAP_OBJECT); // new capture object
-        encode_object_2 = gm_new_obj(GM_ENCODER_OBJECT);
-
-        cap_attr.cap_vch = ch;
-        cap_attr.path = 2;
-
-        gm_set_attr(capture_object_2, &cap_attr); // set capture attribute
-
-#if (GM_VERSION_CODE != 0x0034)
-        gm_set_attr(capture_object_2, &m_flip);
-#endif
-
-        h264e_attr.dim.width = width;
-        h264e_attr.dim.height = height;
-        BITSTREAM_LEN2 = width * height;
-
-        gm_set_attr(capture_object_2, &dnr_attr);
-
-        h264e_attr.frame_info.framerate = frameRate;
-        h264e_attr.ratectl.mode = GM_EVBR;
-        h264e_attr.ratectl.gop = frameRate * 2;
-        h264e_attr.ratectl.bitrate = bitRate; // 2Mbps
-        h264e_attr.ratectl.bitrate_max = bitRate;
-
-#if (GM_VERSION_CODE == 0x0034)
-        h264e_attr.b_frame_num = 0;    // B-frames per GOP (H.264 high profile)
-        h264e_attr.enable_mv_data = 0; // disable H.264 motion data output
-#endif
-        // h264e_attr.ratectl.init_quant = frameRate;
-        // h264e_attr.ratectl.min_quant = 1;
-        // h264e_attr.ratectl.max_quant = 30;
-        gm_set_attr(encode_object_2, &h264e_attr);
-
-        // bind channel recording (ç»‘å®šæ•æ‰å¯¹è±¡åˆ°ç¼–ç å¯¹è±¡)
-        bindfd_2 = gm_bind(groupfd, capture_object_2, encode_object_2);
-    }
 
 #if (GM_VERSION_CODE == 0x0034)
     DECLARE_ATTR(h264e_advance_attr, gm_h264_advanced_attr_t);
@@ -399,7 +380,7 @@ bool VideoInput::open()
     return true;
 }
 
-void VideoInput::getSnapshot(std::shared_ptr<uint8_t> &data, int &len, int &width, int &height)
+void VideoInput::getSnapshot(std::shared_ptr<uint8_t> &pData, int &len, int &width, int &height)
 {
     int snapshot_len = 0;
     H_MEM_SP(uint8_t, buf, width * height / 2);
@@ -415,7 +396,7 @@ void VideoInput::getSnapshot(std::shared_ptr<uint8_t> &data, int &len, int &widt
     snapshot_len = gm_request_snapshot(&snapshot, 500); // Timeout value 500ms
     if (snapshot_len > 0)
     {
-        data = buf;
+        pData = buf;
         len = snapshot_len;
     }
     else
@@ -424,8 +405,9 @@ void VideoInput::getSnapshot(std::shared_ptr<uint8_t> &data, int &len, int &widt
     }
 }
 
-void VideoInput::onData(std::shared_ptr<uint8_t> &data, int &len)
+void VideoInput::onData(std::shared_ptr<uint8_t> pData, int len, uint8_t isKeyFrame)
 {
+    h264Parser(pData, len, isKeyFrame);
 }
 
 void VideoInput::close()
