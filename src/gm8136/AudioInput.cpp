@@ -1,6 +1,7 @@
 
 #include "haicam/platform/AudioInput.hpp"
 #include "haicam/Utils.hpp"
+#include "haicam/MacroDefs.hpp"
 #include <unistd.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -104,7 +105,10 @@ static void *encode_thread(void *arg)
                 }
                 else if (multi_bs[i].retval == GM_SUCCESS)
                 {
-                    thiz->onData(multi_bs[i].bs.bs_buf, multi_bs[i].bs.bs_len);
+                    H_MEM_SP(uint8_t, pData, multi_bs[i].bs.bs_len);
+                    memcpy(pData.get(), multi_bs[i].bs.bs_buf, multi_bs[i].bs.bs_len);
+
+                    thiz->onData(pData, multi_bs[i].bs.bs_len);
                 }
             }
             usleep(100);
@@ -180,7 +184,7 @@ bool AudioInput::open()
     return true;
 }
 
-void AudioInput::onData(void *data, int len)
+void AudioInput::onData(std::shared_ptr<uint8_t> pData, int len)
 {
 }
 

@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+#include <stdint.h>
 
 namespace haicam
 {
@@ -10,7 +12,7 @@ namespace haicam
         AudioInput(){};
         virtual ~AudioInput(){};
         virtual bool open(){};
-        virtual void onData(void *data, int len){};
+        virtual void onData(std::shared_ptr<uint8_t> pData, int len){};
         virtual void close(){};
     };
 

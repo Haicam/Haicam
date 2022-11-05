@@ -18,7 +18,11 @@ AudioInput::~AudioInput()
 static void audioRecordCallback(void* userdata, Uint8* data, int len) 
 {
     AudioInput* thiz = (AudioInput*) userdata;
-    thiz->onData((void*)data, len);
+
+    H_MEM_SP(uint8_t, pData, len);
+    memcpy(pData.get(), data, len);
+
+    thiz->onData(pData, len);
 }
 
 bool AudioInput::open()
@@ -61,7 +65,7 @@ bool AudioInput::open()
     return true;
 }
 
-void AudioInput::onData(void *data, int len)
+void AudioInput::onData(std::shared_ptr<uint8_t> pData, int len)
 {
     Utils::log("len: %i", len); // samples * 2
 }

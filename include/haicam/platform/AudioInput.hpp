@@ -20,7 +20,7 @@ namespace haicam
             AudioInput();
             ~AudioInput();
             bool open();
-            void onData(void *data, int len);
+            void onData(std::shared_ptr<uint8_t> pData, int len);
             void close();
         };
     }

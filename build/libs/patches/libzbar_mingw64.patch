@@ -1,0 +1,18 @@
+diff -Naur zbar-0.10/zbar/processor/win.c zbar-0.10-patch/zbar/processor/win.c
+--- zbar-0.10/zbar/processor/win.c      2009-10-23 18:16:44.000000000 +0000
++++ zbar-0.10-patch/zbar/processor/win.c        2022-11-04 13:00:49.480826684 +0000
+@@ -117,12 +117,12 @@
+                                           LPARAM lparam)
+ {
+     zbar_processor_t *proc =
+-        (zbar_processor_t*)GetWindowLongPtr(hwnd, GWL_USERDATA);
++        (zbar_processor_t*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+     /* initialized during window creation */
+     if(message == WM_NCCREATE) {
+         proc = ((LPCREATESTRUCT)lparam)->lpCreateParams;
+         assert(proc);
+-        SetWindowLongPtr(hwnd, GWL_USERDATA, (LONG_PTR)proc);
++        SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)proc);
+         proc->display = hwnd;
+ 
+         zbar_window_attach(proc->window, proc->display, proc->xwin);
