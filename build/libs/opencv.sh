@@ -60,9 +60,10 @@ PKG_CONFIG_LIBDIR=/home/haicam/workspace/libs/ffmpeg/windows/x86_64/lib/pkgconfi
 make -j`nproc` && make install
 rm -rf *
 
-#mac x86_64
-PKG_CONFIG_LIBDIR=/home/haicam/workspace/libs/ffmpeg/mac/x86_64/lib/pkgconfig cmake -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/mac-x86_64.toolchain.cmake \
--DCMAKE_INSTALL_PREFIX=/home/haicam/workspace/libs/opencv/mac/x86_64 \
+#mac x86_64 build in mac computer
+PKG_CONFIG_LIBDIR=`pwd`/ffmpeg_mac_x86_64/lib/pkgconfig \
+cmake \
+-DCMAKE_INSTALL_PREFIX=`pwd`/opencv_mac_x86_64 \
 -D CMAKE_BUILD_TYPE=RELEASE \
 -D BUILD_TESTS=OFF \
 -D BUILD_JAVA=OFF \
@@ -82,5 +83,29 @@ PKG_CONFIG_LIBDIR=/home/haicam/workspace/libs/ffmpeg/mac/x86_64/lib/pkgconfig cm
 -D INSTALL_PYTHON_EXAMPLES=OFF \
 -D BUILD_EXAMPLES=OFF ..
 
-make -j`nproc` && make install
+make -j && make install
+rm -rf *
+
+#rpi armv7
+PKG_CONFIG_LIBDIR=/home/haicam/workspace/libs/ffmpeg/rpi/armv7/lib/pkgconfig cmake -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/arm-rpi.toolchain.cmake \
+-DCMAKE_INSTALL_PREFIX=/home/haicam/workspace/libs/opencv/rpi/armv7 \
+-D CMAKE_BUILD_TYPE=RELEASE \
+-D BUILD_TESTS=OFF \
+-D BUILD_JAVA=OFF \
+-D BUILD_OBJC=OFF \
+-D BUILD_KOTLIN_EXTENSIONS=OFF \
+-D BUILD_opencv_apps=OFF \
+-D BUILD_opencv_python2=OFF \
+-D BUILD_SHARED_LIBS=OFF \
+-D WITH_FFMPEG=ON \
+-D WITH_V4L=ON \
+-D WITH_LIBV4L=ON \
+-D WITH_VTK=OFF \
+-D WITH_GTK=OFF \
+-D WITH_QT=OFF \
+-D INSTALL_C_EXAMPLES=OFF \
+-D INSTALL_PYTHON_EXAMPLES=OFF \
+-D BUILD_EXAMPLES=OFF ..
+
+make -j && make install
 rm -rf *

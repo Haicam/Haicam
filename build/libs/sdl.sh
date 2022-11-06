@@ -19,7 +19,13 @@ cmake -DCMAKE_C_FLAGS='-fPIE' -DCMAKE_CXX_FLAGS='-fPIE' -DCMAKE_TOOLCHAIN_FILE=/
 make -j`nproc` && make install
 rm -rf *
 
-#mac x86_64
-cmake -DCMAKE_C_FLAGS='-fPIE' -DCMAKE_CXX_FLAGS='-fPIE' -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/mac-x86_64.toolchain.cmake -DCMAKE_INSTALL_PREFIX=/home/haicam/workspace/libs/libsdl/mac/x86_64 ..
-make -j`nproc` && make install
+#mac x86_64 - build in Mac computer
+#brew install cmake
+cmake -DCMAKE_C_FLAGS='-fPIE' -DCMAKE_CXX_FLAGS='-fPIE' -DCMAKE_INSTALL_PREFIX=`pwd`/mac_sdl_x86_64 ..
+make -j && make install
+rm -rf *
+
+#rpi armv7
+cmake -DCMAKE_C_FLAGS='-fPIE' -DCMAKE_CXX_FLAGS='-fPIE' -DSDL_WAYLAND=OFF -DSDL_PULSEAUDIO=OFF -DCMAKE_TOOLCHAIN_FILE=/home/haicam/workspace/build/toolchain/arm-rpi.toolchain.cmake -DCMAKE_INSTALL_PREFIX=/home/haicam/workspace/libs/libsdl/rpi/armv7 ..
+make -j && make install
 rm -rf *

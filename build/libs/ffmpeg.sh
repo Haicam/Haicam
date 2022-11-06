@@ -94,3 +94,29 @@ export LIBTOOL=${TOOLCHAIN_PREFIX}-libtool
 make -j`nproc` && make install
 rm -rf *
 )
+
+#rpi armv7
+# update ../configure line  6412 to below, disable faield pkg_config check
+#-enabled libopenh264       && require_pkg_config libopenh264 openh264 wels/codec_api.h WelsGetCodecVersion
+#+enabled libopenh264
+../configure --prefix=/home/haicam/workspace/libs/ffmpeg/rpi/armv7 \
+--cross-prefix=/home/haicam/toolchain/gcc-linaro-7.5.0-2019.12-x86_64_arm-linux-gnueabi/bin/arm-linux-gnueabi- \
+--target-os=linux \
+--arch=arm \
+--enable-pic \
+--enable-avresample \
+--enable-libopenh264 \
+--disable-doc \
+--disable-debug \
+--enable-static \
+--disable-shared \
+--disable-programs \
+--disable-ffmpeg \
+--disable-ffplay \
+--disable-ffprobe \
+--disable-iconv \
+--extra-cflags="-fPIE -pie -I/home/haicam/workspace/libs/openh264/rpi/armv7/include" \
+--extra-ldflags="-fPIE -pie -L/home/haicam/workspace/libs/openh264/rpi/armv7/lib"
+
+make -j && make install
+rm -rf *
