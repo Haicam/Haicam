@@ -73,3 +73,15 @@ RUN update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32
 WORKDIR /home/haicam/workspace
 
 RUN apt-get install -y gdb valgrind qemu-user gdb-multiarch
+
+RUN apt-get update
+RUN apt-get install -y libasound2-dev libpulse-dev yasm pkg-config
+
+RUN apt-get install -y --no-install-recommends gcc-4.8 gcc-4.8-multilib g++-4.8 g++-4.8-multilib
+RUN apt-get install -y libgtk-3-dev
+
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 30
+RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 30
+
+RUN apt-get install -y nasm
+RUN apt-get install -y autoconf libtool-bin

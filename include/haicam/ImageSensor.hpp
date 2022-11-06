@@ -3,7 +3,7 @@
 #include "haicam/ByteBuffer.hpp"
 #include <mutex>
 #include <list>
-#ifdef HAICAM_GM8136_GCC
+#ifdef HAICAM_PLATFORM_GM8136
 #include <cstdatomic>
 #else
 #include <atomic>

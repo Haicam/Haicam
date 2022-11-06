@@ -1,10 +1,10 @@
-prefix=/home/haicam/workspace/libs/libuv/linux64
+prefix=/home/haicam/workspace/libs/libuv/linux/x86_64
 exec_prefix=${prefix}
-libdir=/home/haicam/workspace/libs/libuv/linux64/lib
-includedir=/home/haicam/workspace/libs/libuv/linux64/include
+libdir=/home/haicam/workspace/libs/libuv/linux/x86_64/lib
+includedir=/home/haicam/workspace/libs/libuv/linux/x86_64/include
 
 Name: libuv
-Version: 1.44.1
+Version: 1.44.2
 Description: multi-platform support library with a focus on asynchronous I/O.
 URL: http://libuv.org/
 

@@ -1,0 +1,14 @@
+prefix=/home/haicam/workspace/libs/ffmpeg/rpi/armv7
+exec_prefix=${prefix}
+libdir=/home/haicam/workspace/libs/ffmpeg/rpi/armv7/lib
+includedir=/home/haicam/workspace/libs/ffmpeg/rpi/armv7/include
+
+Name: libavresample
+Description: Libav audio resampling library
+Version: 4.0.0
+Requires: libavutil >= 56.70.100
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavresample -lm
+Libs.private: 
+Cflags: -I${includedir}

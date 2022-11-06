@@ -1,0 +1,14 @@
+prefix=/home/haicam/workspace/libs/ffmpeg/rpi/armv7
+exec_prefix=${prefix}
+libdir=/home/haicam/workspace/libs/ffmpeg/rpi/armv7/lib
+includedir=/home/haicam/workspace/libs/ffmpeg/rpi/armv7/include
+
+Name: libavutil
+Description: FFmpeg utility library
+Version: 56.70.100
+Requires: 
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavutil -pthread -lm -latomic
+Libs.private: 
+Cflags: -I${includedir}

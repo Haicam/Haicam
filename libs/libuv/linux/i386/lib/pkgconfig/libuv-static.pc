@@ -1,7 +1,7 @@
-prefix=/home/haicam/workspace/libs/libuv/linux32
+prefix=/home/haicam/workspace/libs/libuv/linux/i386
 exec_prefix=${prefix}
-libdir=/home/haicam/workspace/libs/libuv/linux32/lib
-includedir=/home/haicam/workspace/libs/libuv/linux32/include
+libdir=/home/haicam/workspace/libs/libuv/linux/i386/lib
+includedir=/home/haicam/workspace/libs/libuv/linux/i386/include
 
 Name: libuv-static
 Version: 1.44.2

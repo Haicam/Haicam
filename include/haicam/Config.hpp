@@ -9,9 +9,19 @@ namespace haicam
     {
     public:
         H_CFG_VAR(bool, isDevelopment, true);
+#ifdef HAICAM_PLATFORM_GM8136
+    H_CFG_VAR(const char*, getThreadPoolSize, "6");
+#else
+    H_CFG_VAR(const char*, getThreadPoolSize, "64");
+#endif
         H_CFG_VAR(std::string, getUserWritablePath, "");
         H_CFG_VAR(std::string, getSecurityDevice, "/dev/security");
         H_CFG_VAR(std::string, getWatchdogDevice, "/dev/watchdog");
+
+        H_CFG_VAR(std::string, getMemDevice, "/dev/mem");
+        H_CFG_VAR(std::string, getIRCtrlDevice, "/dev/sar_adc_drv");
+        H_CFG_VAR(std::string, getISPDevice, "/dev/isp328");
+
         H_CFG_VAR(int, getWatchdogTimeout, 20);// 20 seconds
         H_CFG_VAR(int, getWatchdogTick, 3000);// 3 seconds
 

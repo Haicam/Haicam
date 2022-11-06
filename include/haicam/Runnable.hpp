@@ -5,6 +5,7 @@
 #include "haicam/SafeQueue.hpp"
 #include "haicam/ByteBuffer.hpp"
 #include <functional>
+#include "haicam/Timer.hpp"
 
 namespace haicam
 {
@@ -29,9 +30,8 @@ namespace haicam
             }
         }
 
-        static void timerCallback(uv_timer_t *handle)
+        static void timerCallback(Runnable* thiz)
         {
-            Runnable *thiz = static_cast<Runnable *>(handle->data);
             thiz->stop();
             if (thiz->onTimeoutCallback != NULL)
             {
@@ -55,8 +55,10 @@ namespace haicam
 
         void sendDataOut(ByteBufferPtr buf)
         {
-            if (timeoutMillisecs > 0)
-                uv_timer_stop(&timer);
+            if (timer)
+            {
+                timer->stop();
+            }
 
             uv_async_send(&this->async);
             this->output.enqueue(buf);
@@ -78,9 +80,9 @@ namespace haicam
 
             if (timeoutMillisecs > 0)
             {
-                uv_timer_init(context->uv_loop, &timer);
-                timer.data = static_cast<void *>(this);
-                uv_timer_start(&timer, Runnable::timerCallback, timeoutMillisecs, 0);
+                timer = Timer::create(context, timeoutMillisecs, 0);
+                timer->onTimeoutCallback = std::bind(Runnable::timerCallback, this);
+                timer->start();
             }
 
             uv_async_init(context->uv_loop, &async, Runnable::asyncCallback);
@@ -102,10 +104,9 @@ namespace haicam
             input.close();
             output.close();
 
-            if (timeoutMillisecs > 0)
+            if (timer)
             {
-                uv_timer_stop(&timer);
-                uv_close((uv_handle_t *)&timer, NULL);
+                timer->stop();
             }
 
             uv_close((uv_handle_t *)&async, Runnable::asyncCloseCallback);
@@ -116,10 +117,12 @@ namespace haicam
         Context *context;
         SafeQueue<ByteBufferPtr> output;
         uv_async_t async;
-        uv_timer_t timer;
+        TimerPtr timer;
         uv_thread_t thread;
-        bool isStopped;
         int timeoutMillisecs;
+
+        //used in main thread only
+        bool isStopped;
 
     protected:
         SafeQueue<ByteBufferPtr> input;

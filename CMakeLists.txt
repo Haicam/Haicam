@@ -4,15 +4,29 @@ project(haicam-core VERSION 0.0.2 LANGUAGES C CXX)
 
 set(CMAKE_BUILD_TYPE "Debug")
 
-if (HAICAM_PLATFORM MATCHES "gm8136")
-    add_definitions(-DHAICAM_GM8136_GCC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -O0 -ggdb3")
+if (HAICAM_PLATFORM MATCHES "windows")
+    add_definitions(-DHAICAM_PLATFORM_WINDOWS)
+elseif (HAICAM_PLATFORM MATCHES "gm8136")
+    add_definitions(-DHAICAM_PLATFORM_GM8136)
 else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O0 -ggdb3")
+    add_definitions(-DHAICAM_PLATFORM_LINUX)
+endif()
+
+if (HAICAM_PLATFORM MATCHES "gm8136")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIE -pie -Wno-psabi -O0 -ggdb3")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -fPIE -pie -frtti -fexceptions -Wno-psabi -O0 -ggdb3 -Wno-pointer-arith")
+else()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIE -pie -O0 -ggdb3")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fPIE -pie -frtti -fexceptions -O0 -ggdb3 -Wno-pointer-arith")
+
+    find_package(PkgConfig)
+    pkg_search_module(GTK REQUIRED IMPORTED_TARGET gtk+-3.0)
+
 endif()
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/cameras/${HAICAM_PLATFORM}/${CAMERA_SDK}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/googletest/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/libuv/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/zbar/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
@@ -21,6 +35,8 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/ffmpeg/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/openssl/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/libsdl/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/chan/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/jsoncpp
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/sqlite3
     ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -29,14 +45,19 @@ include_directories(
 )
 
 link_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/cameras/${HAICAM_PLATFORM}/${CAMERA_SDK}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/googletest/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/libuv/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/zbar/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/quid/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/curl/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/ffmpeg/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/openh264/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib/3rdparty
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/openssl/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/libsdl/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/chan/${HAICAM_PLATFORM}/${HAICAM_ARCH}/lib
 )
 
 file(GLOB HAICAM_CORE_SRCS
@@ -121,6 +142,17 @@ elseif (HAICAM_PLATFORM MATCHES "mac" OR HAICAM_PLATFORM MATCHES "ios")
         dl
     )
 
+elseif (HAICAM_PLATFORM MATCHES "linux")
+    target_link_libraries (haicam-camera-app
+        haicam-core_a
+        uv_a.a
+        ssl.a
+        crypto.a
+        SDL2.a
+        pthread
+        dl
+    )
+
 else()
 
     target_link_libraries (haicam-camera-app
@@ -180,17 +212,57 @@ elseif (HAICAM_PLATFORM MATCHES "mac" OR HAICAM_PLATFORM MATCHES "ios")
         dl
     )
 
-else()
-
+elseif (HAICAM_PLATFORM MATCHES "linux")
     target_link_libraries (haicam-test
         haicam-core_a
         uv_a.a
+        chan.a
         gtest.a
         gtest_main.a
         gmock.a
         gmock_main.a
         ssl.a
         crypto.a
+        SDL2.a
+        opencv_videoio.a
+        opencv_imgcodecs.a
+        opencv_imgproc.a
+        opencv_features2d.a
+        opencv_highgui.a
+        opencv_core.a
+        avfilter.a
+        avdevice.a
+        avformat.a
+        avcodec.a
+        swresample.a
+        swscale.a
+        avutil.a
+        openh264.a
+        jpeg-turbo.a
+        png.a
+        webp.a
+        tiff.a
+        openjp2.a 
+        PkgConfig::GTK
+        z
+        lzma
+        pthread
+        dl
+    )
+
+else()
+
+    target_link_libraries (haicam-test
+        haicam-core_a
+        uv_a.a
+        chan.a
+        gtest.a
+        gtest_main.a
+        gmock.a
+        gmock_main.a
+        ssl.a
+        crypto.a
+        gm
         pthread
         dl
     )

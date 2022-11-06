@@ -17,25 +17,25 @@ void H264SensorSimulator::run()
 
     long long lastFrameTime = -1;
    
-        while (isRunning)
+    while (isRunning)
+    {
+        // fread((void*) &frameHeader, sizeof(frameHeader), 1, fp);
+        //  fake data
+        frameHeader.length = 1024;
+        frameHeader.millTimestamp = 1000;
+        lastFrameTime = 0;
+
+        if (lastFrameTime > -1 && frameHeader.millTimestamp > lastFrameTime)
         {
-            // fread((void*) &frameHeader, sizeof(frameHeader), 1, fp);
-            //  fake data
-            frameHeader.length = 1024;
-            frameHeader.millTimestamp = 1000;
-            lastFrameTime = 0;
-
-            if (lastFrameTime > -1 && frameHeader.millTimestamp > lastFrameTime)
-            {
-                uv_sleep(frameHeader.millTimestamp - lastFrameTime);
-            }
-
-            lastFrameTime = frameHeader.millTimestamp;
-
-            ByteBufferPtr frame = ByteBuffer::create(frameHeader.length);
-            //size_t result = fread((void *)frame->getDataPtr(), 1, frameHeader.length, fp);
-            notify(frame, frameHeader.isKeyframe);
+            uv_sleep(frameHeader.millTimestamp - lastFrameTime);
         }
+
+        lastFrameTime = frameHeader.millTimestamp;
+
+        ByteBufferPtr frame = ByteBuffer::create(frameHeader.length);
+        //size_t result = fread((void *)frame->getDataPtr(), 1, frameHeader.length, fp);
+        notify(frame, frameHeader.isKeyframe);
+    }
 }
 H264SensorSimulator::~H264SensorSimulator()
 {

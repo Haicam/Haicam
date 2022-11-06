@@ -17,7 +17,7 @@ void haicam_TimerTest_timeout(Timer *timer) {
 TEST(haicam_TimerTest, timer_test) {
     Context* context = Context::getInstance();
 
-    TimerPtr timer = Timer::create(context, 100, 100);
+    TimerPtr timer = Timer::create(context, 100, 0);
     timer->onTimeoutCallback = std::bind(haicam_TimerTest_timeout, timer.get());
     timer->start();
 

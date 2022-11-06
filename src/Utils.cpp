@@ -14,6 +14,11 @@
 #define localtime_r(T, Tm) (localtime_s(Tm, T) ? NULL : Tm)
 #endif
 
+extern "C"
+{
+#include <uv.h>
+}
+
 #ifdef __ANDROID__
 #include <android/log.h>
 #define printf(...) __android_log_print(ANDROID_LOG_DEBUG, "haicam_log", __VA_ARGS__);
@@ -44,7 +49,7 @@ Json::Value Utils::getJsonFromString(std::string str)
     }
 }
 
-std::string Utils::uint32ToNetworkString(uint32 value)
+std::string Utils::uint32ToNetworkString(uint32_t value)
 {
     std::string ret = "";
     value = htonl(value);
@@ -55,18 +60,18 @@ std::string Utils::uint32ToNetworkString(uint32 value)
     return ret;
 }
 
-uint32 Utils::networkStringToUint32(std::string buf, size_t offset)
+uint32_t Utils::networkStringToUint32(std::string buf, size_t offset)
 {
     std::string strbuf = buf.substr(offset, 4);
-    uint32 ret = *(uint32 *)strbuf.data();
+    uint32_t ret = *(uint32_t *)strbuf.data();
     ret = ntohl(ret);
     return ret;
 }
 
-uint16 Utils::networkStringToUint16(std::string buf, size_t offset)
+uint16_t Utils::networkStringToUint16(std::string buf, size_t offset)
 {
     std::string strbuf = buf.substr(offset, 2);
-    uint16 ret = *(uint16 *)strbuf.data();
+    uint16_t ret = *(uint16_t *)strbuf.data();
     ret = ntohs(ret);
     return ret;
 }
@@ -90,6 +95,13 @@ void Utils::makeDir(std::string dir)
         mkdir(dir.c_str(), S_IRWXU);
 #endif
     }
+}
+
+uint64_t Utils::getMillTimestmap()
+{
+    uv_timeval64_t now;
+    uv_gettimeofday(&now);
+    return now.tv_sec*1000 + now.tv_usec/1000;
 }
 
 static void _log(const char *format, va_list args)
@@ -160,6 +172,15 @@ static void _log(const char *format, va_list args)
 #endif
 
     delete[] buf;
+}
+
+void Utils::log_va(const char *format, va_list args)
+{
+    if (!Config::getInstance()->isDevelopment()) 
+    {   
+        return;
+    }
+    _log(format, args);
 }
 
 void Utils::log(const char *format, ...)

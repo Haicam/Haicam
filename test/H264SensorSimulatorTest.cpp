@@ -7,25 +7,27 @@
 
 using namespace haicam;
 
-void haicam_H264SensorSimulatorTest_timeout(Timer *timer, std::shared_ptr<H264SensorSimulator> h264Simulator, std::shared_ptr<RTSPServer> rtspServer) {
-    h264Simulator->detach(rtspServer);
-    h264Simulator->stop();
-
-    EXPECT_GT(rtspServer->frameReceived, 0);    
-}
-
 TEST(haicam_H264SensorSimulatorTest, run_test)
 {
+    Context *context = Context::getInstance();
+
     std::shared_ptr<H264SensorSimulator> h264Simulator = H264SensorSimulator::create();
-    std::shared_ptr<RTSPServer> rtspServer =  RTSPServer::create();
+    std::shared_ptr<RTSPServer> rtspServer = RTSPServer::create();
+    TimerPtr timer = Timer::create(context, 3000);
 
     h264Simulator->attach(rtspServer);
     h264Simulator->start();
 
-    Context* context = Context::getInstance();
 
-    TimerPtr timer = Timer::create(context, 3000);
-    timer->onTimeoutCallback = std::bind(haicam_H264SensorSimulatorTest_timeout, timer.get(), h264Simulator, rtspServer);
+    H_FUNC(
+        timeOut, (Timer * timer, std::shared_ptr<H264SensorSimulator> h264Simulator, std::shared_ptr<RTSPServer> rtspServer) {
+            h264Simulator->detach(rtspServer);
+            h264Simulator->stop();
+
+            EXPECT_GT(rtspServer->frameReceived, 0);
+        });
+    
+    timer->onTimeoutCallback = H_BINDV(timeOut, timer.get(), h264Simulator, rtspServer);
     timer->start();
 
     context->run();

@@ -1,5 +1,10 @@
 #include "haicam/platform/Camera.hpp"
 #include "haicam/Utils.hpp"
+#include "haicam/UserDefault.hpp"
+extern "C" {
+    #include "BoardMgr.h"
+    #include "HardwareEncryption.h"
+}
 
 using namespace haicam::platform;
 
@@ -14,6 +19,30 @@ Camera::~Camera()
 void Camera::init(Context* context)
 {
     haicam::Camera::init(context);
+    Board_Init();
+    //TODO
+    //initGMSystem()
+
+    // init isp328
+    initAdvance();
+
+    // init hardware AES128
+    CInitEncodeCBCAES();
+
+    //TODO
+    //get mac address
+
+    if(!Config::getInstance()->isDevelopment()) {
+        if(get_flag_WTD_reboot()) {
+            isStartedByUser = false;
+        }
+        if (UserDefault::getInstance()->getBoolForKey("update_firmware")) {
+            isStartedByUser = true;
+        }
+        if (UserDefault::getInstance()->getBoolForKey("rebootNoSound")) {
+            isStartedByUser = false;
+        }
+    }
 }
 
 void Camera::telnetOn()
@@ -39,9 +68,8 @@ void Camera::upgradeFirmware()
 
 void Camera::factoryDefault()
 {
-    // TODO resetAccount();
-    Utils::executeSystemCommand(Config::getInstance()->getShellFactoryDefault());
     Utils::log("Haicam Camera::factoryDefault");
+    Factory_Default();
 }
 
 void Camera::startWatchdog()

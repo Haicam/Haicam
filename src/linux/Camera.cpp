@@ -1,6 +1,7 @@
 #include "haicam/platform/Camera.hpp"
 #include "haicam/Context.hpp"
 #include "haicam/Utils.hpp"
+#include "SDL2/SDL.h"
 
 using namespace haicam::platform;
 
@@ -10,10 +11,15 @@ Camera::Camera()
 
 Camera::~Camera()
 {
+     SDL_Quit();
 }
 
 void Camera::init(Context* context)
 {
+    if (SDL_Init(SDL_INIT_AUDIO) != 0) {
+        Utils::log("Unable to initialize SDL: %s", SDL_GetError());
+        H_ASSERT_ERR_STR("Unable to initialize SDL");
+    }
     haicam::Camera::init(context);
 }
 

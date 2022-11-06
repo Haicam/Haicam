@@ -1,8 +1,8 @@
 #pragma once
-#include "json/json.h"
-#include <string>
-#include "haicam/FrameCommand.hpp"
+#include <string.h>
+#include <stdarg.h>
 #include <sstream>
+#include "json/json.h"
 
 namespace haicam
 {
@@ -11,14 +11,17 @@ namespace haicam
     public:
         static std::string getFastString(Json::Value value);
         static Json::Value getJsonFromString(std::string str);
-        static std::string uint32ToNetworkString(uint32 value);
+        static std::string uint32ToNetworkString(uint32_t value);
 
-        static uint32 networkStringToUint32(std::string buf, size_t offset);
-        static uint16 networkStringToUint16(std::string buf, size_t offset);
+        static uint32_t networkStringToUint32(std::string buf, size_t offset);
+        static uint16_t networkStringToUint16(std::string buf, size_t offset);
 
         static bool checkIsFileExsit(std::string fullPath);
         static void makeDir(std::string dir);
 
+        static uint64_t getMillTimestmap();
+
+        static void log_va(const char *format, va_list args);
         static void log(const char *format, ...);
 
         template<typename T>
