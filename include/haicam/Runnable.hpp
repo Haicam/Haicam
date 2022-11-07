@@ -67,7 +67,7 @@ namespace haicam
     public:
         Runnable(Context *context)
             : context(context), input(), output(), onSuccessCallback(NULL), onTimeoutCallback(NULL), async(), timer(), thread(), isStopped(true), timeoutMillisecs(0){};
-        ~Runnable(){};
+        virtual ~Runnable(){};
 
         void start(int timeoutMillisecs = 0)
         {

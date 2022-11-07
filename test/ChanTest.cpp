@@ -2,6 +2,7 @@
 #include "haicam/Context.hpp"
 #include "haicam/Chan.hpp"
 #include "haicam/ThreadWorker.hpp"
+#include "haicam/platform/model/Config.hpp"
 
 using namespace haicam;
 using namespace std::placeholders;
@@ -13,9 +14,10 @@ Chan<int> chan2(0);
 
 TEST(haicam_ChanTest, chan_test)
 {
-    Context *context = Context::getInstance();
+    Config* config = new platform::model::Config();
+    config->init();
 
-    printf("start \n");
+    Context *context = Context::getInstance();
 
     H_NEW_SP(ThreadWorker<int>, worker, (context));
 

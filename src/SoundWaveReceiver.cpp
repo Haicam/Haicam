@@ -1,5 +1,4 @@
 #include "haicam/SoundWaveReceiver.hpp"
-//#include "liquid/liquid.h"
 
 using namespace haicam;
 
