@@ -230,6 +230,7 @@ elseif (HAICAM_PLATFORM MATCHES "linux")
         crypto.a
         SDL2.a
         liquid.a
+        zbar.a
         opencv_videoio.a
         opencv_imgcodecs.a
         opencv_imgproc.a
@@ -269,6 +270,7 @@ else()
         ssl.a
         crypto.a
         liquid.a
+        zbar.a
         gm
         pthread
         dl
