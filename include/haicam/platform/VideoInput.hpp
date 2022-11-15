@@ -26,7 +26,7 @@ namespace haicam
             uv_thread_t thread;
             std::atomic<bool> isRunning;
 
-#ifdef HAICAM_PLATFORM_LINUX
+#ifdef HAICAM_USE_OPENCV
             H_DEF_SP(cv::VideoCapture, capture);
 #endif
 

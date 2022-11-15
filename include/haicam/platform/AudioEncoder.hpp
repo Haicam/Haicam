@@ -13,14 +13,12 @@ namespace haicam
         class AudioEncoder : public haicam::AudioEncoder
         {
         private:
-#if defined(HAICAM_PLATFORM_LINUX)
+#ifdef HAICAM_USE_FFMPEG
             AVCodec *codec;
             AVCodecContext *codecCtx;
             AVFrame *frame;
             AVPacket *pkt;
-
 #endif
-
         public:
             AudioEncoder();
             ~AudioEncoder();

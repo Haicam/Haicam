@@ -13,7 +13,7 @@ namespace haicam
         class AudioOutput : public haicam::AudioOutput
         {
         private:
-#if defined(HAICAM_PLATFORM_LINUX)
+#ifdef HAICAM_USE_SDL
             SDL_AudioDeviceID devId;
 #endif
         public:
