@@ -122,14 +122,20 @@ void VideoEncoder::onDataInput(void *data, int len)
         }
 
         //printf("Write packet %3"PRId64" (size=%5d)\n", pkt->pts, pkt->size);
-        onDataOutput(pkt->data, pkt->size);
+        bool isKeyFrame = pkt->flags & AV_PKT_FLAG_KEY;
+        onDataOutput(pkt->data, pkt->size, isKeyFrame);
         av_packet_unref(pkt);
     }
 
 }
 
+/*
+ extradata: 0 0 0 1 sps 0 0 0 1 pps
+ key frame: extradata 0 0 0 1 key_frame_data
+ non_key_frame: 0 0 0 1 non_key_frame_data
+*/
 
-void VideoEncoder::onDataOutput(void *data, int len)
+void VideoEncoder::onDataOutput(void *data, int len, bool isKeyFrame)
 {
 }
 
@@ -148,7 +154,8 @@ void VideoEncoder::close()
         }
 
         //printf("Write packet %3"PRId64" (size=%5d)\n", pkt->pts, pkt->size);
-        onDataOutput(pkt->data, pkt->size);
+        bool isKeyFrame = pkt->flags & AV_PKT_FLAG_KEY;
+        onDataOutput(pkt->data, pkt->size, isKeyFrame);
         av_packet_unref(pkt);
     }
 

@@ -1,0 +1,2 @@
+/home/haicam/toolchain/android-ndk-r24/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar qc libhaicam-p2p-onvif.a  CMakeFiles/haicam-p2p-onvif.dir/home/haicam/workspace/golang/P2Peer.cpp.o CMakeFiles/haicam-p2p-onvif.dir/home/haicam/workspace/golang/discovery.cpp.o CMakeFiles/haicam-p2p-onvif.dir/home/haicam/workspace/golang/websocket.cpp.o
+/home/haicam/toolchain/android-ndk-r24/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ranlib libhaicam-p2p-onvif.a

@@ -25,7 +25,7 @@ namespace haicam
             ~VideoEncoder();
             bool open(VideoCodec vCodec, int width, int height, PIX_FMT pix_fmt);
             void onDataInput(void *data, int len);
-            void onDataOutput(void *data, int len);
+            void onDataOutput(void *data, int len, bool isKeyFrame);
             void close();
         };
 
