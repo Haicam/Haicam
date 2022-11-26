@@ -16,7 +16,7 @@ endif()
 
 if (HAICAM_PLATFORM MATCHES "gm8136")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIE -pie -Wno-psabi -O0 -ggdb3")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -fPIE -pie -frtti -fexceptions -Wno-psabi -O0 -ggdb3 -Wno-pointer-arith")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Dnullptr=NULL -fPIE -pie -frtti -fexceptions -Wno-psabi -O0 -ggdb3 -Wno-pointer-arith")
 
     set(CMAKE_INSTALL_RPATH "/home/haicam/workspace/libs/cameras/gm8136/sdk_v1/lib")
 
@@ -31,6 +31,7 @@ endif()
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/golang
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/cameras/${HAICAM_PLATFORM}/${CAMERA_SDK}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/googletest/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/libs/libuv/${HAICAM_PLATFORM}/${HAICAM_ARCH}/include

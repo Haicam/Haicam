@@ -5,7 +5,7 @@ package main
 #cgo linux,box LDFLAGS: -L${SRCDIR}/box_proj/build -lhaicam-p2p-onvif -lhaicam-ifaddrs -lstdc++
 #cgo darwin,box LDFLAGS: -L${SRCDIR}/box_proj/build -lhaicam-p2p-onvif -lhaicam-ifaddrs -lstdc++
 #cgo windows,box LDFLAGS: -L${SRCDIR}/box_proj/build -lhaicam-p2p-onvif -lhaicam-ifaddrs -lwinpthread -lstdc++ -static-libgcc -static-libstdc++ -static
-#include "websocket.h"
+#include "haicam/websocket.h"
 */
 import "C"
 

@@ -25,8 +25,8 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 
 
-#include "P2Peer.h"
-#include "discovery.h"
+#include "haicam/P2Peer.h"
+#include "haicam/discovery.h"
 #include "ifaddrs.h"
 
 #line 1 "cgo-generated-wrapper"
@@ -39,7 +39,7 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 
 
-#include "P2Peer.h"
+#include "haicam/P2Peer.h"
 
 #line 1 "cgo-generated-wrapper"
 
@@ -49,7 +49,7 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 
 
-#include "discovery.h"
+#include "haicam/discovery.h"
 
 #line 1 "cgo-generated-wrapper"
 
@@ -59,7 +59,7 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 
 
-#include "websocket.h"
+#include "haicam/websocket.h"
 
 #line 1 "cgo-generated-wrapper"
 

@@ -2,10 +2,8 @@ cmake_minimum_required(VERSION 3.6)
 
 project(haicam-p2p C CXX)
 
-set(HAICAM_CORE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../CloudCameraHub-core)
-
 include_directories(
-    ${HAICAM_CORE_PATH}/Hub_Embedded/
+    ${CMAKE_CURRENT_SOURCE_DIR}/../include
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/build/${ANDROID_ABI}
 )

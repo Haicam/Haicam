@@ -8,6 +8,10 @@
 #else
 #include <atomic>
 #endif
+extern "C"
+{
+#include <uv.h>
+}
 
 namespace haicam
 {

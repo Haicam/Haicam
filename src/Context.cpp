@@ -13,7 +13,7 @@ using namespace haicam;
 Context *Context::instance = NULL;
 std::mutex Context::mtx;
 
-Context::Context() : uv_loop(NULL), localAddr(0)
+Context::Context() : uv_loop(NULL)
 {
     setenv("UV_THREADPOOL_SIZE",Config::getInstance()->getThreadPoolSize(),1); // for max uv_queue_work
     uv_loop = (uv_loop_t *)malloc(sizeof(uv_loop_t));
@@ -45,38 +45,6 @@ int Context::run()
 void Context::stop()
 {
     uv_stop(uv_loop);
-}
-
-std::string Context::getRSAKey1024()
-{
-    H_ASSERT(false);
-    return "";
-}
-
-std::string Context::getRSAKey2048()
-{
-    H_ASSERT(false);
-    return UserDefault::getInstance()->getStringForKey("cameraRSA2048PrivateKey");
-}
-
-std::string Context::getAESKey128()
-{
-    H_ASSERT(false);
-    return "";
-}
-
-std::string Context::getServerRSAKey2048()
-{
-    if (Config::getInstance()->isDevelopment())
-        return SERVER_DEV_RSA2048_PUBLIC_KEY;
-    else
-        return SERVER_RSA2048_PUBLIC_KEY;
-}
-
-std::string Context::getAESKey256()
-{
-    H_ASSERT(false);
-    return "";
 }
 
 uint64_t Context::getCurrentMillSecs()

@@ -13,11 +13,6 @@ using namespace haicam::Encryption;
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 TEST(encryption_test, rsa) {
-    Context* context = Context::getInstance();
-
-    std::string s = EncodeRSAData(context->getServerRSAKey2048(), std::string(50, 'a'), 256, 1);
-
-    printf("EncodeRSAData %zu\n", s.size());
 
 }
 

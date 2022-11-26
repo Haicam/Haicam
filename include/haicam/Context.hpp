@@ -22,13 +22,6 @@ namespace haicam
         int run();
         void stop();
 
-        std::string getRSAKey1024();
-        std::string getRSAKey2048();
-        std::string getAESKey256();
-        std::string getAESKey128();
-
-        std::string getServerRSAKey2048();
-
         uint64_t getCurrentMillSecs();
 
     private:
@@ -36,7 +29,6 @@ namespace haicam
 
     public:
         uv_loop_t *uv_loop;
-        uint32_t localAddr;
 
     private:
         static std::mutex mtx;

@@ -3,6 +3,7 @@
 #include <memory>
 #include <functional>
 #include <stdarg.h>
+#include <stdio.h>
 
 #define H_ASSERT(expr)                                         \
     do                                                         \

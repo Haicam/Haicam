@@ -171,20 +171,6 @@ void UserDefault::setBoolForKey(const std::string &key, bool value)
     setStringForKey(key, strVal);
 }
 
-template<typename NONSTR>
-NONSTR UserDefault::getValueForKey(const std::string &key)
-{
-    std::string strVal = getStringForKey(key);
-    return Utils::fromStrTo<NONSTR>(strVal);
-}
-
-template<typename NONSTR>
-void UserDefault::setValueForKey(const std::string &key, NONSTR value)
-{
-    std::string strVal = Utils::toStr<NONSTR>(value);
-    setStringForKey(key, strVal);
-}
-
 void UserDefault::reset()
 {
     std::lock_guard<std::mutex> lock(mtx);

@@ -1,4 +1,4 @@
-#include "discovery.h"
+#include "haicam/discovery.h"
 
 #ifdef __ANDROID__
 
@@ -27,6 +27,8 @@
 #include "dlfcn.h"
 #endif
 
+using namespace haicam;
+
 extern "C" {
 
 void onOnvifCameraFound(void* cObjRef, char* urn, char* brand, char* model, char* ip, int port)
@@ -35,9 +37,9 @@ void onOnvifCameraFound(void* cObjRef, char* urn, char* brand, char* model, char
 
 }
 
-void onBandCameraFound(void* cObjRef, char* brand, char* mac, char* ipv4, int port, int isDhcp)
+void onBrandCameraFound(void* cObjRef, char* brand, char* mac, char* ipv4, int port, int isDhcp)
 {
-    ((DiscoveryDelegate*)cObjRef)->onBandCameraFound(brand, mac, ipv4, port, isDhcp);
+    ((DiscoveryDelegate*)cObjRef)->onBrandCameraFound(brand, mac, ipv4, port, isDhcp);
 }
 
 void onGetCameraStreams(void* cObjRef, char* cameraUuid, char* ip, char* jsonPayload, int httpCode)
@@ -51,7 +53,7 @@ void onCameraEvent(void* cObjRef, int camera_id, char* camera_uuid, char* motion
     ((DiscoveryDelegate*)cObjRef)->onCameraEvent(camera_id, camera_uuid, motionTimeStr, motionStateStr, statusCode);
 }
 
-} // extern "C"
+} // end extern "C"
 
 typedef char* (*T_GenerateUUID)();
 typedef void (*T_GetCameraStreams)(char*, char*, int, char*, char*);

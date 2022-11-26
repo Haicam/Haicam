@@ -1,4 +1,0 @@
-/home/haicam/workspace/golang/box_proj/build/CMakeFiles/rebuild_cache.dir
-/home/haicam/workspace/golang/box_proj/build/CMakeFiles/edit_cache.dir
-/home/haicam/workspace/golang/box_proj/build/CMakeFiles/haicam-ifaddrs.dir
-/home/haicam/workspace/golang/box_proj/build/CMakeFiles/haicam-p2p-onvif.dir

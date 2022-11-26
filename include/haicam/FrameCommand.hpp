@@ -146,6 +146,7 @@ typedef unsigned long long   uint64;
 #define CHECK_SDCARD_ISEXIST     10
 #define REBOOT_NO_SOUND          11
 #define PLAY_SOUND_BY_S3         12
+#define WEBRTC_CMD               13
 #define FRAME_CMD_FACTORY_DEFAULT                       0x59
 #define FRAME_CMD_CREATE_CAMERA_CHANNEL		0x5a
 #define FRAME_CMD_CREATE_CLINET_CHANNEL		0x5b
@@ -316,10 +317,9 @@ enum MoveDirection
     RIGHT_Dt
 };
 
-static int icounttt = 0;
 
 static int heardSize = 6;
-
 static int heardSize2 = 18;
+
 #define MAX_PACKET_LEN 1024*8
 

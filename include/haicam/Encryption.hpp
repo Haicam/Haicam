@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "haicam/FrameCommand.hpp"
 
 namespace haicam{
 
@@ -23,6 +24,10 @@ namespace haicam{
         std::string EncodeCBCAES( const std::string& strKey, const std::string& strdata,unsigned char* cIV);
 
         std::string DecodeCBCAES( const std::string& strKey, const std::string& strData,unsigned char* cIV);
+
+        std::string packFrame(uint32 frameNum, uint8 cmd, uint8 cmdType, std::string payload, uint32 remoteAddr, uint8 encryptType, std::string masterKey = "");
+
+        bool unpackFrame(uint8& cmd, uint8& cmdType, uint32& fromAddr, uint32& frameNum, std::string &payload, std::string &lastBuffer, std::string& buffer, std::string masterKey = "");
 
     }
     

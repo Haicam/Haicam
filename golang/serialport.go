@@ -5,7 +5,7 @@ package main
 #cgo linux,box LDFLAGS: -L${SRCDIR}/box_proj/build -lhaicam-p2p-onvif -lhaicam-ifaddrs -lstdc++
 #cgo darwin,box LDFLAGS: -L${SRCDIR}/box_proj/build -lhaicam-p2p-onvif -lhaicam-ifaddrs -lstdc++
 #cgo windows,box LDFLAGS: -L${SRCDIR}/box_proj/build -lhaicam-p2p-onvif -lhaicam-ifaddrs -static-libgcc -static-libstdc++
-#include "discovery.h"
+#include "haicam/discovery.h"
 */
 import "C"
 
