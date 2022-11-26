@@ -1,9 +1,10 @@
 #ifndef __HAICAM_BYTE_BUFFER__
 #define __HAICAM_BYTE_BUFFER__
 
-#include "haicam/Context.hpp"
+#include "haicam/MacroDefs.hpp"
 #include <vector>
 #include <memory>
+#include <string>
 
 namespace haicam
 {

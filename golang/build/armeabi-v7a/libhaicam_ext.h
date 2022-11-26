@@ -27,7 +27,7 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 
 
-#include "P2Peer.h"
+#include "haicam/P2Peer.h"
 
 #line 1 "cgo-generated-wrapper"
 

@@ -1,5 +1,6 @@
 #include "haicam/SSLUDP.hpp"
 #include "haicam/Encryption.hpp"
+#include "haicam/UserDefault.hpp"
 #include "haicam/Utils.hpp"
 
 using namespace std::placeholders;
@@ -47,7 +48,7 @@ bool SSLUDP::sendFrame(uint8 cmd, uint8 cmdType, std::string &payload, uint8 enc
         data.append(1, cmd);
         data.append(1, cmdType);
 
-        std::string strPayloadRSA = EncodeRSAData(context->getRSAKey1024(), payload, 128);
+        std::string strPayloadRSA = EncodeRSAData(UserDefault::getInstance()->getRSAKey1024(), payload, 128);
 
         data.append(Utils::uint32ToNetworkString((uint32)strPayloadRSA.length()));
         data.append(strPayloadRSA);
@@ -60,7 +61,7 @@ bool SSLUDP::sendFrame(uint8 cmd, uint8 cmdType, std::string &payload, uint8 enc
         uint32 len = (uint32)payload.length();
         data2.append(Utils::uint32ToNetworkString(len));
         data2.append(payload);
-        std::string strPayloadRSA = EncodeRSAData(context->getRSAKey2048(), data2, 256);
+        std::string strPayloadRSA = EncodeRSAData(UserDefault::getInstance()->getRSAKey2048(), data2, 256);
 
         data.append(1, FRAME_CMD_SOF);
         data.append(1, encryptType);
@@ -191,7 +192,7 @@ void SSLUDP::onData(ByteBufferPtr data, std::string fromIP, int fromPort)
         type = buffer[3];
         strframe = buffer.substr(8, len);
 
-        strframe = DecodeRSAData(context->getRSAKey1024(), strframe, 128);
+        strframe = DecodeRSAData(UserDefault::getInstance()->getRSAKey1024(), strframe, 128);
     }
     else if (encryptType == FRAME_RSA_2048)
     { // new camera logic
@@ -209,7 +210,7 @@ void SSLUDP::onData(ByteBufferPtr data, std::string fromIP, int fromPort)
         }
 
         std::string strframe = buffer.substr(heardSize, len);
-        strframe = DecodeRSAData(context->getRSAKey2048(), strframe, 256);
+        strframe = DecodeRSAData(UserDefault::getInstance()->getRSAKey2048(), strframe, 256);
 
         cmd = strframe[0];
         type = strframe[1];

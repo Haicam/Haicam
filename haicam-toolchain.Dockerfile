@@ -85,3 +85,5 @@ RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 30
 
 RUN apt-get install -y nasm
 RUN apt-get install -y autoconf libtool-bin
+
+#RUN apt-get install python3.8-venv libsecret-1-dev python

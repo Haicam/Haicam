@@ -5,6 +5,7 @@
 #include "haicam/Timer.hpp"
 #include <map>
 #include <list>
+#include "json/json.h"
 
 namespace haicam
 {
@@ -39,7 +40,6 @@ namespace haicam
 
         std::list<SSLTCPClientListenerPtr> listeners;
 
-        bool sendFrame(uint32 frameNum, uint8 cmd, uint8 cmdType, std::string payload, uint8 encryptType = FRAME_SSL_AES_256, uint32 remoteAddr = FRAME_ADDR_SERVER);
         void sendData(ByteBufferPtr data);
 
     public:
@@ -50,8 +50,9 @@ namespace haicam
         void removeListener(SSLTCPClientListenerPtr listener);
 
         void connect();
-        bool sendRequest(uint8 cmd, std::string payload, uint8 encryptType = FRAME_SSL_AES_256, uint32 remoteAddr = FRAME_ADDR_SERVER);
-        bool sendResponse(uint32 frameNum, uint8 cmd, std::string payload, uint8 encryptType = FRAME_SSL_AES_256, uint32 remoteAddr = FRAME_ADDR_SERVER);
+        bool sendRequest(uint8 cmd, Json::Value payload, uint32 remoteAddr = FRAME_ADDR_SERVER, uint8 encryptType = FRAME_SSL_AES_256);
+        bool sendRequest(uint8 cmd, std::string payload, uint32 remoteAddr = FRAME_ADDR_SERVER, uint8 encryptType = FRAME_SSL_AES_256);
+        bool sendResponse(uint32 frameNum, uint8 cmd, std::string payload, uint32 remoteAddr = FRAME_ADDR_SERVER, uint8 encryptType = FRAME_SSL_AES_256);
 
         void onRequest(uint8 cmd, uint32 fromAddr, uint32 frameNum, const std::string &payload);
         void onResponse(uint8 cmd, uint32 fromAddr, uint32 frameNum, const std::string &payload);

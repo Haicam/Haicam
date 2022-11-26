@@ -5,8 +5,8 @@ package main
 #cgo linux,box LDFLAGS: -L${SRCDIR}/box_proj/build -lhaicam-p2p-onvif -lhaicam-ifaddrs -lstdc++
 #cgo darwin,box LDFLAGS: -L${SRCDIR}/box_proj/build -lhaicam-p2p-onvif -lhaicam-ifaddrs -lstdc++
 #cgo windows,box LDFLAGS: -L${SRCDIR}/box_proj/build -lhaicam-p2p-onvif -lhaicam-ifaddrs -static-libgcc -static-libstdc++
-#include "P2Peer.h"
-#include "discovery.h"
+#include "haicam/P2Peer.h"
+#include "haicam/discovery.h"
 #include "ifaddrs.h"
 */
 import "C"
@@ -322,11 +322,11 @@ func foundHikvisionOrDahua(brand string, mac string, ipv4 string, iPort int, isD
 	if isDhcp {
 		r_isDhcp = 1
 	}
-	C.onBandCameraFound(CallbackDelegateRef, r_brand, r_mac, r_ipv4, C.int(iPort), C.int(r_isDhcp))
+	C.onBrandCameraFound(CallbackDelegateRef, r_brand, r_mac, r_ipv4, C.int(iPort), C.int(r_isDhcp))
 	C.free(unsafe.Pointer(r_brand))
 	C.free(unsafe.Pointer(r_mac))
 	C.free(unsafe.Pointer(r_ipv4))
-	Golog("onvif C.onBandCameraFound end")
+	Golog("onvif C.onBrandCameraFound end")
 
 }
 

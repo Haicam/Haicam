@@ -1,4 +1,4 @@
-#include "websocket.h"
+#include "haicam/websocket.h"
 #include "libhaicam_ext.h"
 #include <sys/time.h>
 
@@ -10,9 +10,9 @@
 #include "dlfcn.h"
 #endif
 
-#ifdef __cplusplus
+using namespace haicam;
+
 extern "C" {
-#endif
 
 static void _log(const char* buf) 
 {
@@ -58,8 +58,7 @@ void onWebSocketData(void* cObjRef, long long unsigned int goObjRef, void* data,
     ((WebSocketDelegate*)cObjRef)->onWebSocketData(goObjRef, data, length);
 }
 
-#ifdef __cplusplus
-}
+}// end extern "C"
 
 
 typedef void (*T_WebSocketStart)(char*, void*);
@@ -155,4 +154,3 @@ std::string WebSocket::getGetExePath()
     return str;
 }
 
-#endif

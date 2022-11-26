@@ -9,7 +9,7 @@ package main
 #cgo linux,box LDFLAGS: -L${SRCDIR}/box_proj/build -lhaicam-p2p-onvif -lstdc++
 #cgo darwin,box LDFLAGS: -L${SRCDIR}/box_proj/build -lhaicam-p2p-onvif -lstdc++
 #cgo windows,box LDFLAGS: -L${SRCDIR}/box_proj/build -lhaicam-p2p-onvif -static-libgcc -static-libstdc++ -static
-#include "P2Peer.h"
+#include "haicam/P2Peer.h"
 */
 import "C"
 

@@ -1,6 +1,7 @@
 #include <string.h>
-#include "P2Peer.h"
+#include "haicam/P2Peer.h"
 #include <sys/time.h>
+#include <functional>
 
 #ifdef _WIN32
 #define localtime_r(T,Tm) (localtime_s(Tm,T) ? NULL : Tm)
@@ -33,6 +34,8 @@
 #ifdef HAICAM_WINDOWS_32
 #include "dlfcn.h"
 #endif
+
+using namespace haicam;
 
 extern "C" {
 
@@ -78,30 +81,36 @@ void onGoLog(char* buf)
 void onICECandidateForRemote(void* cObjRef, char* candidate)
 {
     P2Peer* peer = (P2Peer*)cObjRef;
-    peer->onICECandidateForRemote(candidate);
+    //peer->onICECandidateForRemote(candidate);
+    peer->runOnSchedule(std::bind(&P2Peer::onICECandidateForRemote, peer, std::string(candidate)));
 }
 
 void onDescForRemote(void* cObjRef, char* desc)
 {
     P2Peer* peer = (P2Peer*)cObjRef;
-    peer->onDescForRemote(desc);
+    //peer->onDescForRemote(desc);
+    peer->runOnSchedule(std::bind(&P2Peer::onDescForRemote, peer, std::string(desc)));
 }
 void onReady(void* cObjRef)
 {
     P2Peer* peer = (P2Peer*)cObjRef;
-    peer->onReady();
+    //peer->onReady();
+    peer->runOnSchedule(std::bind(&P2Peer::onReady, peer));
 }
 void onClose(void* cObjRef)
 {
     printf("PeerConn goCallback onClose cRef: %p\n", cObjRef);
 
     P2Peer* peer = (P2Peer*)cObjRef;
-    peer->onClose();
+    //peer->onClose();
+    peer->runOnSchedule(std::bind(&P2Peer::onClose, peer));
 }
 void onData(void* cObjRef, void* data, int length)
 {
     P2Peer* peer = (P2Peer*)cObjRef;
-    peer->onData(data, length);
+    //peer->onData(data, length);
+    ByteBufferPtr bufPtr = ByteBuffer::create(data, length);
+    peer->runOnSchedule(std::bind(&P2Peer::onDataBuffer, peer, bufPtr));
 }
 
 } // end extern "C"
@@ -126,7 +135,6 @@ T_SendAudioSample t_SendAudioSample = NULL;
 T_ClosePeer t_ClosePeer = NULL;
 T_CreateOfferer t_CreateOfferer = NULL;
 T_CreateAnswerer t_CreateAnswerer = NULL;
-
 
 P2Peer::P2Peer()
 {
@@ -220,7 +228,16 @@ void P2Peer::onClose()
 void P2Peer::onData(void *data, int len)
 {
     delegate->onData(data, len);
+}
 
+void P2Peer::onDataBuffer(ByteBufferPtr bufPtr)
+{
+    delegate->onDataBuffer(bufPtr);
+}
+
+void P2Peer::runOnSchedule(std::function<void()> func)
+{
+    delegate->runOnSchedule(func);
 }
 
 bool P2Peer::setRemoteDescription(string desc)
@@ -240,6 +257,8 @@ bool P2Peer::addICECandidate(string candidate)
 
     return true;
 }
+
+
 
 bool P2Peer::sendData(void * data, int len)
 {

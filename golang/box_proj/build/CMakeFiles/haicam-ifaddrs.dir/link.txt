@@ -1,2 +1,0 @@
-/home/haicam/toolchain/android-ndk-r24/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar qc libhaicam-ifaddrs.a  CMakeFiles/haicam-ifaddrs.dir/home/haicam/workspace/golang/ifaddrs.cpp.o
-/home/haicam/toolchain/android-ndk-r24/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ranlib libhaicam-ifaddrs.a
